@@ -52,20 +52,10 @@
             </template>
           </v-text-field>
         </v-card-text>
-        <v-card v-if="false" class="ma-3" outlined>
-          <v-card-text class="pa-0">
-            <v-card-title>For Testing</v-card-title>
-            <v-card-text>
-              <strong>Username: kayengxiong</strong>
-              <br />
-              <strong>Password: password</strong>
-            </v-card-text>
-          </v-card-text>
-        </v-card>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="login" :loading="loading">
+          <v-btn color="primary" @click="login" :loading="loading" to="/">
             ເຂົ້າສູ່ລະບົບ
           </v-btn>
           <v-spacer></v-spacer>

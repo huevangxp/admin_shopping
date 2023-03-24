@@ -15,7 +15,7 @@
         color="primary"
         @click.stop="miniVariant = !miniVariant"
       >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
       <v-list v-for="(item, i) in items" :key="i" dense class="py-0" tile flat>
         <v-list-group
@@ -23,12 +23,14 @@
           :prepend-icon="item.icon"
           no-action
           color="primary"
-          dark>
+          dark
+        >
           <template #activator>
             <v-list-item-title
               class="py-2"
               style="font-size: 18px; color: black; font-weight: bold"
-              >{{ item.title }}</v-list-item-title>
+              >{{ item.title }}</v-list-item-title
+            >
           </template>
           <v-list-item
             v-for="(subItem, subI) in item.children"
@@ -36,7 +38,6 @@
             exact
             :to="subItem.to"
             link
-          
           >
             <v-list-item-title
               class="py-2"
@@ -54,7 +55,7 @@
           active-class="primary white--text"
         >
           <v-list-item-action>
-            <v-icon  >{{ item.icon }}</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
@@ -74,8 +75,15 @@
       color="primary"
       dark
     >
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-avatar size="50" color="red">
+        <v-img
+          src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
+          alt="alt"
+        />
+      </v-avatar>
+      <v-toolbar-title class="ml-3">{{ title }}</v-toolbar-title>
       <v-spacer />
+      <v-btn icon> <v-icon>mdi-power</v-icon> </v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>
@@ -90,7 +98,7 @@
 
 <script>
 export default {
-  name: 'DefaultLayout',
+  name: "DefaultLayout",
   data() {
     return {
       clipped: true,
@@ -99,153 +107,154 @@ export default {
       miniVariant: true,
       right: true,
       rightDrawer: true,
-      title: 'ກະຊວງພາຍໃນ',
+      title: "ກະຊວງພາຍໃນ",
       items: [
         {
-          icon: 'mdi-monitor-dashboard',
-          title: 'ອົງການທີ່ຂື້ນກັບລັດຖະບານ',
-          to:'/'
+          icon: "mdi-monitor-dashboard",
+          title: "ອົງການທີ່ຂື້ນກັບລັດຖະບານ",
+          to: "/",
         },
         {
-          icon: 'mdi-cog',
-          title: 'ສູນກາງ',
+          icon: "mdi-cog",
+          title: "ສູນກາງ",
           children: [
             {
-              title: 'ກະຊວງການຕ່າງປະເທດ',
-              to:'/inspire'
+              title: "ກະຊວງການຕ່າງປະເທດ",
+              to: "/ministry",
             },
             {
-              title: 'ກະຊວງຍຸຕິທໍາ',
-              to:'/login'
+              title: "ກະຊວງຍຸຕິທໍາ",
+              to: "/login",
             },
             {
-              title: 'ກະຊວງພາຍໃນ',
+              title: "ກະຊວງພາຍໃນ",
+              to: "/rural",
             },
             {
-              title: 'ກະຊວງສຶກສາທິການ ແລະ ກິລາ',
+              title: "ກະຊວງສຶກສາທິການ ແລະ ກິລາ",
             },
             {
-              title: 'ກະຊວງສາທາລະນະສຸກ',
+              title: "ກະຊວງສາທາລະນະສຸກ",
             },
             {
-              title: 'ກະຊວງຖະແຫຼງຂ່າວ, ວັດທະນະທໍາ ແລະ ທ່ອງທ່ຽວ',
+              title: "ກະຊວງຖະແຫຼງຂ່າວ, ວັດທະນະທໍາ ແລະ ທ່ອງທ່ຽວ",
             },
             {
-              title: 'ກະຊວງແຮງງານ ແລະ ສະຫວັດດີການສັງຄົມ',
+              title: "ກະຊວງແຮງງານ ແລະ ສະຫວັດດີການສັງຄົມ",
             },
             {
-              title: 'ກະຊວງແຜນການ ແລະ ການລົງທຶນ',
+              title: "ກະຊວງແຜນການ ແລະ ການລົງທຶນ",
             },
             {
-              title: 'ກະຊວງການເງິນ',
+              title: "ກະຊວງການເງິນ",
             },
             {
-              title: 'ກະຊວງກະສິກໍາ ແລະ ປ່າໄມ້',
+              title: "ກະຊວງກະສິກໍາ ແລະ ປ່າໄມ້",
             },
             {
-              title:'ກະຊວງຊັບພະຍາກອນທໍາມະຊາດ ແລະ ສິ່ງແວດລ້ອມ'
+              title: "ກະຊວງຊັບພະຍາກອນທໍາມະຊາດ ແລະ ສິ່ງແວດລ້ອມ",
             },
             {
-              title:'ກະຊວງພະລັງງານ ແລະ ບໍ່ແຮ່'
+              title: "ກະຊວງພະລັງງານ ແລະ ບໍ່ແຮ່",
             },
             {
-              title:'ກະຊວງອຸດສາຫະກໍາ ແລະ ການຄ້າ'
+              title: "ກະຊວງອຸດສາຫະກໍາ ແລະ ການຄ້າ",
             },
             {
-              title:'ກະຊວງໂຍທາທິການ ແລະ ຂົນສົ່ງ'
+              title: "ກະຊວງໂຍທາທິການ ແລະ ຂົນສົ່ງ",
             },
             {
-              title:'ກະຊວງເຕັກໂນໂລຊີ ແລະ ການສື່ສານ'
+              title: "ກະຊວງເຕັກໂນໂລຊີ ແລະ ການສື່ສານ",
             },
             {
-              title:'ຫ້ອງວ່າການສໍານັກງານນາຍົກລັດຖະມົນຕີ'
+              title: "ຫ້ອງວ່າການສໍານັກງານນາຍົກລັດຖະມົນຕີ",
             },
             {
-              title:'ທະນາຄານແຫ່ງ ສປປ ລາວ'
+              title: "ທະນາຄານແຫ່ງ ສປປ ລາວ",
             },
           ],
         },
         {
-          icon: 'mdi-face-agent',
-          title: 'ຈັດການທ້ອງຖິ້ມ',
+          icon: "mdi-face-agent",
+          title: "ຈັດການທ້ອງຖິ້ມ",
           children: [
             {
-              title: 'ນະຄອນຫຼວງວຽງຈັນ',
+              title: "ນະຄອນຫຼວງວຽງຈັນ",
             },
             {
-              title: 'ແຂວງວຽງຈັນ',
+              title: "ແຂວງວຽງຈັນ",
             },
             {
-              title: 'ຮັບສັ່ງຊື້ແລ້ວ',
+              title: "ຮັບສັ່ງຊື້ແລ້ວ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
             {
-              title: 'ຊຳລະສຳເລັດ',
+              title: "ຊຳລະສຳເລັດ",
             },
           ],
         },
 
         {
-          icon: 'mdi-sim',
-          title: 'sims-master',
+          icon: "mdi-sim",
+          title: "sims-master",
         },
         {
-          icon: 'mdi-poll',
-          title: 'ລາຍງານ',
+          icon: "mdi-poll",
+          title: "ລາຍງານ",
         },
       ],
-    }
+    };
   },
-}
+};
 </script>
 
 <style scope>
 * {
-  font-family: 'Noto Sans Lao Looped', sans-serif;
+  font-family: "Noto Sans Lao Looped", sans-serif;
   /* font-size:40px */
 }
 </style>

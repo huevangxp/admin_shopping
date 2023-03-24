@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+  <v-container fluid>
+    <IndexLine/>
+  </v-container>
     <v-row>
       <v-col cols="4">
         <v-text-field
@@ -13,10 +16,9 @@
         ></v-text-field>
       </v-col> 
       <v-col cols="4">
-        
       </v-col>
       <v-col cols="4">
-        <v-btn color="primary">create admin</v-btn>
+        <v-btn color="primary" to="/createAdmin">create admin</v-btn>
         <v-btn color="green" dark>Export To excel</v-btn>
       </v-col>
     </v-row>
@@ -45,8 +47,7 @@
 <v-dialog
   v-model="dialog"
   max-width="500px"
-  transition="dialog-transition"
->
+  transition="dialog-transition">
 <v-card>
   <v-card-title color="red">
     Do you want to delete this admin?
