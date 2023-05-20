@@ -1,6 +1,6 @@
 <template>
     <div id="backgrond-image">
-        <v-card class="mx-auto my-5" max-width="400" elevation="10">
+        <v-card class="mx-auto my-5 " max-width="400" elevation="10">
       <template slot="progress">
         <v-progress-linear
           color="deep-purple"
