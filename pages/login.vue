@@ -8,7 +8,7 @@
           indeterminate
         ></v-progress-linear>
       </template>
-      <!-- <div  class="d-flex justify-center pt-3">
+      <div  class="d-flex justify-center pt-3">
 
         <v-avatar
          size="200"
@@ -19,28 +19,26 @@
              src="https://wallpaperaccess.com/full/4593946.jpg"
            ></v-img>
         </v-avatar>
-      </div> -->
-      <v-img
-       height="250"
-             src="https://wallpaperaccess.com/full/4593946.jpg"
-           ></v-img>
+      </div>
+
       <v-card-title  class="d-flex justify-center">ກະລຸນາເຂົ້າສູ່ລະບົບ</v-card-title>
 
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
           <v-text-field
-            v-model="username"
+          type="text"
+            v-model="user.phone"
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
             outlined
             dense
-            label="ຊື່ຜູ້ໃຊ້"
+            label="ເບິໂທຜູ້ໃຊ້"
           >
             <template #prepend-inner>
-              <v-icon color="primary" right>mdi-account-key </v-icon>
+              <v-icon color="primary" right>mdi-account-key</v-icon>
             </template>
           </v-text-field>
           <v-text-field
-            v-model="password"
+            v-model="user.password"
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
             outlined
             dense
@@ -55,7 +53,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="login" :loading="loading" to="/">
+          <v-btn color="primary" :loading="loading" @click="login()" class="mb-10">
             ເຂົ້າສູ່ລະບົບ
           </v-btn>
           <v-spacer></v-spacer>
@@ -68,7 +66,24 @@
 <script>
 export default {
     layout:'Black',
-    name:'LoginPage'
+  name: 'LoginPage',
+  middleware: 'unAuth',
+  data() {
+    return {
+      user:{}
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.auth.loading
+    }
+  },
+  methods: {
+    login() {
+      // console.log(this.user);
+      this.$store.dispatch('auth/isLogin', {...this.user})
+    }
+  }
 }
 </script>
 

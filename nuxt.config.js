@@ -25,8 +25,13 @@ export default {
   css: [
   ],
 
+  publicRuntimeConfig: {
+    // imageKey: '31724911-b7434b8167bbba9384616102d',
+    api: 'http://localhost:9000/api/v1',
+  },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/axios' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,6 +45,8 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'cookie-universal-nuxt',
+    '@nuxtjs/axios',
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

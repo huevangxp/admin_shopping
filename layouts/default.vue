@@ -77,13 +77,13 @@
     >
       <v-avatar size="50" color="red">
         <v-img
-          src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
+          lazy-src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
           alt="alt"
         />
       </v-avatar>
-      <v-toolbar-title class="ml-3">{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="ml-3">{{ name }} {{ lastName }}</v-toolbar-title>
       <v-spacer />
-      <v-btn icon to="/login"> <v-icon>mdi-power</v-icon> </v-btn>
+      <v-btn icon @click="logout()"> <v-icon>mdi-power</v-icon> </v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>
@@ -93,21 +93,44 @@
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <!-- persistent :overlay="false" -->
+    <v-dialog v-model="dialog" max-width="500px">
+      <!-- transition="dialog-transition" -->
+      <v-card>
+        <v-card-title primary-title> ອອກຈາກລະບົບ </v-card-title>
+        <!-- <v-divider></v-divider> -->
+        <v-card-text class="d-flex justify-center py-10">
+          ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ່?
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined dense @click="dialog = false"
+            >ຍົກເລີກ</v-btn
+          >
+          <v-btn color="primary" dense dark @click="confirmLogout()">ອອກຈາກລະບົບ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 export default {
   name: "DefaultLayout",
+  middleware: "auth",
   data() {
     return {
+      dialog: false,
       clipped: true,
       drawer: true,
       fixed: false,
       miniVariant: true,
       right: true,
       rightDrawer: true,
-      title: "ກະຊວງພາຍໃນ",
+      name: this.$cookies.get("name"),
+      lastName: this.$cookies.get("lastName"),
+      profile: this.$cookies.get("profile"),
       items: [
         {
           icon: "mdi-monitor-dashboard",
@@ -117,7 +140,7 @@ export default {
         {
           icon: "mdi-cog",
           title: "ສູນກາງ",
-          to:"/ministry"
+          to: "/ministry",
           // children: [
           //   {
           //     title: "ກະຊວງການຕ່າງປະເທດ",
@@ -178,7 +201,7 @@ export default {
         {
           icon: "mdi-face-agent",
           title: "ຈັດການທ້ອງຖິ້ມ",
-          to:"/rural"
+          to: "/rural",
           // children: [
           //   {
           //     title: "ນະຄອນຫຼວງວຽງຈັນ",
@@ -247,10 +270,26 @@ export default {
         {
           icon: "mdi-poll",
           title: "ລາຍງານ",
-          to:'/reports'
+          to: "/reports",
         },
       ],
     };
+  },
+  methods: {
+    logout() {
+      this.dialog = true;
+    },
+    confirmLogout() {
+      this.$cookies.remove("name");
+      this.$cookies.remove("lastName");
+      this.$cookies.remove("phone");
+      this.$cookies.remove("role");
+      this.$cookies.remove("userId");
+      this.$cookies.remove("email");
+      this.$cookies.remove("profile");
+      this.$cookies.remove("token");
+      this.$router.push("/login");
+    },
   },
 };
 </script>
