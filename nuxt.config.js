@@ -32,6 +32,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/axios' },
+    { src: '~/plugins/global' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -47,6 +48,7 @@ export default {
   modules: [
     'cookie-universal-nuxt',
     '@nuxtjs/axios',
+    '@nuxtjs/moment',
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

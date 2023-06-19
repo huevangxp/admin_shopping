@@ -15,33 +15,62 @@
     </v-row>
     <div>
       <v-data-table
-        :headers="headers"
-        class="elevation-1"
-        select-all
-        pagination.sync="pagination"
-        item-key="id"
-        loading="true"
-        search="search"
-      >
-      </v-data-table>
+      :headers="headers"
+      :items="admin.rows"
+      class="elevation-3"
+      :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
+      dense
+      fixed-header
+      
+    >
+    <template #item.profile= "{item}">
+      <div>
+        <v-avatar
+          size="70"
+          color="red"
+        >
+          
+        <v-img
+      
+         :src="item?.profile" alt="profile"></v-img>
+        </v-avatar>
+      </div>
+    </template>
+      <template #item.idx="{  index }">
+        <div>
+          {{ index + 1 }}
+        </div>
+      </template>
+      <template #item.createdAt = '{item}'>
+        <div>
+          {{ $moment(item.createdAt).format('DD/MM/YYYY') }}
+        </div>
+      </template>
+      <template #item.actions="{item}">
+        <div>
+          <v-btn color="red" outlined small @click="deleteUserDialog(item.id)">ລືມ</v-btn>
+          <v-btn color="primary"  small>ແກ້ໄຂ</v-btn>
+          <!-- {{ item.id }} -->
+        </div>
+      </template>
+    </v-data-table>
     </div>
     <v-dialog
       v-model="dialog"
       persistent
       :overlay="false"
       max-width="500px"
-      transition="dialog-transition"
+     transition="dialog-transition"
     >
       <v-card>
         <v-card-title class="primary white--text">
-             ສ້າງສະມາຊິກ 
-            <!-- <v-icon>mdi-cancel</v-icon> -->
+          ສ້າງສະມາຊິກ
         </v-card-title>
         <v-card-title class="d-flex justify-center">
           <v-card-text class="d-none">
             <v-file-input
               id="picture"
-              v-model="images"
+              v-model="user.images"
               @change="uploadImage"
             ></v-file-input>
           </v-card-text>
@@ -53,16 +82,44 @@
           </v-avatar>
         </v-card-title>
         <v-card-text class="pt-2">
-          <v-text-field placeholder="name" outlined dense></v-text-field>
-          <v-text-field placeholder="name" outlined dense></v-text-field>
-          <v-text-field placeholder="name" outlined dense></v-text-field>
-          <v-text-field placeholder="name" outlined dense></v-text-field>
-          <v-text-field placeholder="name" outlined dense></v-text-field>
+          <v-text-field v-model="user.name" placeholder="ຊື່" outlined dense></v-text-field>
+          <v-text-field v-model="user.lastName" placeholder="ນາມສະກຸນ" outlined dense></v-text-field>
+          <v-text-field v-model="user.phone" placeholder="ເບີ" outlined dense></v-text-field>
+          <v-text-field v-model="user.email" placeholder="ອີເມວ" outlined dense></v-text-field>
+          <v-text-field v-model="user.status" placeholder="ສະຖານະ" outlined dense></v-text-field>
+          <v-select
+           :items="items"
+            v-model="user.role" 
+            outlined
+            dense
+            label="ສິບ"></v-select>
+          <v-text-field v-model="user.position" placeholder="ຕຳແໜ່ງ" outlined dense></v-text-field>
+          <v-text-field v-model="user.password" placeholder="ລະຫັດຜ່ານ" outlined dense></v-text-field>
         </v-card-text>
         <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red" outlined @click="dialog = false">ຍົກເລິກ</v-btn>
-            <v-btn color="primary white--text">ສ້າງສະມາຊິກ</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="dialog = false">ຍົກເລິກ</v-btn>
+          <v-btn color="primary white--text" @click="createAdmin()">ສ້າງສະມາຊິກ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="deleteDialog"  
+      persistent :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text">
+          ລືມຂໍ້ມູນ
+        </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" small outlined @click='deleteDialog = false'>ຍົກເລິກ</v-btn>
+        <v-btn color="primary " small  @click='deleteUser(userId)'>ລືມຂໍ້ມູນ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -73,27 +130,64 @@
 export default {
   data() {
     return {
-        dialog: false,
-        image: "",
-        images: "",
-        headers: [
-        {text: "id", value:'id'},
-        {text: "image", value:'id'},
-        {text: "name", value:'id'},
-        {text: "lastname", value:'id'},
-        {text: "address", value:'id'},
-        {text: "actions", value:'id'},
-      ]
+      dialog: false,
+      deleteDialog: false,
+      image: "",
+      userId:'',
+      user: {},
+      headers: [
+      {
+          text: "ລ/ດ",
+          align: "start",
+          sortable: false,
+          value: "idx",
+        },
+        { text: "ຮູບ", value: "profile" },
+        { text: "ຊື່", value: "name" },
+        { text: "ນາມສະກຸນ", value: "lastName" },
+        { text: "ເບິ", value: "phone" },
+        { text: "ອີເມວ", value: "email" },
+        { text: "ສະຖານະ", value: "role" },
+        { text: "ວັນທີສ້າງ", value: "createdAt" },
+        { text: "", value: "actions" },
+      ],
+      items: [
+        { id: 1, text: "super_admin" },
+        { id: 1, text: "ministry_admin" },
+        { id: 1, text: "rural_admin" },
+      ],
     };
+  },
+  mounted() {
+    this.$store.dispatch('user/getAdmin');
+  },
+  computed: {
+    admin() {
+     return this.$store.state.user.admin
+    }
+  },
+  methods: {
+    deleteUserDialog(id) {
+      this.userId = id;
+      this.deleteDialog = true;
     },
-    methods: {
-        uploadImage(e) {
+    uploadImage(e) {
       this.url = URL.createObjectURL(e);
       this.image = this.url;
     },
     getImage() {
       document.getElementById("picture").click();
     },
-  }
+   async createAdmin() {
+     await this.$store.dispatch('user/createAdmin', { ...this.user });
+     this.$store.dispatch('user/getAdmin');
+     this.dialog = false
+    },
+    async deleteUser(id) {
+      await this.$store.dispatch('user/deleteUser', id);
+     this.$store.dispatch('user/getAdmin');
+     this.deleteDialog= false
+    }
+  },
 };
 </script>

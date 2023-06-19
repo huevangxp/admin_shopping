@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
+    v-if="role=='super_admin'"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -28,7 +29,7 @@
           <template #activator>
             <v-list-item-title
               class="py-2"
-              style="font-size: 18px; color: black; font-weight: bold"
+              style="font-size: 14px; color: black; font-weight: bold"
               >{{ item.title }}</v-list-item-title
             >
           </template>
@@ -41,7 +42,7 @@
           >
             <v-list-item-title
               class="py-2"
-              style="font-size: 18px; color: black"
+              style="font-size: 14px; color: black"
               >{{ subItem.title }}</v-list-item-title
             >
           </v-list-item>
@@ -59,7 +60,7 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              <span style="font-size: 18px; color: black; font-weight: bold">{{
+              <span style="font-size: 14px; color: black; font-weight: bold">{{
                 item.title
               }}</span>
             </v-list-item-title>
@@ -74,7 +75,7 @@
       elevation="0"
       color="primary"
       dark
-    >
+    > 
       <v-avatar size="50" color="red">
         <v-img
           lazy-src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
@@ -131,6 +132,7 @@ export default {
       name: this.$cookies.get("name"),
       lastName: this.$cookies.get("lastName"),
       profile: this.$cookies.get("profile"),
+      role: this.$cookies.get("role"),
       items: [
         {
           icon: "mdi-monitor-dashboard",
@@ -146,127 +148,23 @@ export default {
           //     title: "ກະຊວງການຕ່າງປະເທດ",
           //     to: "/ministry",
           //   },
-          //   {
-          //     title: "ກະຊວງຍຸຕິທໍາ",
-          //     to: "/login",
-          //   },
-          //   {
-          //     title: "ກະຊວງພາຍໃນ",
-          //     to: "/rural",
-          //   },
-          //   {
-          //     title: "ກະຊວງສຶກສາທິການ ແລະ ກິລາ",
-          //   },
-          //   {
-          //     title: "ກະຊວງສາທາລະນະສຸກ",
-          //   },
-          //   {
-          //     title: "ກະຊວງຖະແຫຼງຂ່າວ, ວັດທະນະທໍາ ແລະ ທ່ອງທ່ຽວ",
-          //   },
-          //   {
-          //     title: "ກະຊວງແຮງງານ ແລະ ສະຫວັດດີການສັງຄົມ",
-          //   },
-          //   {
-          //     title: "ກະຊວງແຜນການ ແລະ ການລົງທຶນ",
-          //   },
-          //   {
-          //     title: "ກະຊວງການເງິນ",
-          //   },
-          //   {
-          //     title: "ກະຊວງກະສິກໍາ ແລະ ປ່າໄມ້",
-          //   },
-          //   {
-          //     title: "ກະຊວງຊັບພະຍາກອນທໍາມະຊາດ ແລະ ສິ່ງແວດລ້ອມ",
-          //   },
-          //   {
-          //     title: "ກະຊວງພະລັງງານ ແລະ ບໍ່ແຮ່",
-          //   },
-          //   {
-          //     title: "ກະຊວງອຸດສາຫະກໍາ ແລະ ການຄ້າ",
-          //   },
-          //   {
-          //     title: "ກະຊວງໂຍທາທິການ ແລະ ຂົນສົ່ງ",
-          //   },
-          //   {
-          //     title: "ກະຊວງເຕັກໂນໂລຊີ ແລະ ການສື່ສານ",
-          //   },
-          //   {
-          //     title: "ຫ້ອງວ່າການສໍານັກງານນາຍົກລັດຖະມົນຕີ",
-          //   },
-          //   {
-          //     title: "ທະນາຄານແຫ່ງ ສປປ ລາວ",
-          //   },
-          // ],
+          // ]
         },
         {
           icon: "mdi-face-agent",
           title: "ຈັດການທ້ອງຖິ້ມ",
           to: "/rural",
-          // children: [
-          //   {
-          //     title: "ນະຄອນຫຼວງວຽງຈັນ",
-          //   },
-          //   {
-          //     title: "ແຂວງວຽງຈັນ",
-          //   },
-          //   {
-          //     title: "ຮັບສັ່ງຊື້ແລ້ວ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          //   {
-          //     title: "ຊຳລະສຳເລັດ",
-          //   },
-          // ],
+          children: [
+            {
+              title: "ກະຊວງ",
+            },
+            {
+              title: "ອົງການທຽບເທົ່າກະຊວງ",
+            },
+          ]
+        
         },
 
-        // {
-        //   icon: "mdi-sim",
-        //   title: "sims-master",
-        // },
         {
           icon: "mdi-poll",
           title: "ລາຍງານ",

@@ -31,11 +31,16 @@ export const actions = {
     },
     async getDepartment({ commit }) {
         commit("setLoading", true);
-        await this.$axios.get('/department')
+        const response = await this.$axios.get('/department')
             .then((res) => {
                 commit('setDepartment', res.data);
                 commit("setLoading", false);
-      })  
+                return res.data
+            }).catch(err => {
+                return []
+            })
+        console.log(response);
+        return response;
     },
     async createDepartment({ commit }, data) {
         await this.$axios.post('/department', data)

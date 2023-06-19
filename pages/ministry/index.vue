@@ -114,7 +114,7 @@ export default {
     },
     moveDepartment(id) {
       this.$router.push(`/ministry/department/${id}`);
-      console.log("id--->", id);
+      
     },
     createMinistry() {
       this.dialog = true;
@@ -124,10 +124,10 @@ export default {
         profile: this.images,
         ministry_title: this.ministry_title,
       };
-      // console.log(ministry);
       await this.$store.dispatch("ministry/createMinistry", { ...ministry });
       this.$store.dispatch("ministry/getMinistry");
       this.dialog = false;
+      this.ministry_title = '';
     },
   },
 };
