@@ -1,11 +1,13 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
-    v-if="role=='super_admin'"
+      v-if="role == 'super_admin'"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
       width="250"
+      color="primary"
+      dark
       fixed
       app
     >
@@ -13,25 +15,30 @@
         icon
         class="ml-1"
         x-large
-        color="primary"
+        color="white"
         @click.stop="miniVariant = !miniVariant"
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
+      <v-card v-if="miniVariant == false" elevation="0" class="primary">
+        <v-card-title class="d-flex justify-center">
+          <v-avatar size="102" color="white">
+            <v-avatar size="100" color="primary">
+              <v-img :src="profile" alt="image"></v-img>
+            </v-avatar>
+          </v-avatar>
+        </v-card-title>
+      </v-card>
       <v-list v-for="(item, i) in items" :key="i" dense class="py-0" tile flat>
         <v-list-group
           v-if="item.children"
           :prepend-icon="item.icon"
           no-action
-          color="primary"
           dark
+          active-class="white black--text"
         >
           <template #activator>
-            <v-list-item-title
-              class="py-2"
-              style="font-size: 14px; color: black; font-weight: bold"
-              >{{ item.title }}</v-list-item-title
-            >
+            <v-list-item-title class="py-2">{{ item.title }}</v-list-item-title>
           </template>
           <v-list-item
             v-for="(subItem, subI) in item.children"
@@ -39,12 +46,14 @@
             exact
             :to="subItem.to"
             link
+            active-class="white black--text"
           >
-            <v-list-item-title
-              class="py-2"
-              style="font-size: 14px; color: black"
-              >{{ subItem.title }}</v-list-item-title
-            >
+            <v-list-item-action>
+              <v-icon>{{ subItem.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-title class="py-2" style="font-size: 14px">{{
+              subItem.title
+            }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
         <v-list-item
@@ -53,16 +62,14 @@
           router
           exact
           dense
-          active-class="primary white--text"
+          active-class="white black--text"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>
-              <span style="font-size: 14px; color: black; font-weight: bold">{{
-                item.title
-              }}</span>
+            <v-list-item-title class="font-weight-bold" style="font-size: 14px">
+              {{ item.title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -75,16 +82,27 @@
       elevation="0"
       color="primary"
       dark
-    > 
-      <v-avatar size="50" color="red">
-        <v-img
-          lazy-src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
-          alt="alt"
-        />
+    >
+      <v-avatar size="60" color="white">
+        <v-img lazy-src="/loading.gif" src="/logo.png" alt="alt" />
       </v-avatar>
-      <v-toolbar-title class="ml-3">{{ name }} {{ lastName }}</v-toolbar-title>
+      <v-toolbar-title class="ml-3">ອົງການທີ່ຂື້ນກັບລັດຖະບານ</v-toolbar-title>
       <v-spacer />
-      <v-btn icon @click="logout()"> <v-icon>mdi-power</v-icon> </v-btn>
+      <div class="mx-4">version {{ VERSION }}</div>
+      <div class="d-flex">
+        <p class="mt-4" style="border-bottom: 1px solid #fff">ຜູ້ໃຊ້ລະບົບ:</p>
+        <v-tab @click="$router.push(`/dashboard/admin/${id}`)">
+        <v-badge
+          color="white"
+          dot>
+        <span class="font-weight-bold">{{ name }}</span>
+        </v-badge>
+      </v-tab>
+        
+      </div>
+      <v-btn outlined icon class="ml-4" @click="logout()">
+        <v-icon>mdi-power</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>
@@ -94,12 +112,12 @@
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
-    <!-- persistent :overlay="false" -->
     <v-dialog v-model="dialog" max-width="500px">
-      <!-- transition="dialog-transition" -->
       <v-card>
-        <v-card-title primary-title> ອອກຈາກລະບົບ </v-card-title>
-        <!-- <v-divider></v-divider> -->
+        <v-card-title primary-title class="primary white--text">
+          ອອກຈາກລະບົບ
+        </v-card-title>
+
         <v-card-text class="d-flex justify-center py-10">
           ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ່?
         </v-card-text>
@@ -109,7 +127,9 @@
           <v-btn color="red" outlined dense @click="dialog = false"
             >ຍົກເລີກ</v-btn
           >
-          <v-btn color="primary" dense dark @click="confirmLogout()">ອອກຈາກລະບົບ</v-btn>
+          <v-btn color="primary" dense dark @click="confirmLogout()"
+            >ອອກຈາກລະບົບ</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -117,56 +137,69 @@
 </template>
 
 <script>
+  // import { VERSION } from 'constants';
 export default {
   name: "DefaultLayout",
   middleware: "auth",
   data() {
     return {
+      VERSION:'0.0.2',
       dialog: false,
       clipped: true,
       drawer: true,
       fixed: false,
-      miniVariant: true,
+      miniVariant: false,
       right: true,
       rightDrawer: true,
       name: this.$cookies.get("name"),
+      id: this.$cookies.get('userId'),
       lastName: this.$cookies.get("lastName"),
       profile: this.$cookies.get("profile"),
       role: this.$cookies.get("role"),
       items: [
         {
-          icon: "mdi-monitor-dashboard",
+          icon: "mdi-tablet-dashboard",
           title: "ອົງການທີ່ຂື້ນກັບລັດຖະບານ",
           to: "/",
         },
         {
-          icon: "mdi-cog",
+          icon: "mdi-database",
+          title: "ຈັດການຂໍ້ມູນພື້ນຖາມ",
+          // to: "/",
+        },
+        {
+          icon: "mdi-bank",
           title: "ສູນກາງ",
-          to: "/ministry",
+          // to: "/ministry",
+          children: [
+            {
+              icon: "mdi-bank-circle",
+              title: "ກະຊວງ",
+              to: "/ministry",
+            },
+            {
+              icon: "mdi-bank-outline",
+              title: "ອົງການທຽບເທົ່າກະຊວງ",
+              to: "/ministryAgency",
+            },
+          ],
+        },
+        {
+          icon: "mdi-home-city-outline",
+          title: "ຈັດການທ້ອງຖິ້ມ",
+          to: "/rural",
           // children: [
           //   {
-          //     title: "ກະຊວງການຕ່າງປະເທດ",
-          //     to: "/ministry",
+          //     title: "ກະຊວງ",
+          //   },
+          //   {
+          //     title: "ອົງການທຽບເທົ່າກະຊວງ",
           //   },
           // ]
         },
-        {
-          icon: "mdi-face-agent",
-          title: "ຈັດການທ້ອງຖິ້ມ",
-          to: "/rural",
-          children: [
-            {
-              title: "ກະຊວງ",
-            },
-            {
-              title: "ອົງການທຽບເທົ່າກະຊວງ",
-            },
-          ]
-        
-        },
 
         {
-          icon: "mdi-poll",
+          icon: "mdi-chart-box",
           title: "ລາຍງານ",
           to: "/reports",
         },

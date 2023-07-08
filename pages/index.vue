@@ -4,7 +4,9 @@
     <IndexLine/>
   </v-container>
   <div>
-        <div class=" font-weight-bold mb-3" style="font-size:26px">ການຈັດການຂໍ້ມູນ</div>
+    <!-- <input type="color"> -->
+
+        <!-- <div class=" font-weight-bold mb-3" style="font-size:26px">ການຈັດການຂໍ້ມູນ</div>
         <v-row dense>
             <v-col
                 v-for="item in lists"
@@ -29,7 +31,7 @@
                     </v-card-text>
                 </v-card>
             </v-col>
-        </v-row>
+        </v-row> -->
     </div>
   </v-container>
 </template>

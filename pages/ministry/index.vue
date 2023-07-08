@@ -1,47 +1,47 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="4">
-        <v-text-field
-          v-model="search"
-          name="search"
-          label="search"
-          id="id"
-          dense
-          outlined
-          append-icon="mdi-magnify"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="4"> </v-col>
-      <v-col cols="4">
-        <v-btn color="primary" @click="createMinistry()">ສ້າງກະຊວງ</v-btn>
-      </v-col>
-    </v-row>
-
-    <h1 class="my-4 text-h4">ກະຊວງທັງໜົດ ( {{ ministry.count }} )</h1>
+    <h1>ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
+    <!-- <div class="d-flex justify-space-between">
+      <h1 class="my-4 text-h6">ກະຊວງທັງໜົດ ( {{ ministry.count }} )</h1>
+      <v-btn color="primary" @click="createMinistry()">ສ້າງກະຊວງ</v-btn>
+    </div> -->
     <v-row>
       <v-col v-for="data in ministry.rows" :key="data.id" cols="6" md="3">
         <v-card max-width="400px" @click="moveDepartment(data.id)">
-          <v-card-text class="d-flex justify-content">
-            <v-img
-              :src="data.profile"
-              alt="ministry-image"
-              lazy-src="/loading.gif"
-              style="object-fit: cover; width: 100%; height: 150"
+          <v-img src="/card.png" alt="alt" style="width: 100%; height: 100px">
+            <v-avatar size="150" color="white" class="ml-8 mt-10 fixed-avatar">
+              <v-img
+                :src="data.profile"
+                alt="ministry-image"
+                lazy-src="/loading.gif"
+                style="object-fit: fill;"
               ></v-img>
-          </v-card-text>
+            </v-avatar>
+          </v-img>
+          <v-card-text style="height: 100px"> </v-card-text>
           <v-card-text
-            class="black--text d-flex justify-center pb-8"
-            style="font-weight: bold; font-size: 20px"
+            class="black--text d-flex justify-center"
+            style="font-weight: bold; font-size: 16px"
           >
-         <v-icon class="px-3" size="40" color="teal">mdi-flag</v-icon>   {{ data.ministry_title }}
+            {{ data.ministry_title }}
           </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="py-5">
+            <v-spacer></v-spacer>
+            <v-btn color="red" outlined fab small @click.stop="deleteItem(data.id)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <v-btn color="primary" outlined fab small>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="teal white--text"> ສ້າງກະຊວງ </v-card-title>
+        <v-card-title class="primary white--text"> ສ້າງກະຊວງ </v-card-title>
         <v-card-title class="d-flex justify-center">
           <v-card-text class="d-none">
             <v-file-input
@@ -67,7 +67,6 @@
           ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
-
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" outlined @click="dialog = false"> ຍົກເລີກ </v-btn>
@@ -101,6 +100,9 @@ export default {
     },
   },
   methods: {
+    deleteItem(id) {
+      console.log(id);
+    },
     async deleteMinistry(id) {
       await this.$store.dispatch("ministry/deleteMinistry", id);
       this.$store.dispatch("ministry/getMinistry");
@@ -113,8 +115,7 @@ export default {
       document.getElementById("picture").click();
     },
     moveDepartment(id) {
-      this.$router.push(`/ministry/department/${id}`);
-      
+      this.$router.push(`/ministry/department/departmentData/${id}`);
     },
     createMinistry() {
       this.dialog = true;
@@ -127,8 +128,15 @@ export default {
       await this.$store.dispatch("ministry/createMinistry", { ...ministry });
       this.$store.dispatch("ministry/getMinistry");
       this.dialog = false;
-      this.ministry_title = '';
+      this.ministry_title = "";
     },
   },
 };
 </script>
+
+<style>
+.fixed-avatar {
+  position: fixed;
+  z-index: 888;
+}
+</style>

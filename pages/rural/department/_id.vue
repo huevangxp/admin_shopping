@@ -13,9 +13,9 @@
         ></v-text-field>
       </v-col>
       <v-col cols="4"> </v-col>
-      <v-col cols="4">
+      <v-col cols="4" class="d-flex justify-content-end">
         <v-btn color="primary" to="/department/detail/create">create ຂະແໜງ</v-btn>
-        <v-btn color="green" dark>Export To excel</v-btn>
+        <!-- <v-btn color="green" dark>Export To excel</v-btn> -->
       </v-col>
     </v-row>
     {{ id }}
@@ -25,15 +25,19 @@
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="name"
-        show-expand
         class="elevation-1"
-      >
-        <template #[`item.actions`]>
-          <div class="d-flex">
-            <v-btn color="teal" dark>ສ້າງຂະແໜງ</v-btn>
+        @click:row="moveTodepartmentType"
+        >
+        <!-- show-expand -->
+        <!-- v-if="role !== 'super_admin'" -->
+        <template #[`item.actions`] >
+          <div class="d-flex" >
+            <v-btn color="primary" icon dark>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
           </div>
         </template>
-        <template v-slot:expanded-item="{ headers, item }">
+        <!-- <template v-slot:expanded-item="{ headers, item }">
           <td :colspan="headers.length">
               <v-col v-for="data in department" :key="data.id" cols="12">
                 <v-card elevation="0" @click="moveDepartment(data.id)">
@@ -44,7 +48,7 @@
                 <v-divider></v-divider>
               </v-col>
           </td>
-        </template>
+        </template> -->
       </v-data-table>
       <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
         <v-card>
@@ -76,7 +80,8 @@ export default {
       expanded: [],
         singleExpand: false,
         dialog: false,
-        search: "",
+      search: "",
+        role:this.$cookies.get('role'),
         dessertHeaders: [
           {
             text: "ລະຫັດ",
@@ -127,8 +132,8 @@ export default {
     };
   },
   methods: {
-    moveDepartment(item) {
-       this.$router.push(`/rural/manage/${item.id}`)
+    moveTodepartmentType(item) {
+       this.$router.push(`/rural/departmentType/${item.id}`)
     //   console.log(item.id);
     },
   },

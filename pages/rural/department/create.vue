@@ -30,7 +30,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" dark>cancel</v-btn>    
-                <v-btn color="teal" dark>Create</v-btn>    
+                <v-btn color="primary" dark>Create</v-btn>    
             </v-card-actions>
         </v-card>
     </v-container>

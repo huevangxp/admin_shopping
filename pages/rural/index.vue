@@ -1,38 +1,43 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="4"> </v-col>
-      <v-col cols="4"> </v-col>
-      <v-col cols="4">
-        <v-btn color="primary" dark class="px-10" @click="dialog = true"
-          >ສ້າງແຂວງ</v-btn
-        >
-      </v-col>
-    </v-row>
-    <h1 class="py-4">ທ້ອງຖິ່ນທັງໝົດ ( {{ province.count }} )</h1>
+    <h1 class="mb-3">ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
     <v-row>
       <v-col v-for="data in province.rows" :key="data.id" cols="6" md="3">
         <v-card max-width="400px" @click="moveDepartment(data.id)">
-          <v-card-text>
-            <v-img
-              :src="data.profile"
-              lazy-src="/loading.gif"
-              style="object-fit: cover; width: 100%; height: 100"
-              alt="logo"
-            ></v-img>
-          </v-card-text>
+          <v-img src="/card.png" alt="alt" style="width: 100%; height: 100px">
+            <v-avatar size="150" color="white" class="ml-10 mt-10 fixed-avatar">
+              <v-img
+                :src="data.profile"
+                alt="ministry-image"
+                lazy-src="/loading.gif"
+                style="object-fit: fill;"
+              ></v-img>
+            </v-avatar>
+          </v-img>
+          <v-card-text style="height: 100px"> </v-card-text>
           <v-card-text
-            class="black--text d-flex justify-center pb-8"
-            style="font-weight: bold; font-size: 20px"
+            class="black--text d-flex justify-center"
+            style="font-weight: bold; font-size: 16px"
           >
             {{ data.province_title }}
           </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="py-5" v-if="role == 'ministry'">
+            <v-spacer></v-spacer>
+            <v-btn color="red" outlined fab small @click.stop="deleteItem(data.id)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <v-btn color="primary" outlined fab small>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="teal white--text"> ສ້າງແຂວງ </v-card-title>
+        <v-card-title class="primary white--text"> ສ້າງແຂວງ </v-card-title>
         <v-card-title class="d-flex justify-center">
           <v-card-text class="d-none">
             <v-file-input
@@ -89,6 +94,7 @@ export default {
       images: "",
       image: "",
       province_title: "",
+      role:this.$cookies.get("role"),
       expanded: [],
       singleExpand: false,
       dialog: false,
@@ -121,8 +127,8 @@ export default {
       this.dialog = false;
     },
     moveDepartment(id) {
-      // this.$router.push(`/rural/department/${id}`);
-      console.log("id--->", id);
+      this.$router.push(`/rural/department/${id}`);
+      // console.log("id--->", id);
     },
     uploadImage(e) {
       this.url = URL.createObjectURL(e);
@@ -134,3 +140,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.fixed-avatar {
+  position: fixed;
+  z-index: 888;
+  /* Add any other necessary styles here */
+}
+</style>

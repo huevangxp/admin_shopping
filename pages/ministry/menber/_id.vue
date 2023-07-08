@@ -16,20 +16,20 @@
     <div>
       <v-data-table
       :headers="headers"
-      :items="admin.rows"
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
       dense
       fixed-header 
-      @click:row="showDetails"
     >
     <template #item.profile= "{item}">
       <div>
         <v-avatar
           size="70"
           color="red"
-        >   
+        >
+          
         <v-img
+      
          :src="item?.profile" alt="profile"></v-img>
         </v-avatar>
       </div>
@@ -46,7 +46,7 @@
       </template>
       <template #item.actions="{item}">
         <div>
-          <v-btn color="red" icon small @click.stop="deleteUserDialog(item.id)">
+          <v-btn color="red" icon small @click="deleteUserDialog(item.id)">
           <v-icon>mdi-delete</v-icon>
           </v-btn>
           <v-btn color="primary"  icon small>
@@ -88,14 +88,7 @@
           <v-text-field v-model="user.phone" placeholder="ເບີ" outlined dense></v-text-field>
           <v-text-field v-model="user.email" placeholder="ອີເມວ" outlined dense></v-text-field>
           <v-text-field v-model="user.status" placeholder="ສະຖານະ" outlined dense></v-text-field>
-          <v-select
-           :items="items"
-            v-model="user.role" 
-            outlined
-            dense
-            label="ສິບ"></v-select>
           <v-text-field v-model="user.position" placeholder="ຕຳແໜ່ງ" outlined dense></v-text-field>
-          <v-text-field v-model="user.password" placeholder="ລະຫັດຜ່ານ" outlined dense></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -152,26 +145,20 @@ export default {
         { text: "ວັນທີສ້າງ", value: "createdAt" },
         { text: "", value: "actions" },
       ],
-      items: [
-        { id: 1, text: "super_admin" },
-        { id: 1, text: "ministry_admin" },
-        { id: 1, text: "rural_admin" },
-      ],
+    
     };
   },
   mounted() {
-    this.$store.dispatch('user/getAdmin');
+   
   },
+
   computed: {
-    admin() {
-     return this.$store.state.user.admin
+    id() {
+      return this.$route.params.id;
     }
   },
 
   methods: {
-    showDetails() {
-      alert('test')
-    },
     deleteUserDialog(id) {
       this.userId = id;
       this.deleteDialog = true;
@@ -183,16 +170,8 @@ export default {
     getImage() {
       document.getElementById("picture").click();
     },
-   async createAdmin() {
-     await this.$store.dispatch('user/createAdmin', { ...this.user });
-     this.$store.dispatch('user/getAdmin');
-     this.dialog = false
-    },
-    async deleteUser(id) {
-      await this.$store.dispatch('user/deleteUser', id);
-     this.$store.dispatch('user/getAdmin');
-     this.deleteDialog= false
-    }
+  
+    
   },
 };
 </script>

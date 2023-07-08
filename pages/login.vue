@@ -1,5 +1,6 @@
 <template>
-    <div id="backgrond-image">
+  <!-- id="backgrond-image" -->
+    <div >
         <v-card class="mx-auto my-5 " max-width="400" elevation="10">
       <template slot="progress">
         <v-progress-linear
@@ -15,7 +16,6 @@
          
         >
         <v-img
-       
              src="https://wallpaperaccess.com/full/4593946.jpg"
            ></v-img>
         </v-avatar>
@@ -31,7 +31,7 @@
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
             outlined
             dense
-            label="ເບິໂທຜູ້ໃຊ້"
+            label="ເບິໂທ"
           >
             <template #prepend-inner>
               <v-icon color="primary" right>mdi-account-key</v-icon>
@@ -80,7 +80,6 @@ export default {
   },
   methods: {
     login() {
-      // console.log(this.user);
       this.$store.dispatch('auth/isLogin', {...this.user})
     }
   }

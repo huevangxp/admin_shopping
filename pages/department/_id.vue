@@ -28,7 +28,7 @@
       @click:row="moveDepartment"
     >
       <template #[`item.profile`]="{ item }">
-        <v-avatar size="60" color="red">
+        <v-avatar size="60" color="primary">
           <v-img :src="item.profile" alt="hue"></v-img>
         </v-avatar>
       </template>
