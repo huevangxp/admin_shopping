@@ -1,55 +1,140 @@
 <template>
-  <v-container fluid >
-    <v-row align="center"  justify="center" >
-      <v-col cols="12" md="12" lg="12">
-        <v-card elevation="1" max-width="800" class="mx-auto">
-          <v-card max-width="250" height="250" class="mx-auto">
-          <v-img :src="profilePicture" style="height: 100%; width: 100%;"></v-img>
-          </v-card>
-          <v-card-media :src="profilePicture" height="200"></v-card-media>
-          <v-card-title>
-    <span class="title">{{ fullName }} </span>
-    <span class="subtitle">{{ status }}</span>
-  </v-card-title>
-          <!-- <v-card-subtitle class="text-center">{{ status }}</v-card-subtitle> -->
-          <v-card-text>
-            <p>Age: {{ age }}</p>
-            <p>Address: {{ address }}</p>
-          </v-card-text>
+  <v-container fluid>
+    <!-- {{ id }} -->
+    <div class="d-flex justify-space-between mx-10">
+      <div>
+      <div class="d-flex justify-space-between">
+
+        <v-card max-width="200" height="250" elevation="0">
+          <v-img src="/huevang.jpeg" style="height: 100%; width: 100%"></v-img>
         </v-card>
-      </v-col>
-    </v-row>
+        <v-card class="mx-4 " elevation="0">
+         <div class="mx-4 my-3">
+          <span style=" font-weight: bold">
+            ຊື່:
+          </span><br>
+          <span>- Mr.huevang</span>
+         </div>
+         <div class="mx-4 my-3">
+          <span style=" font-weight: bold">
+            ເບີ:
+          </span><br>
+          <span >- 020 78849378</span>
+         </div>
+         <div class="mx-4 my-3">
+          <span style=" font-weight: bold">
+            ຕຳແໜງ:
+          </span><br>
+          <span>- ຫົວນ້າກົມປານຊາການ</span>
+         </div>
+        </v-card>
+      </div>
+      <v-card max-width="100%" elevation="0">
+       <v-card-text style="width: 380px">
+       <span class="black--text"> ທີ່ຢູ່: </span>
+       <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</p>
+       </v-card-text> 
+       <v-card-text style="width: 380px">
+        <span class="black--text">ປະຫວັດຫຍໍ້:</span>
+        <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</p>
+       </v-card-text> 
+      </v-card>
+      </div>
+      <div class="flex-1">
+        <v-timeline dense clipped>
+          <v-timeline-item
+            fill-dot
+            class="white--text mb-12"
+            color="primary"
+            small
+          >
+            <template v-slot:icon>
+              <v-avatar size="40" color="primary">
+                <v-img :src="profile" alt="alt"></v-img>
+              </v-avatar>
+            </template>
+            <v-text-field
+            style="width: 400px"
+              v-model="input"
+              hide-details
+              flat
+              label="ເຮັດກິດຈະກຳຕ່າງໆໆໆ"
+              
+              solo
+              @keydown.enter="comment"
+            >
+              <template v-slot:append>
+                <v-btn class="mx-0" color="red" dark icon depressed @click="comment"> <v-icon>mdi-checkbox-marked-circle</v-icon> </v-btn>
+              </template>
+            </v-text-field>
+          </v-timeline-item>
+          <v-slide-x-transition group>
+            <v-timeline-item
+              v-for="event in timeline"
+              :key="event.id"
+              class="mb-4"
+              color="primary"
+              small
+            >
+              <v-card hover raised>
+                <div class="d-flex"> 
+                  <v-btn class="mt-5 ml-3 " color="yellow" elevation="0" small icon>
+
+                    <v-icon>mdi-check-decagram</v-icon>
+                  </v-btn>
+                  <!-- <span style="font-size:39px" class="mx-2">:</span> -->
+              <v-card-title
+                  style="width: 400px"
+                  v-text="event.text"
+                > 
+              </v-card-title>
+              </div>
+                <v-card-text v-text="event.time"></v-card-text>
+              </v-card>
+            </v-timeline-item>
+          </v-slide-x-transition>
+        </v-timeline>
+      </div>
+    </div>
   </v-container>
 </template>
-
 <script>
 export default {
   data() {
     return {
-      fullName: 'John Doe',
-      status: 'Active',
-      age: 25,
-      address: '123 Main Street',
-      profilePicture: 'https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg', // replace with your own image URL
-    }
+      events: [],
+      input: null,
+      nonce: 0,
+      profile:this.$cookies.get('profile')
+    };
   },
-}
-</script>
+  computed: {
+    id() {
+      return this.$route.params.id;
+    },
+    timeline() {
+      return this.events.slice().reverse();
+    },
+  },
+  methods: {
+    comment() {
+      const time = new Date().toTimeString();
+      this.events.push({
+        id: this.nonce++,
+        text: this.input,
+        time: time.replace(
+          /:\d{2}\sGMT-\d{4}\s\((.*)\)/,
+          (match, contents, offset) => {
+            return ` ${contents
+              .split(" ")
+              .map((v) => v.charAt(0))
+              .join("")}`;
+          }
+        ),
+      });
 
-<style scoped>
-.my-card {
-/* background-image: url('https://www.shutterstock.com/image-photo/old-brick-black-color-wall-260nw-1605128917.jpg'); */
-/* background-size: cover; */
-background-color: azure;
-height: 100%;
-width: 100%;
-}
-.title {
-font-size: 24px;
-font-weight: bold;
-}
-.subtitle {
-font-size: 16px;
-font-weight: regular;
-}
-</style>
+      this.input = null;
+    },
+  },
+};
+</script>

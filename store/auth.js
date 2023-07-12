@@ -23,8 +23,14 @@ export const actions = {
                 this.$cookies.set("email", data.email);
                 this.$cookies.set("profile", data.profile);
                 this.$cookies.set('token', res?.data);
-                this.$router.push('/');
                 commit('setLoading', false)
+                
+                if (data?.role == 'super_admin') {
+                    this.$router.push('/');  
+                } else {
+                    this.$router.push('/ministry'); 
+                }
+
             }).catch((err) => {
                 console.log(err);
                 commit('setLoading', false)

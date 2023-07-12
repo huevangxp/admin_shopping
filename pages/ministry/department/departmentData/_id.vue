@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4">
-        <v-btn color="primary" @click="openCreate()">ສ້າງກົມຈັດຕັ້ງ</v-btn>
+        <v-btn v-if="role !== 'ministry_amdin'" color="primary" @click="openCreate()">ສ້າງກົມຈັດຕັ້ງ</v-btn>
       </v-col>
     </v-row>
     <v-data-table
@@ -34,7 +34,7 @@
         </div>
       </template>
       <template v-slot:item.actions="{ item }">
-        <div class="d-flex" v-if="role == 'ministry_amdin'">
+        <div class="d-flex">
           <div>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">

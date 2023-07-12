@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h1 class="my-10">ຈັດການຂໍ້ມູນພະນັກງານຂອງກະຊວງ</h1>
     <v-row>
@@ -20,14 +20,10 @@
     </v-row>
     <v-data-table
       :headers="employeeHeaders"
-      hide-actions
+      :items="data"
       class="elevation-1"
-      select-all
-      pagination.sync="pagination"
-      loading="true"
-      search="search"
-    >
-      
+      @click:row="toDetails"
+    >   
     </v-data-table>
   </div>
 </template>
@@ -44,13 +40,32 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຮູບພາບ" },
-        { text: "ຊື້ແລະນາມສະກຸ່ມ"},
-        { text: "ຕຳແໜງ" },
-        { text: "ສະໄໝ" },
-        { text: "ແຕ່ປີ" },
-        { text: "ຫາປີ" },
+        { text: "ຮູບພາບ", value:'image' },
+        { text: "ຊື້ແລະນາມສະກຸ່ມ", value:'name'},
+        { text: "ຕຳແໜງ" , value:'position'},
+        // { text: "ສະໄໝ" },
+        // { text: "ແຕ່ປີ" },
+        // { text: "ຫາປີ" },
       ],
+      data: [
+          {
+            id:'11',
+            image: "https://example.com/image.jpg",
+            name: "John",
+            lastname: "Doe",
+            position: "Developer",
+            status: "Active",
+          },
+          {
+            id:'22',
+            image: "https://example.com/image2.jpg",
+            name: "Jane",
+            lastname: "Doe",
+            position: "Designer",
+            status: "Inactive",
+          },
+          // More data objects go here
+        ],
     };
   },
   mounted() {
@@ -62,7 +77,9 @@ export default {
     },
   },
   methods: {
-   
+    toDetails(item) {
+      this.$router.push(`/ministry/detail/${item?.id}`)
+    }
   },
 };
-</script>
+</script> -->

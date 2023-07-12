@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+ 
     <v-row>
       <v-col cols="12" md="3"> 
       <v-card to="/dashboard/create">
@@ -21,7 +22,7 @@
       </v-card>  
       </v-col>
       <v-col cols="12" md="3"> 
-      <v-card>
+      <v-card to="/dashboard/adminMinistry">
         <v-card-title class="d-flex justify-center">
           <v-btn color="primary"  fab elevation="0" >
             <v-icon color="white" size="30" style="opacity: 1">mdi-bank</v-icon>

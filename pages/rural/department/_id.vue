@@ -30,25 +30,81 @@
         >
         <!-- show-expand -->
         <!-- v-if="role !== 'super_admin'" -->
-        <template #[`item.actions`] >
-          <div class="d-flex" >
-            <v-btn color="primary" icon dark>
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </div>
-        </template>
-        <!-- <template v-slot:expanded-item="{ headers, item }">
-          <td :colspan="headers.length">
-              <v-col v-for="data in department" :key="data.id" cols="12">
-                <v-card elevation="0" @click="moveDepartment(data.id)">
-                  <p >
-                    {{ data.name }}
-                  </p>
-                </v-card>
-                <v-divider></v-divider>
-              </v-col>
-          </td>
-        </template> -->
+        <template #[`item.idx`]="{index}">
+            <div>
+              {{ index+1 }}
+            </div>
+          </template>
+          <template #[`item.actions`] >
+            <div class="d-flex" >
+              <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="red"
+                  dark
+                  v-on="on"
+                  @click="createPhane(item.id)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>ລືບ</span>
+            </v-tooltip>
+              <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="primary"
+                  dark
+                  v-on="on"
+                  @click="createPhane(item.id)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+              <span>ແກ້ໄຂຂໍ້ມູນ</span>
+            </v-tooltip>
+         
+            </div>
+          </template >
+
+          <template #item.employee>
+            <div>
+              <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="primary"
+                  dark
+                  v-on="on"
+                  @click="createPhane(item.id)">
+                  <v-icon>mdi-account-multiple-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>ເບີ່ງ</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="primary"
+                  dark
+                  v-on="on"
+                  @click="createPhane(item.id)"
+                >
+                  <v-icon>mdi-account-multiple-plus-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>ສ້າງ</span>
+            </v-tooltip>
+              <!-- <v-btn color="primary" dark>view employee</v-btn> -->
+              <!-- <v-btn color="primary" dark>create employee</v-btn> -->
+            </div>
+          </template>
+  
       </v-data-table>
       <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
         <v-card>
@@ -82,16 +138,17 @@ export default {
         dialog: false,
       search: "",
         role:this.$cookies.get('role'),
-        dessertHeaders: [
-          {
-            text: "ລະຫັດ",
-            align: "start",
-            sortable: false,
-            value: "id",
-          },
-          { text: "ຊື່ພະແນກ", value: "name" },
-          { text: "", value: "actions" },
-          { text: "", value: "data-table-expand" },
+      dessertHeaders: [
+        {
+          text: "ລະຫັດ",
+          align: "start",
+          sortable: false,
+          value: "id",
+        },
+        { text: "ຊື່ພະແນກ", value: "name" },
+        { text: "", value: "actions" },
+        { text: "", value: "data-table-expand" },
+        { text: "", value: "employee" },
         ],
         desserts: [
           {
@@ -133,8 +190,7 @@ export default {
   },
   methods: {
     moveTodepartmentType(item) {
-       this.$router.push(`/rural/departmentType/${item.id}`)
-    //   console.log(item.id);
+       this.$router.push(`/rural/department/departmentType/${item.id}`)
     },
   },
   computed: {

@@ -16,10 +16,12 @@
       <div>
         <v-data-table
         :headers="headers"
+        :items="items"
         class="elevation-3"
         :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
         dense
         fixed-header 
+        @click:row="menubar"
       >
       <template #item.profile= "{item}">
         <div>
@@ -136,15 +138,21 @@
             sortable: false,
             value: "idx",
           },
-          { text: "ຮູບ", value: "profile" },
           { text: "ຊື່", value: "name" },
-          { text: "ນາມສະກຸນ", value: "lastName" },
-          { text: "ເບິ", value: "phone" },
-          { text: "ອີເມວ", value: "email" },
-          { text: "ສະຖານະ", value: "role" },
-          { text: "ວັນທີສ້າງ", value: "createdAt" },
+          // { text: "ຊື່", value: "name" },
+          // { text: "ນາມສະກຸນ", value: "lastName" },
+          // { text: "ເບິ", value: "phone" },
+          // { text: "ອີເມວ", value: "email" },
+          // { text: "ສະຖານະ", value: "role" },
+          // { text: "ວັນທີສ້າງ", value: "createdAt" },
           { text: "", value: "actions" },
         ],
+          items: [
+              {
+                index: 1,
+            name:'ພະແນກການເງີນ'
+          }
+        ]
       
       };
     },
@@ -159,6 +167,9 @@
     },
   
     methods: {
+        menubar(item) {
+        // this.$router.push(``);
+      },
       deleteUserDialog(id) {
         this.userId = id;
         this.deleteDialog = true;

@@ -83,8 +83,11 @@
       color="primary"
       dark
     >
-      <v-avatar size="60" color="white">
+      <v-avatar size="60" color="white" v-if="role == 'super_admin'">
         <v-img lazy-src="/loading.gif" src="/logo.png" alt="alt" />
+      </v-avatar>
+      <v-avatar size="60" color="white" v-else>
+        <v-img lazy-src="/loading.gif" :src="profile" alt="alt" />
       </v-avatar>
       <v-toolbar-title class="ml-3">ອົງການທີ່ຂື້ນກັບລັດຖະບານ</v-toolbar-title>
       <v-spacer />
