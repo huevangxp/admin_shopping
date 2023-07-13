@@ -89,7 +89,8 @@
       <v-avatar size="60" color="white" v-else>
         <v-img lazy-src="/loading.gif" :src="profile" alt="alt" />
       </v-avatar>
-      <v-toolbar-title class="ml-3">ອົງການທີ່ຂື້ນກັບລັດຖະບານ</v-toolbar-title>
+      <v-toolbar-title v-if="role == 'super_admin'" class="ml-3">ອົງການທີ່ຂື້ນກັບລັດຖະບານ</v-toolbar-title>
+      <v-toolbar-title  v-else class="ml-3">{{ title }}</v-toolbar-title>
       <v-spacer />
       <div class="mx-4">version {{ VERSION }}</div>
       <div class="d-flex">
@@ -140,7 +141,6 @@
 </template>
 
 <script>
-  // import { VERSION } from 'constants';
 export default {
   name: "DefaultLayout",
   middleware: "auth",
@@ -159,16 +159,27 @@ export default {
       lastName: this.$cookies.get("lastName"),
       profile: this.$cookies.get("profile"),
       role: this.$cookies.get("role"),
+      title: this.$cookies.get('title'),
       items: [
+        // {
+        //   icon: "mdi-tablet-dashboard",
+        //   title: "ອົງການທີ່ຂື້ນກັບລັດຖະບານ",
+        //   to: "/",
+        // },
         {
-          icon: "mdi-tablet-dashboard",
-          title: "ອົງການທີ່ຂື້ນກັບລັດຖະບານ",
+          icon: "mdi-database",
+          title: "ຈັດການຂໍ້ມູນພື້ນຖາມ",
           to: "/",
         },
         {
           icon: "mdi-database",
-          title: "ຈັດການຂໍ້ມູນພື້ນຖາມ",
-          // to: "/",
+          title: "ຈັດການ admin ກະຊວງ",
+          to: "/dashboard/adminMinistry",
+        },
+        {
+          icon: "mdi-database",
+          title: "ຈັດການ admin ທ້ອງຖີ້ມ",
+          to: "/dashboard/adminRarul",
         },
         {
           icon: "mdi-bank",
@@ -221,6 +232,7 @@ export default {
       this.$cookies.remove("userId");
       this.$cookies.remove("email");
       this.$cookies.remove("profile");
+      this.$cookies.remove("title");
       this.$cookies.remove("token");
       this.$router.push("/login");
     },

@@ -27,7 +27,7 @@
         <v-card-text>
           <v-text-field
           type="text"
-            v-model="user.phone"
+            v-model="user.user_name"
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
             outlined
             dense
@@ -70,7 +70,10 @@ export default {
   middleware: 'unAuth',
   data() {
     return {
-      user:{}
+      user: {
+        user_name: 'kenglao',
+        password:'huevang'
+      }
     }
   },
   computed: {

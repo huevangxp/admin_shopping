@@ -49,6 +49,18 @@ export default {
     'cookie-universal-nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/moment',
+    [
+      '@nuxtjs/toast',
+      {
+        duration: 3000,
+        position: 'top-right',
+        iconPack: 'mdi',
+        // icon: "",
+        theme: 'outline',
+        type: 'error',
+        closeOnSwipe: false,
+      },
+    ],
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

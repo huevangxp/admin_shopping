@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="my-10">ຈັດການຂໍ້ມູນກົມຂອງກະຊວງ</h1>
+    <h1 class="my-10">ຈັດການຂໍ້ມູນກົມຂອງ <span class="primary--text" style="border-bottom:1px solid #000">{{ title }}</span></h1>
     <v-row>
       <v-col cols="4">
         <v-text-field
@@ -85,24 +85,7 @@
           </div>
         </div>
       </template>
-      <!-- <template v-slot:expanded-item="{ headers, item }">
-        <td
-          :colspan="headers.length"
-          :ref="item.id"
-          @click="checkMenberDetail(item.id)"
-        >
-          <v-col
-            v-for="data in getDepartment(item.id)"
-            :key="data.id"
-            cols="12"
-          >
-            <v-card elevation="0">
-              <p style="cursor: pointer">{{ data.department_title }}</p>
-            </v-card>
-            <v-divider></v-divider>
-          </v-col>
-        </td>
-      </template> -->
+    
     </v-data-table>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
@@ -170,26 +153,13 @@ export default {
       dialog: false,
       dialogDO: false,
       role: this.$cookies.get("token"),
+      title: this.$cookies.get("title"),
       depId: "",
       search: "",
       department_title: "",
       department_organization_title: "",
 
-      employeeHeaders: [
-        {
-          text: "ລ/ດ",
-          align: "center",
-          sortable: false,
-          value: "idx",
-        },
-        { text: "ຮູບພາບ" },
-        { text: "ຊື້ແລະນາມສະກຸ່ມ" },
-        { text: "ຕຳແໜງ" },
-        { text: "ສະໄໝ" },
-        { text: "ແຕ່ປີ" },
-        { text: "ຫາປີ" },
-      ],
-
+    
       dessertHeaders: [
         {
           text: "ລ/ດ",

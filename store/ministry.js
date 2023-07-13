@@ -40,7 +40,7 @@ export const actions = {
     },
     async getMinistry({ commit }) {
         commit("setLoading", true);
-        await this.$axios.get('/ministry')
+        await this.$axios.get('/ministryData')
             .then((res) => {
                 commit('setMinistry', res.data);
                 commit('setLoading', false)

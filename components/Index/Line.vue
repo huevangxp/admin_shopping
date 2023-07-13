@@ -22,7 +22,7 @@
       </v-card>  
       </v-col>
       <v-col cols="12" md="3"> 
-      <v-card to="/dashboard/adminMinistry">
+      <v-card to="/dashboard/dataMinistry">
         <v-card-title class="d-flex justify-center">
           <v-btn color="primary"  fab elevation="0" >
             <v-icon color="white" size="30" style="opacity: 1">mdi-bank</v-icon>
@@ -31,7 +31,7 @@
         <v-card-text>
           
         <p class="d-flex justify-center text-h6 font-weight-bold black--text">
-          (<span class="primary--text">0</span>)  <span class="ml-5">ສູນກາງ</span>
+          (<span class="primary--text">{{ ministry.count  }}</span>)  <span class="ml-5">ສູນກາງ</span>
           
         </p>
         <span class="d-flex justify-center ">
@@ -41,16 +41,16 @@
       </v-card>  
       </v-col>
       <v-col cols="12" md="3"> 
-      <v-card>
+      <v-card to="/dashboard/dataRarul">
         <v-card-title class="d-flex justify-center">
           <v-btn color="primary"  fab elevation="0" >
             <v-icon color="white" size="30" style="opacity: 1">mdi-home-city-outline</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
-          
+
         <p class="d-flex justify-center text-h6 font-weight-bold black--text">
-          (<span class="primary--text">0</span>)  <span class="ml-5">ທ້ອງຖິ້ມ</span>
+          (<span class="primary--text">{{ province.count }}</span>)  <span class="ml-5">ທ້ອງຖິ້ມ</span>
           
         </p>
         <span class="d-flex justify-center ">
@@ -90,16 +90,17 @@ export default {
       value: 10,
     };
   },
-  beforeDestroy() {
-    clearInterval(this.interval);
+  computed: {
+    province() {
+        return this.$store.state.province.province;
+      },
+    ministry() {
+      return this.$store.state.ministry.ministry
+    }
   },
   mounted() {
-    this.interval = setInterval(() => {
-      if (this.value === 60) {
-        return (this.value = 0);
-      }
-      this.value += 1;
-    }, 1000);
+    this.$store.dispatch('ministry/getMinistry');
+    this.$store.dispatch("province/getProvince");
   },
 };
 </script>

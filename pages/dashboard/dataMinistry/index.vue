@@ -1,7 +1,7 @@
 <template>
   <div>
-      <!-- {{ ministry }} -->
-      <v-row>
+    <!-- {{ ministry }} -->
+    <v-row>
       <v-col md="6">
         <v-text-field
           outlined
@@ -10,7 +10,9 @@
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
-        <v-btn  color="primary" dark to="/dashboard/adminMinistry/create">ສ້າງ admin ຂອງກະຊວງ</v-btn>
+        <v-btn color="primary" dark to="/dashboard/adminMinistry/create"
+          >ສ້າງ admin ຂອງກະຊວງ</v-btn
+        >
       </v-col>
     </v-row>
     <v-data-table
@@ -19,36 +21,32 @@
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
       dense
-      fixed-header 
-      >
+      fixed-header
+    >
       <!-- @click:row="showDetails" -->
-    <template #item.profile= "{item}">
-      <div>
-        <v-avatar
-          size="70"
-          color="red"
-        >   
-        <v-img
-         :src="item?.profile" alt="profile"></v-img>
-        </v-avatar>
-      </div>
-    </template>
-      <template #item.idx="{  index }">
+      <template #item.profile="{ item }">
+        <div>
+          <v-avatar size="70" color="red">
+            <v-img :src="item?.profile" alt="profile"></v-img>
+          </v-avatar>
+        </div>
+      </template>
+      <template #item.idx="{ index }">
         <div>
           {{ index + 1 }}
         </div>
       </template>
-      <template #item.createdAt = '{item}'>
+      <template #item.createdAt="{ item }">
         <div>
-          {{ $moment(item.createdAt).format('DD/MM/YYYY') }}
+          {{ $moment(item.createdAt).format("DD/MM/YYYY") }}
         </div>
       </template>
-      <template #item.actions="{item}">
+      <template #item.actions="{ item }">
         <div>
           <v-btn color="red" icon small @click.stop="deleteData(item.id)">
-          <v-icon>mdi-delete</v-icon>
+            <v-icon>mdi-delete</v-icon>
           </v-btn>
-          <v-btn color="primary"  icon small>
+          <v-btn color="primary" icon small>
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </div>
@@ -56,7 +54,6 @@
     </v-data-table>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -68,21 +65,20 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຊື່", value: "user_name" },
-        { text: "ສະຖານະ", value: "role" },
+        { text: "ຮູບພາບ", value: "profile" },
+        { text: "ຊື່ກະຊວງ", value: "ministry_title" },
         { text: "ວັນທີສ້າງ", value: "createdAt" },
         { text: "", value: "actions" },
       ],
     };
-    
   },
   computed: {
     ministry() {
-      return this.$store.state.ministry.ministry
-    }
+      return this.$store.state.ministry.ministry;
+    },
   },
   mounted() {
-    this.$store.dispatch('ministry/getMinistry')
+    this.$store.dispatch("ministry/getMinistry");
   },
   methods: {
     async deleteData(id) {

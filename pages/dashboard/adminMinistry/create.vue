@@ -32,6 +32,7 @@
           </div>
         <v-card-text>
             <v-text-field
+               v-model="user.ministry_title"
                outlined
                dense
                type="text"
@@ -43,18 +44,36 @@
         <v-window-item :value="2">
           <v-card-text>
           <v-row>
-            <v-col>
+            <v-col cols="12">
                 <v-text-field
+                v-model="user.user_name"
                 dense
                 outlined
-                placeholder="name"
+                placeholder="ຊື່ຂອງ admin ຈັດການກະຊວງ"
+                hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="user.role"
+                dense
+                outlined
+                placeholder="ສິດຂອງ admin"
+                hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-text-field
+                v-model="user.password"
+                dense
+                outlined
+                placeholder="ລະຫັດຜ່ານ"
+                hide-details="auto"
                 ></v-text-field>
             </v-col>
           </v-row>
           </v-card-text>
         </v-window-item>
-
-
       </v-window>
 
       <v-divider></v-divider>
@@ -78,7 +97,8 @@
 export default {
   data() {
     return {
-      images: "",
+      images: '',
+      user:{},
       image: "",
       step: 1,
     };
@@ -103,8 +123,32 @@ export default {
     getImage() {
       document.getElementById("picture").click();
       },
-      create() {
-        alert('huevang')
+    async create() {
+      // console.log(this.images);
+      try {
+        const formData = new FormData;
+        formData.append('file', this.images);
+      const image = await this.$axios.post('upload',  formData )
+        .then((res) => {
+          return res?.data?.url
+        })
+        console.log('image',image);
+        if (image) {
+          const data = {
+            ministry_title:this.user.ministry_title,
+    user_name: this.user.user_name,
+    password: this.user.password,
+    profile: image,
+    role: this.user.role
+         }
+          await this.$axios.post('/ministry', data)
+            .then((data) => {
+              this.$router.back();
+          })
+        }
+      } catch (error) {
+        console.log(error);
+      }
       }
   },
 };

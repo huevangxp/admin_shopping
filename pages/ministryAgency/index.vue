@@ -27,16 +27,7 @@
               {{ data.ministry_title }}
             </v-card-text>
             <v-divider></v-divider>
-            <v-card-actions class="py-5">
-              <v-spacer></v-spacer>
-              <v-btn color="red" outlined fab small @click.stop="deleteItem(data.id)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-              <v-btn color="primary" outlined fab small>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
+          
           </v-card>
         </v-col>
       </v-row>
