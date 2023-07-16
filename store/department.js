@@ -29,9 +29,9 @@ export const actions = {
                 commit("setLoading", false);
             })
     },
-    async getDepartment({ commit }) {
+    async getDepartment({ commit }, id) {
         commit("setLoading", true);
-        const response = await this.$axios.get('/department')
+        const response = await this.$axios.get(`/department/${id}`)
             .then((res) => {
                 commit('setDepartment', res.data);
                 commit("setLoading", false);

@@ -145,6 +145,5 @@ export default {
 .fixed-avatar {
   position: fixed;
   z-index: 888;
-  /* Add any other necessary styles here */
 }
 </style>

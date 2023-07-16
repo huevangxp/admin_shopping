@@ -54,13 +54,22 @@
                 ></v-text-field>
             </v-col>
             <v-col cols="12">
-                <v-text-field
+              <v-select
+                  :items="data"
+                  v-model="user.role"
+                  item-text="name"
+                  item-value="name"
+                  label="ເລືອກສິດຂອງ admin"
+                  dense 
+                  outlined
+                ></v-select>
+                <!-- <v-text-field
                 v-model="user.role"
                 dense
                 outlined
                 placeholder="ສິດຂອງ admin"
                 hide-details="auto"
-                ></v-text-field>
+                ></v-text-field> -->
             </v-col>
             <v-col cols="12">
                 <v-text-field
@@ -101,6 +110,11 @@ export default {
       user:{},
       image: "",
       step: 1,
+      data: [
+        {id: 1, name: "super_admin"},
+        {id: 2, name: "ministry_admin"},
+        {id: 3, name: "rural_admin"},
+      ],
     };
   },
   computed: {
@@ -110,6 +124,7 @@ export default {
           return "ສ້າງກະຊວງ";
           default :
           return "ສ້າງ admin ຂອງກະຊວງ";
+
         // default:
         //   return "";
       }

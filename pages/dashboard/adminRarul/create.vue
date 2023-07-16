@@ -60,18 +60,20 @@
                   v-model="user.user_name"
                   dense
                   outlined
-                  placeholder="ຊື່ຂອງ admin ຈັດການກະຊວງ"
+                  placeholder="ຊື່ຂອງ admin ຈັດການທ້ອງຖີ່ນ"
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
+                <v-select
+                  :items="data"
                   v-model="user.role"
-                  dense
+                  item-text="name"
+                  item-value="name"
+                  label="ເລືອກສິດຂອງ admin"
+                  dense 
                   outlined
-                  placeholder="ສິດຂອງ admin"
-                  hide-details="auto"
-                ></v-text-field>
+                ></v-select>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -111,6 +113,11 @@ export default {
       user: {},
       image: "",
       step: 1,
+      data: [
+        {id: 1, name: "super_admin"},
+        {id: 2, name: "ministry_admin"},
+        {id: 3, name: "rural_admin"},
+      ],
     };
   },
   mounted() {
@@ -140,7 +147,6 @@ export default {
     },
     async create() {
       try {
-        // console.log(this.province);
         const formData = new FormData();
         formData.append("file", this.images);
         const image = await this.$axios.post("upload", formData).then((res) => {

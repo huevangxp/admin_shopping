@@ -6,11 +6,11 @@
       :mini-variant="miniVariant"
       :clipped="clipped"
       width="250"
-      color="primary"
-      dark
       fixed
       app
-    >
+      color="white"
+      >
+      <!-- dark -->
       <v-btn
         icon
         class="ml-1"
@@ -20,10 +20,10 @@
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
-      <v-card v-if="miniVariant == false" elevation="0" class="primary">
+      <v-card v-if="miniVariant == false" elevation="0">
         <v-card-title class="d-flex justify-center">
-          <v-avatar size="102" color="white">
-            <v-avatar size="100" color="primary">
+          <v-avatar size="102" color="primary">
+            <v-avatar size="100">
               <v-img :src="profile" alt="image"></v-img>
             </v-avatar>
           </v-avatar>
@@ -35,7 +35,7 @@
           :prepend-icon="item.icon"
           no-action
           dark
-          active-class="white black--text"
+          active-class="primary white--text"
         >
           <template #activator>
             <v-list-item-title class="py-2">{{ item.title }}</v-list-item-title>
@@ -46,7 +46,7 @@
             exact
             :to="subItem.to"
             link
-            active-class="white black--text"
+            active-class="primary white--text"
           >
             <v-list-item-action>
               <v-icon>{{ subItem.icon }}</v-icon>
@@ -62,7 +62,7 @@
           router
           exact
           dense
-          active-class="white black--text"
+          active-class="primary white--text"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -80,9 +80,9 @@
       fixed
       app
       elevation="0"
-      color="primary"
-      dark
-    >
+      >
+      <!-- color="primary"
+      dark -->
       <v-avatar size="60" color="white" v-if="role == 'super_admin'">
         <v-img lazy-src="/loading.gif" src="/logo.png" alt="alt" />
       </v-avatar>
@@ -97,7 +97,7 @@
         <p class="mt-4" style="border-bottom: 1px solid #fff">ຜູ້ໃຊ້ລະບົບ:</p>
         <v-tab @click="$router.push(`/dashboard/admin/${id}`)">
         <v-badge
-          color="white"
+          color="primary"
           dot>
         <span class="font-weight-bold">{{ name }}</span>
         </v-badge>

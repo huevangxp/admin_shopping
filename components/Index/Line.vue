@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
- 
+ <!-- {{ admin }} -->
     <v-row>
       <v-col cols="12" md="3"> 
       <v-card to="/dashboard/create">
@@ -9,11 +9,10 @@
             <v-icon color="white" size="30" style="opacity: 1">mdi-account</v-icon>
           </v-btn>
         </v-card-title>
-        <!-- <v-divider color="primary"></v-divider> -->
         <v-card-text>
           
         <p class="d-flex justify-center text-h6 font-weight-bold black--text">
-         (<span class="primary--text">0</span>)  <span class="ml-5">ADMIN</span>
+         (<span class="primary--text">{{ admin?.count }}</span>)  <span class="ml-5">ADMIN</span>
         </p>
         <span class="d-flex justify-center ">
           ເຂົ້າເບີ່ງ admin
@@ -59,7 +58,7 @@
         </v-card-text>
       </v-card>  
       </v-col>
-      <v-col cols="12" md="3"> 
+      <!-- <v-col cols="12" md="3"> 
       <v-card>
         <v-card-title class="d-flex justify-center">
           <v-btn color="primary"  fab elevation="0" >
@@ -77,7 +76,7 @@
         </span>
         </v-card-text>
       </v-card>  
-      </v-col>
+      </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -96,11 +95,15 @@ export default {
       },
     ministry() {
       return this.$store.state.ministry.ministry
+    },
+    admin() {
+      return this.$store.state.user.admin
     }
   },
   mounted() {
     this.$store.dispatch('ministry/getMinistry');
     this.$store.dispatch("province/getProvince");
+    this.$store.dispatch('user/getAdmin');
   },
 };
 </script>

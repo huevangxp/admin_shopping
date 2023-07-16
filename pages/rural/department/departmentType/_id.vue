@@ -22,7 +22,7 @@
          </v-card>
        </v-col>
        <v-col cols="12" sm="4" md="3">
-         <v-card  @click="$router.push(`/rural/city/${id}`)">
+         <v-card  @click="$router.push(`/rural/city/data?id=${id}&pid=${pid}`)">
            <v-card-text>
              <div
                class="font-weight-bold d-flex align-center"
@@ -51,7 +51,10 @@
      },
      computed: {
        id() {
-         return this.$route.params.id;
+         return this.$route.query.id;
+       },
+          pid() {
+        return this.$route.query.pid
        }
      },
      methods: {
