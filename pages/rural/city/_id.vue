@@ -36,7 +36,7 @@
           {{ index + 1 }}
         </div>
       </template>
-      <template #[`item.actions`]>
+      <template #[`item.actions`] = "{item}">
         <div class="d-flex">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -46,7 +46,7 @@
                 color="red"
                 dark
                 v-on="on"
-                @click="createPhane(item.id)"
+                @click.stop="deleteCity(item.id)"
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
@@ -159,7 +159,7 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຊື່ພະແນກ", value: "title" },
+        { text: "ຊື່ພະແນກ", value: "district_title" },
         { text: "", value: "actions" },
         { text: "", value: "data-table-expand" },
         { text: "", value: "employee" },
@@ -174,19 +174,39 @@ export default {
    })
   },
   methods: {
-    createCity(){
+   async deleteCity(id) {
+
+    try {
+       await this.$axios.delete(`/district/${id}`)
+        .then((res) => {
+          // console.log(res.data);
+        
+        })
+      this.$axios.get(`/district/${this.id}`)
+      .then((res) => {
+    console.log(res.data);
+    this.getCityData = res?.data
+   })
+    } catch (error) {
+      console.log(error);
+    }
+    },
+   async createCity(){
     try {
       const data = {
         province_departments_id: this.id,
         title: this.title
       }
       // console.log(data);
-      this.$axios.post('/district', data)
+     await this.$axios.post('/district', data)
         .then((res) => {
-          // console.log(res.data);
-          // this.getCity = res?.data
         this.dialog = false
-      })
+        })
+        this.$axios.get(`/district/${this.id}`)
+      .then((res) => {
+    // console.log(res.data);
+    this.getCityData = res?.data
+   })
     } catch (error) {
       console.log(error);
     }

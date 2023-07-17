@@ -72,7 +72,7 @@ export default {
     return {
       user: {
         user_name: 'kenglao',
-        password:'huevang'
+        password:'kenglao'
       }
     }
   },

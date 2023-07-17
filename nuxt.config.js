@@ -56,7 +56,7 @@ export default {
         position: 'top-right',
         iconPack: 'mdi',
         // icon: "",
-        theme: 'outline',
+        // theme: 'outline',
         type: 'error',
         closeOnSwipe: false,
       },

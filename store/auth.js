@@ -22,7 +22,7 @@ export const actions = {
                             const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
                             console.log(data);
                             this.$cookies.set('name', data.name);
-                            this.$cookies.set('id', data.id);
+                            this.$cookies.set('userId', data.id);
                             this.$cookies.set('role', data.role);
                             this.$cookies.set('profile', data.profile);
                             this.$cookies.set('title', data.title);

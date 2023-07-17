@@ -48,6 +48,7 @@
             link
             active-class="primary white--text"
           >
+          
             <v-list-item-action>
               <v-icon>{{ subItem.icon }}</v-icon>
             </v-list-item-action>
@@ -75,14 +76,117 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <v-navigation-drawer
+    v-if="role == 'rarul_admin'"
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      width="250"
+      fixed
+      app
+      color="white"
+      active-class="primary white--text"
+    >
+
+    <v-btn
+        icon
+        class="ml-1"
+        x-large
+        color="primary"
+        @click.stop="miniVariant = !miniVariant"
+      >
+        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
+      </v-btn>
+
+      <v-list
+        dense
+        nav
+      >
+      <v-list-tile  @click="moveRarul" style="cursor: pointer;"
+      active-class="primary white--text"
+      >
+       <div class="d-flex justify-space-between">
+        <v-list-item-icon>
+          <v-icon class="ml-2">mdi-database</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>ຈັດການຂໍ້ມູນ</v-list-item-title>
+      </div>
+       </v-list-tile>
+        <v-list-item
+          v-for="item in rarul"
+          :key="item.title"
+          link
+          :to="item.to"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }} </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      
+    </v-navigation-drawer>
+    <v-navigation-drawer
+    v-if="role == 'ministry_admin'"
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      width="250"
+      fixed
+      app
+      color="white"
+      active-class="primary white--text"
+    >
+
+    <v-btn
+        icon
+        class="ml-1"
+        x-large
+        color="primary"
+        @click.stop="miniVariant = !miniVariant"
+      >
+        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
+      </v-btn>
+
+      <v-list
+        dense
+        nav
+      >
+      <v-list-tile  @click="moveMinistry" style="cursor: pointer;"
+      active-class="primary white--text"
+      >
+       <div class="d-flex justify-space-between">
+        <v-list-item-icon>
+          <v-icon class="ml-2">mdi-database</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>ຈັດການຂໍ້ມູນ</v-list-item-title>
+      </div>
+       </v-list-tile>
+        <v-list-item
+          v-for="item in ministry"
+          :key="item.title"
+          link
+          :to="item.to"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }} </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      
+    </v-navigation-drawer>
     <v-app-bar
       :clipped-left="clipped"
       fixed
       app
       elevation="0"
       >
-      <!-- color="primary"
-      dark -->
+ 
       <v-avatar size="60" color="white" v-if="role == 'super_admin'">
         <v-img lazy-src="/loading.gif" src="/logo.png" alt="alt" />
       </v-avatar>
@@ -104,7 +208,7 @@
       </v-tab>
         
       </div>
-      <v-btn outlined icon class="ml-4" @click="logout()">
+      <v-btn outlined icon class="ml-4" @click="dialog = true">
         <v-icon>mdi-power</v-icon>
       </v-btn>
     </v-app-bar>
@@ -160,12 +264,31 @@ export default {
       profile: this.$cookies.get("profile"),
       role: this.$cookies.get("role"),
       title: this.$cookies.get('title'),
+      rarul: [
+        {
+          icon: "mdi-account",
+          title: "ຈັດການ admin",
+          to: "/rural/admin",
+        },
+        {
+          icon: "mdi-chart-box",
+          title: "ລາຍງານ",
+          to:'/reports/rarul'
+        },
+      ],
+      ministry: [
+        {
+          icon: "mdi-account",
+          title: "ຈັດການ admin",
+          to: "/ministry/admin",
+        },
+        {
+          icon: "mdi-chart-box",
+          title: "ລາຍງານ",
+          to:'/reports/ministry'
+        },
+      ],
       items: [
-        // {
-        //   icon: "mdi-tablet-dashboard",
-        //   title: "ອົງການທີ່ຂື້ນກັບລັດຖະບານ",
-        //   to: "/",
-        // },
         {
           icon: "mdi-database",
           title: "ຈັດການຂໍ້ມູນພື້ນຖາມ",
@@ -224,6 +347,13 @@ export default {
     logout() {
       this.dialog = true;
     },
+    moveMinistry() {
+      this.$router.push(`/ministry/department/${this.id}`)
+    },
+    moveRarul() {
+      this.$router.push(`/rural/department/${this.id}`)
+    },
+   
     confirmLogout() {
       this.$cookies.remove("name");
       this.$cookies.remove("lastName");
