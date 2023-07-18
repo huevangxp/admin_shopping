@@ -1,5 +1,6 @@
 export const state = () => ({
     province: {},
+    department:{},
     loading: false,
     address: []
 
@@ -14,6 +15,9 @@ export const mutations = {
     },
     setAddress(state, data) {
         state.address = data;
+    },
+    setDepartment(state, data) {
+        state.department = data
     }
 }
 
@@ -54,5 +58,16 @@ export const actions = {
             console.log(e);
             commit('setLoading', false)
         }
+    },
+    async getDepartment({ commit }, ) {
+       try {
+           await this.$axios.get('/rarul_department')
+               .then((res) => {
+            //    console.log(res.data);
+                   commit('setDepartment', res?.data)
+           })
+       } catch (error) {
+        console.log(error);
+       }
     }
 }

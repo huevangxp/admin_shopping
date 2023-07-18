@@ -17,10 +17,9 @@ export const actions = {
                     await this.$axios.post('/signIn-ministry', user)
                         .then((res) => {
                             const token = res.data.token
-                           
                          
                             const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-                            console.log(data);
+                            console.log('login',data);
                             this.$cookies.set('name', data.name);
                             this.$cookies.set('userId', data.id);
                             this.$cookies.set('role', data.role);
@@ -31,7 +30,7 @@ export const actions = {
                             if (data?.role == 'ministry_admin') {
                                     this.$router.push(`/ministry/department/${data.id}`)
                             } else {
-                                this.$router.push(`/rural/department/${data.id}`)
+                                this.$router.push(`/rural/department/departmentType/data?id=${data.id}&pid=${data.pid}`)
                                 }
                    })
                 }

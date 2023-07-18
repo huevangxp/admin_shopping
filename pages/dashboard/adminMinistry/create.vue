@@ -20,7 +20,7 @@
               @change="uploadImage"
             ></v-file-input>
           </v-card-text>
-          <div class=" d-flex justify-center">
+          <div class="d-flex justify-center">
             <v-avatar size="150" v-if="image">
               <v-img :src="image" alt="profile"></v-img>
             </v-avatar>
@@ -30,37 +30,37 @@
               >
             </v-avatar>
           </div>
-        <v-card-text>
+          <v-card-text>
             <v-text-field
-               v-model="user.ministry_title"
-               outlined
-               dense
-               type="text"
-               placeholder="ຊື່ກະຊວງ"
+              v-model="user.ministry_title"
+              outlined
+              dense
+              type="text"
+              placeholder="ຊື່ກະຊວງ"
             ></v-text-field>
-        </v-card-text>
+          </v-card-text>
         </v-window-item>
 
         <v-window-item :value="2">
           <v-card-text>
-          <v-row>
-            <v-col cols="12">
+            <v-row>
+              <v-col cols="12">
                 <v-text-field
-                v-model="user.user_name"
-                dense
-                outlined
-                placeholder="ຊື່ຂອງ admin ຈັດການກະຊວງ"
-                hide-details="auto"
+                  v-model="user.user_name"
+                  dense
+                  outlined
+                  placeholder="ຊື່ຂອງ admin ຈັດການກະຊວງ"
+                  hide-details="auto"
                 ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-select
+              </v-col>
+              <v-col cols="12">
+                <v-select
                   :items="data"
                   v-model="user.role"
                   item-text="name"
                   item-value="name"
                   label="ເລືອກສິດຂອງ admin"
-                  dense 
+                  dense
                   outlined
                 ></v-select>
                 <!-- <v-text-field
@@ -70,17 +70,17 @@
                 placeholder="ສິດຂອງ admin"
                 hide-details="auto"
                 ></v-text-field> -->
-            </v-col>
-            <v-col cols="12">
+              </v-col>
+              <v-col cols="12">
                 <v-text-field
-                v-model="user.password"
-                dense
-                outlined
-                placeholder="ລະຫັດຜ່ານ"
-                hide-details="auto"
+                  v-model="user.password"
+                  dense
+                  outlined
+                  placeholder="ລະຫັດຜ່ານ"
+                  hide-details="auto"
                 ></v-text-field>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-window-item>
       </v-window>
@@ -91,12 +91,10 @@
         <v-btn :disabled="step === 1" text @click="step--"> Back </v-btn>
         <v-spacer></v-spacer>
 
-        <v-btn v-if="step == 2"  color="primary" depressed @click="create">
+        <v-btn v-if="step == 2" color="primary" depressed @click="create">
           ບັກທືນ
         </v-btn>
-        <v-btn  v-else color="primary" depressed @click="step++">
-          ບັກທືນ
-        </v-btn>
+        <v-btn v-else color="primary" depressed @click="step++"> ບັກທືນ </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -106,14 +104,14 @@
 export default {
   data() {
     return {
-      images: '',
-      user:{},
+      images: "",
+      user: {},
       image: "",
       step: 1,
       data: [
-        {id: 1, name: "super_admin"},
-        {id: 2, name: "ministry_admin"},
-        {id: 3, name: "rural_admin"},
+        { id: 1, name: "super_admin" },
+        { id: 2, name: "ministry_admin" },
+        { id: 3, name: "rural_admin" },
       ],
     };
   },
@@ -122,11 +120,8 @@ export default {
       switch (this.step) {
         case 1:
           return "ສ້າງກະຊວງ";
-          default :
+        default:
           return "ສ້າງ admin ຂອງກະຊວງ";
-
-        // default:
-        //   return "";
       }
     },
   },
@@ -137,34 +132,31 @@ export default {
     },
     getImage() {
       document.getElementById("picture").click();
-      },
+    },
     async create() {
-      // console.log(this.images);
       try {
-        const formData = new FormData;
-        formData.append('file', this.images);
-      const image = await this.$axios.post('upload',  formData )
-        .then((res) => {
-          return res?.data?.url
-        })
-        console.log('image',image);
+        const formData = new FormData();
+        formData.append("file", this.images);
+        const image = await this.$axios.post("upload", formData).then((res) => {
+          return res?.data?.url;
+        });
+        console.log("image", image);
         if (image) {
           const data = {
-            ministry_title:this.user.ministry_title,
-    user_name: this.user.user_name,
-    password: this.user.password,
-    profile: image,
-    role: this.user.role
-         }
-          await this.$axios.post('/ministry', data)
-            .then((data) => {
-              this.$router.back();
-          })
+            ministry_title: this.user.ministry_title,
+            user_name: this.user.user_name,
+            password: this.user.password,
+            profile: image,
+            role: this.user.role,
+          };
+          await this.$axios.post("/ministry", data).then((data) => {
+            this.$router.back();
+          });
         }
       } catch (error) {
         console.log(error);
       }
-      }
+    },
   },
 };
 </script>

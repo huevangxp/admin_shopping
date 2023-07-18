@@ -1,6 +1,6 @@
 <template>
     <div>
-      <!-- {{ ministry }} -->
+      <!-- {{ department }} -->
       <v-row>
         <v-col md="6">
           <v-text-field
@@ -17,7 +17,7 @@
       </v-row>
       <v-data-table
         :headers="headers"
-        :items="province.rows"
+        :items="department.rows"
         class="elevation-3"
         :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
         dense
@@ -67,18 +67,19 @@
         //   { text: "ຮູບພາບ", value: "profile" },
           { text: "ຊື່", value: "user_name" },
           { text: "ສິດ", value: "role" },
+          { text: "ຈັດການພະແນກ", value: "title" },
           { text: "ວັນທີສ້າງ", value: "createdAt" },
           { text: "", value: "actions" },
         ],
       };
     },
     computed: {
-        province() {
-        return this.$store.state.province.province;
+        department() {
+        return this.$store.state.province.department;
       },
     },
     mounted() {
-      this.$store.dispatch("province/getProvince");
+      this.$store.dispatch("province/getDepartment");
     },
     methods: {
           async deleteData(id) {

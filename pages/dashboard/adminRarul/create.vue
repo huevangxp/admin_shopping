@@ -13,42 +13,28 @@
 
       <v-window v-model="step">
         <v-window-item :value="1">
-          <v-card-text class="d-none">
-            <v-file-input
-              id="picture"
-              v-model="images"
-              @change="uploadImage"
-            ></v-file-input>
-          </v-card-text>
-          <div class="d-flex justify-center">
-            <v-avatar size="150" v-if="image">
-              <v-img :src="image" alt="profile"></v-img>
-            </v-avatar>
-            <v-avatar size="150" color="primary" @click="getImage" v-else>
-              <v-icon size="70" color="white"
-                >mdi-file-image-plus-outline</v-icon
-              >
-            </v-avatar>
-          </div>
           <v-card-text>
             <v-select
-              :items="chooseProvince"
+              :items="chooseProvince.rows"
               v-model="province"
-              item-value="pn"
-              item-text="pn"
+              item-value="id"
+              item-text="province_title"
               label="ເລືອກແຂວງ"
               return-object
               outlined
               dense
               class="mt-10"
+              hide-details="auto"
             ></v-select>
-            <!-- <v-text-field
-              v-model="user.province_title"
-              outlined
-              dense
-              type="text"
-              placeholder="ຊື່ກະຊວງ"
-            ></v-text-field> -->
+          </v-card-text>
+          <v-card-text>
+                <v-text-field
+                  v-model="user.title"
+                  dense
+                  outlined
+                  placeholder="ຊື່ພະແນກ"
+                  hide-details="auto"
+                ></v-text-field>
           </v-card-text>
         </v-window-item>
 
@@ -73,6 +59,7 @@
                   label="ເລືອກສິດຂອງ admin"
                   dense 
                   outlined
+                  hide-details="auto"
                 ></v-select>
               </v-col>
               <v-col cols="12">
@@ -121,12 +108,12 @@ export default {
     };
   },
   mounted() {
-    // this.$store.dispatch("province/getProvince");
-    this.$store.dispatch("province/getAllProvince");
+  this.$store.dispatch('province/getProvince')
   },
   computed: {
+
     chooseProvince() {
-      return this.$store.state.province.address;
+      return this.$store.state.province.province;
     },
     currentTitle() {
       switch (this.step) {
@@ -138,35 +125,24 @@ export default {
     },
   },
   methods: {
-    uploadImage(e) {
-      this.url = URL.createObjectURL(e);
-      this.image = this.url;
-    },
-    getImage() {
-      document.getElementById("picture").click();
-    },
+    
     async create() {
       try {
-        const formData = new FormData();
-        formData.append("file", this.images);
-        const image = await this.$axios.post("upload", formData).then((res) => {
-          return res?.data?.url;
-        });
-        console.log("image", image);
-        if (image) {
+     
           const data = {
-            province_title: this.province.pn,
+            province_id: this.province.id,
             pid: this.province.pid,
+            title: this.user.title,
             user_name: this.user.user_name,
             password: this.user.password,
-            profile: image,
             role: this.user.role,
-          };
-          await this.$axios.post("/province", data).then((data) => {
+        };
+          console.log(data);
+          await this.$axios.post("/rarul_department", data).then((data) => {
             this.$router.back();
             this.$toast.success("ສ້າງສຳເລັດແລ້ວ");
           });
-        }
+     
       } catch (error) {
         console.log(error);
       }
