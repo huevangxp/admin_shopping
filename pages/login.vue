@@ -43,8 +43,11 @@
             outlined
             dense
             label="ລະຫັດຜ່ານ"
-            type="password"
-          >
+            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show ? 'text' : 'password'"
+            @click:append="show = !show"
+            >
+            <!-- :rules="[rules.required, rules.min] -->
             <template #prepend-inner>
               <v-icon color="primary" right>mdi-key-plus </v-icon>
             </template>
@@ -70,6 +73,7 @@ export default {
   middleware: 'unAuth',
   data() {
     return {
+      show:false,
       user: {
         user_name: 'kenglao',
         password:'kenglao'
