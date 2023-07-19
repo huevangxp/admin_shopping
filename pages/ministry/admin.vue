@@ -38,7 +38,6 @@ export default {
                 { text: "ສິດ", value: "role" },
                 { text: "ວັນທີສ້າງ", value: "created_at" },
             ]
-
         }
     },
     mounted() {

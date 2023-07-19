@@ -14,8 +14,7 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4" class="d-flex justify-content-end">
-        <v-btn color="primary" @click="dialog = true">ສ້າງຫ້ອງເມືອງ</v-btn
-        >
+        <v-btn color="primary" @click="dialog = true">ສ້າງຫ້ອງເມືອງ</v-btn>
         <!-- <v-btn color="green" dark>Export To excel</v-btn> -->
       </v-col>
     </v-row>
@@ -36,7 +35,7 @@
           {{ index + 1 }}
         </div>
       </template>
-      <template #[`item.actions`]>
+      <template #[`item.actions`]="{ item }">
         <div class="d-flex">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -46,7 +45,7 @@
                 color="red"
                 dark
                 v-on="on"
-                @click="createPhane(item.id)"
+                @click.stop="deleteData(item.id)"
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
@@ -103,8 +102,6 @@
             </template>
             <span>ສ້າງ</span>
           </v-tooltip>
-          <!-- <v-btn color="primary" dark>view employee</v-btn> -->
-          <!-- <v-btn color="primary" dark>create employee</v-btn> -->
         </div>
       </template>
     </v-data-table>
@@ -162,25 +159,50 @@ export default {
       ],
     };
   },
-  mounted() {
-    this.$axios.get(`/office/${this.id}`)
+  mounted() { 
+    this.seleteData();
+  },
+
+  methods: {
+    seleteData() {
+      try {
+        this.$axios.get(`/office/${this.id}`)
       .then((res) => {
         console.log(res.data);
       this.office = res?.data
     })
-  },
-  methods: {
-    createOffice() {
+      } catch (error) {
+        console.log(error);
+      }
+    },
+   async deleteData(id) {
+      try {
+        // console.log(id);
+       await this.$axios.delete(`/office/${id}`)
+          .then((data) => {
+          // console.log(data);
+          this.$toast.success("ລຶບຂໍ້ມູນສຳເລັດ")
+          })
+        this.seleteData();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+   async createOffice() {
       const data = {
         district_id: this.id,
         title:this.title
       }
       // console.log(data);
-      this.$axios.post('office', data)
+    await  this.$axios.post('/office', data)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
+          this.$toast.success('ສ້າງສຳເລັດ')
         this.dialog = false
-      })
+        })
+
+     this.seleteData();
+      
     },
     moveToCityOffice(item) {
       this.$router.push(`/rural/cityUnit/${item.id}`);

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h1 class="my-10">ຈັດການຂໍ້ມູນກົມຂອງ <span class="primary--text" style="border-bottom:1px solid #000">{{ title }}</span></h1>
+    <h1 class="my-10">
+      ຈັດການຂໍ້ມູນກົມຂອງ
+      <span class="primary--text" style="border-bottom: 1px solid #000">{{
+        title
+      }}</span>
+    </h1>
     <v-row>
       <v-col cols="4">
         <v-text-field
@@ -15,8 +20,12 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4">
-        {{ department }}
-        <v-btn v-if="role === 'ministry_admin'" color="primary" @click="openCreate()">ສ້າງກົມຈັດຕັ້ງ</v-btn>
+        <v-btn
+          v-if="role === 'ministry_admin'"
+          color="primary"
+          @click="openCreate()"
+          >ສ້າງກົມຈັດຕັ້ງ</v-btn
+        >
       </v-col>
     </v-row>
     <v-data-table
@@ -26,12 +35,12 @@
       :expanded.sync="expanded"
       item-key="id"
       class="elevation-1"
+      :search="search"
       @click:row="moveTocreate"
-      >
-      <!-- show-expand -->
+    >
       <template #item.idx="{ idx, index }">
         <div>
-          <p>{{ index + 1 }}</p>
+          <span>{{ index + 1 }}</span>
         </div>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -52,7 +61,6 @@
               </template>
               <span>ລືບຂໍ້ມູນ</span>
             </v-tooltip>
-
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -68,12 +76,14 @@
               </template>
               <span>ແກ້ໄຂຂໍ້ມູນ</span>
             </v-tooltip>
-            
           </div>
+        </div>
+        <div v-else>
+          <span class="red--text">ບໍ່ສາມາດແກ້ໄຂໄດ້</span>
         </div>
       </template>
       <template v-slot:item.employee="{ item }">
-        <div class="d-flex" v-if="role === 'ministry_admin'">
+        <div class="d-flex" >
           <div>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -90,8 +100,7 @@
               </template>
               <span>ເບີ່ງພະນັກງານ</span>
             </v-tooltip>
-
-            <v-tooltip bottom>
+            <v-tooltip bottom  v-if="role === 'ministry_admin'">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
@@ -99,7 +108,7 @@
                   color="green"
                   dark
                   v-on="on"
-                  @click.stop="createPhane(item.id)"
+                  @click.stop="openCreateEmployee(item.id)"
                 >
                   <v-icon>mdi-account-multiple-plus</v-icon>
                 </v-btn>
@@ -109,81 +118,27 @@
           </div>
         </div>
       </template>
-    
     </v-data-table>
     <v-dialog
-     v-model="dialogEmployee"
+      v-model="dialogEmployee"
       max-width="500px"
       fullscreen
-       transition="dialog-transition">
-       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
-        </v-btn>
-      </template>
+      transition="dialog-transition"
+    >
       <v-card>
-        <v-toolbar
-          dark
-          color="primary"
-        >
-          <v-btn
-            icon
-            dark
-            @click="dialog = false"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
+        <v-toolbar dark color="primary">
+          <v-avatar class="mx-2" size="40" color="white">
+            <v-icon color="primary">mdi-account</v-icon>
+          </v-avatar>
+          <v-toolbar-title>ພະນັກງານນອງກົມ</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn
-              dark
-              text
-              @click="dialogEmployee = false"
-            >
-              Save
-            </v-btn>
+            <v-btn dark text @click="dialogEmployee = false"> ປິດ </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-list
-          three-line
-          subheader
-        >
-          <v-subheader>User Controls</v-subheader>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>Content filtering</v-list-item-title>
-              <v-list-item-subtitle>Set the content filtering level to restrict apps that can be downloaded</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>Password</v-list-item-title>
-              <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-divider></v-divider>
-     
-      </v-card>
-      <!-- <v-card>
-        <v-card-title color="red">ສ້າງກົມ</v-card-title>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red" outlined dark @click="dialogEmployee = false"
-            >ຍົກເລິກ</v-btn
-          >
-          <v-btn color="primary" dark @click="createDepartment()"
-            >ສ້າງກົມ</v-btn
-          >
-        </v-card-actions>
-      </v-card> -->
+        <v-divider></v-divider>
+      </v-card>
     </v-dialog>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
@@ -205,9 +160,109 @@
           <v-btn color="red" outlined dark @click="dialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="createDO()"
-            >ສ້າງກົມ</v-btn
+          <v-btn color="primary" dark @click="createDO()">ສ້າງກົມ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- fullscreen -->
+    <v-dialog
+      persistent
+      v-model="dialogCreateEmployee"
+      max-width="800px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title color="red">ສ້າງພະນັກງານ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="d-none">
+            <v-file-input
+              id="picture"
+              v-model="images"
+              @change="uploadImage"
+            ></v-file-input>
+          </v-card-text>
+          <div class="d-flex justify-center">
+            <v-avatar size="150" v-if="image">
+              <v-img :src="image" alt="profile"></v-img>
+            </v-avatar>
+            <v-avatar size="150" color="primary" @click="getImage" v-else>
+              <v-icon size="70" color="white"
+                >mdi-file-image-plus-outline</v-icon
+              >
+            </v-avatar>
+          </div>
+        <v-card-text class="mt-3">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.name"
+                label="ຊື່"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.last_name"
+                label="ນາມສະກຸ່ມ"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+              v-model="user.phone"
+            label="ເບີໂທ"
+            outlined
+            dense
+            hide-details="auto"
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+              v-model="user.position"
+            label="ຕຳແໜງ"
+            outlined
+            dense
+            hide-details="auto"
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+              v-model="user.address"
+            label="ທີ່ຢູ່"
+            outlined
+            dense
+            hide-details="auto"
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+              v-model="user.details"
+              counter="50"
+            label="ປະຫັວດຫຍໍ້"
+            outlined
+            dense
+            hide-details="auto"
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-textarea>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
+            >ຍົກເລິກ</v-btn
           >
+          <v-btn color="primary" dark @click="createEmployee()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -218,11 +273,16 @@
 export default {
   data() {
     return {
+      user:{},
+      images: "",
+      image: "",
       expanded: [],
       singleExpand: false,
       dialog: false,
       dialogEmployee: false,
-      eid:'',
+      dialogCreateEmployee: false,
+      eid: "",
+      mid: "",
       role: this.$cookies.get("role"),
       title: this.$cookies.get("title"),
       depId: "",
@@ -244,7 +304,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("department/getDepartmentDO");
-    // this.$store.dispatch("department/getDepartment", id);
   },
   computed: {
     id() {
@@ -255,9 +314,30 @@ export default {
     },
   },
   methods: {
+    uploadImage(e) {
+      this.url = URL.createObjectURL(e);
+      this.image = this.url;
+    },
+    getImage() {
+      document.getElementById("picture").click();
+    },
+    openCreateEmployee(id) {
+      this.mid = id;
+      this.dialogCreateEmployee = true;
+    },
+
+    createEmployee() {
+      const data = {
+        id:this.mid,
+        profile: this.images,
+        ...this.user
+      }
+      console.log('=========>',data);
+    },
+
     openEmployee(id) {
-      this.eid = id
-      this.dialogEmployee = true
+      this.eid = id;
+      this.dialogEmployee = true;
     },
     moveTocreate(item) {
       this.$router.push(`/ministry/departData/${item.id}`);
@@ -271,24 +351,33 @@ export default {
     },
 
     async deleteData(id) {
-      console.log(id);
+      // console.log(id);
+      await this.$axios
+        .$delete(`/department-organization/${id}`)
+        .then((res) => {
+          console.log(res.data);
+          this.$toast.success("ລືບຂໍ້ມູນສຳເລັດ");
+        });
+      this.$store.dispatch("department/getDepartmentDO");
     },
 
     async createDO() {
       try {
-        if (this.department_organization_title === '') {
-        return this.$toast.error('ກະລຸນາປ້ອນຂໍ້ມູນ')
+        if (this.department_organization_title === "") {
+          return this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນ");
+        }
+        const data = {
+          department_organization_title: this.department_organization_title,
+          ministry_id: this.id,
+        };
+        await this.$store.dispatch("department/createDepartmentDO", {
+          ...data,
+        });
+        this.$store.dispatch("department/getDepartmentDO");
+        this.dialog = false;
+      } catch (error) {
+        console.log(error);
       }
-      const data = {
-        department_organization_title: this.department_organization_title,
-        ministry_id: this.id,
-      };
-      await this.$store.dispatch("department/createDepartmentDO", { ...data });
-      this.$store.dispatch("department/getDepartmentDO");
-      this.dialog = false;
-    } catch (error) {
-      console.log(error);
-    }
     },
     // getDepartment(id) {
     //   if (!this.department.rows) return [];

@@ -26,6 +26,7 @@ export const actions = {
                             this.$cookies.set('profile', data.profile);
                             this.$cookies.set('title', data.title);
                             this.$cookies.set('token', token);
+                            this.$cookies.set('pid', data.pid);
                             
                             if (data?.role == 'ministry_admin') {
                                     this.$router.push(`/ministry/department/${data.id}`)

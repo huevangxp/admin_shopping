@@ -105,8 +105,8 @@ export default {
   data() {
     return {
       images: "",
-      user: {},
       image: "",
+      user: {},
       step: 1,
       data: [
         { id: 1, name: "super_admin" },

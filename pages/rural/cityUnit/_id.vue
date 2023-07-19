@@ -15,10 +15,10 @@
       <v-col cols="4"> </v-col>
       <v-col cols="4" class="d-flex justify-content-end">
         <v-btn color="primary" @click="dialog = true">ສ້າງໜ່ວຍງານ</v-btn>
-        <!-- <v-btn color="green" dark>Export To excel</v-btn> -->
+
       </v-col>
     </v-row>
-    {{ id }}
+    <!-- {{ id }} -->
     <v-data-table
       :headers="dessertHeaders"
       :items="unit"

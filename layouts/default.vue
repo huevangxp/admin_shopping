@@ -77,7 +77,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-navigation-drawer
-    v-if="role == 'rarul_admin'"
+    v-if="role == 'rural_admin'"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -264,6 +264,7 @@ export default {
       profile: this.$cookies.get("profile"),
       role: this.$cookies.get("role"),
       title: this.$cookies.get('title'),
+      pid:this.$cookies.get('pid'),
       rarul: [
         {
           icon: "mdi-account",
@@ -351,7 +352,7 @@ export default {
       this.$router.push(`/ministry/department/${this.id}`)
     },
     moveRarul() {
-      this.$router.push(`/rural/department/${this.id}`)
+      this.$router.push(`/rural/department/departmentType/data?id=${this.id}&pid=${this.pid}`)
     },
    
     confirmLogout() {
@@ -364,6 +365,7 @@ export default {
       this.$cookies.remove("profile");
       this.$cookies.remove("title");
       this.$cookies.remove("token");
+      this.$cookies.remove('pid');
       this.$router.push("/login");
     },
   },
