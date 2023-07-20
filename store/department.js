@@ -48,9 +48,9 @@ export const actions = {
                 console.log(res.data);
             })
     },
-    async getDepartmentDO({ commit }) {
+    async getDepartmentDO({ commit }, id) {
         commit('setLoading', true);
-        await this.$axios.get('/department-organization')
+        await this.$axios.get(`/department-organizations/${id}`)
             .then((res) => {
                 console.log(res.data);
                 commit('setDepartmentDO', res?.data);

@@ -69,7 +69,7 @@
                   color="green"
                   dark
                   v-on="on"
-                  @click="createPhane(item.id)"
+                  @click.stop="updateDO(item)"
                 >
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
@@ -83,7 +83,7 @@
         </div>
       </template>
       <template v-slot:item.employee="{ item }">
-        <div class="d-flex" >
+        <div class="d-flex">
           <div>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -93,14 +93,13 @@
                   color="success"
                   dark
                   v-on="on"
-                  @click.stop="openEmployee(item.id)"
-                >
+                  @click.stop="openEmployee(item.id)">
                   <v-icon>mdi-account-group</v-icon>
                 </v-btn>
               </template>
               <span>ເບີ່ງພະນັກງານ</span>
             </v-tooltip>
-            <v-tooltip bottom  v-if="role === 'ministry_admin'">
+            <v-tooltip bottom v-if="role === 'ministry_admin'">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
@@ -137,6 +136,31 @@
           </v-toolbar-items>
         </v-toolbar>
 
+        <div class="mt-5 mx-5 ">
+          <v-row>
+            <v-col v-for="(item, index) in employeeDepartmentDO.rows" :key="index" cols="4" md="4">
+              <v-card>
+                <v-img :src="item.profile" style="width:100%; height:200px"></v-img>
+                <v-card-title>ທ່ານ {{item.name}} {{ item.last_name }}</v-card-title>
+               <v-card-text>
+                <div>
+                <ul>
+                  <li>ເບີໂທ: {{ item.phone }}</li>
+                  <li>ຕຳແໜງ: {{ item.position }}</li>
+                  <li>ທີ່ຢູ່: {{ item.address }}</li>
+                </ul>
+               </div>
+               <div class="mt-3 ml-2" >
+                {{ item.details }}
+
+               </div>
+               </v-card-text>
+
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
+
         <v-divider></v-divider>
       </v-card>
     </v-dialog>
@@ -164,7 +188,29 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- fullscreen -->
+    <v-dialog v-model="dialogUpdateDO" max-width="500px" transition="dialog-transition">
+      <v-card>
+        <v-card-title color="red">ອັບເດບກົມ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-3">
+          <p class="black--text">ຊື່ກົມ</p>
+          <v-text-field
+            v-model="mData.department_organization_title"
+            label="ຊື່ກົມ"
+            outlined
+            dense
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-text-field>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined dark @click="dialogUpdateDO = false"
+            >ຍົກເລິກ</v-btn>
+          <v-btn color="primary" dark @click="updated()">ບັນທືກ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog
       persistent
       v-model="dialogCreateEmployee"
@@ -175,22 +221,20 @@
         <v-card-title color="red">ສ້າງພະນັກງານ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="d-none">
-            <v-file-input
-              id="picture"
-              v-model="images"
-              @change="uploadImage"
-            ></v-file-input>
-          </v-card-text>
-          <div class="d-flex justify-center">
-            <v-avatar size="150" v-if="image">
-              <v-img :src="image" alt="profile"></v-img>
-            </v-avatar>
-            <v-avatar size="150" color="primary" @click="getImage" v-else>
-              <v-icon size="70" color="white"
-                >mdi-file-image-plus-outline</v-icon
-              >
-            </v-avatar>
-          </div>
+          <v-file-input
+            id="picture"
+            v-model="images"
+            @change="uploadImage"
+          ></v-file-input>
+        </v-card-text>
+        <div class="d-flex justify-center">
+          <v-avatar size="150" v-if="image">
+            <v-img :src="image" alt="profile"></v-img>
+          </v-avatar>
+          <v-avatar size="150" color="primary" @click="getImage" v-else>
+            <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon>
+          </v-avatar>
+        </div>
         <v-card-text class="mt-3">
           <v-row>
             <v-col cols="12" md="6">
@@ -215,44 +259,44 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-              v-model="user.phone"
-            label="ເບີໂທ"
-            outlined
-            dense
-            hide-details="auto"
-            :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-text-field>
+                v-model="user.phone"
+                label="ເບີໂທ"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-              v-model="user.position"
-            label="ຕຳແໜງ"
-            outlined
-            dense
-            hide-details="auto"
-            :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-text-field>
+                v-model="user.position"
+                label="ຕຳແໜງ"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-              v-model="user.address"
-            label="ທີ່ຢູ່"
-            outlined
-            dense
-            hide-details="auto"
-            :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-text-field>
+                v-model="user.address"
+                label="ທີ່ຢູ່"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-textarea
-              v-model="user.details"
-              counter="50"
-            label="ປະຫັວດຫຍໍ້"
-            outlined
-            dense
-            hide-details="auto"
-            :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-textarea>
+                v-model="user.details"
+                counter="50"
+                label="ປະຫັວດຫຍໍ້"
+                outlined
+                dense
+                hide-details="auto"
+                :rules="[(v) => !!v || 'ຈຳເປັນ']"
+              ></v-textarea>
             </v-col>
           </v-row>
         </v-card-text>
@@ -273,7 +317,7 @@
 export default {
   data() {
     return {
-      user:{},
+      user: {},
       images: "",
       image: "",
       expanded: [],
@@ -281,12 +325,15 @@ export default {
       dialog: false,
       dialogEmployee: false,
       dialogCreateEmployee: false,
+      dialogUpdateDO:false,
       eid: "",
-      mid: "",
+      mData: {},
       role: this.$cookies.get("role"),
       title: this.$cookies.get("title"),
       depId: "",
       search: "",
+      employeeDepartmentDO: {},
+      departmentDO:{},
       department_organization_title: "",
 
       dessertHeaders: [
@@ -303,17 +350,23 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("department/getDepartmentDO");
+    this.getDepartmentDO();
   },
   computed: {
     id() {
       return this.$route.params.id;
     },
-    departmentDO() {
-      return this.$store.state.department.departmentDO;
-    },
+    // departmentDO() {
+    //   return this.$store.state.department.departmentDO;
+    // },
   },
   methods: {
+    getDepartmentDO() {
+       this.$axios.get(`/department-organizations/${this.id}`)
+        .then((res) => {
+          this.departmentDO = res?.data
+        })
+    },
     uploadImage(e) {
       this.url = URL.createObjectURL(e);
       this.image = this.url;
@@ -325,18 +378,58 @@ export default {
       this.mid = id;
       this.dialogCreateEmployee = true;
     },
-
-    createEmployee() {
+    updateDO(item) {
+      this.mData = item;
+      this.dialogUpdateDO = true;
+    },
+    updated() {
       const data = {
-        id:this.mid,
-        profile: this.images,
-        ...this.user
+        department_organization_title:this.mData.department_organization_title
       }
-      console.log('=========>',data);
+
+      this.$axios.put(`/department-organization/${this.mData.id}`, data)
+        .then((res) => {
+          console.log(res.data);
+          this.dialogUpdateDO = false,
+        this.$toast.success("ສຳເລັດ")
+        }).catch((err) => {
+        this.$toast.error('ອັບເດັບບໍສຳເລັດ')
+      })
+
+    },
+    async createEmployee() {
+      try {
+        const formData = new FormData();
+        formData.append("file", this.images);
+        const image = await this.$axios.post("upload", formData).then((res) => {
+          return res?.data?.url;
+        });
+        // console.log("image", image);
+        if (image) {
+          // image https://firebasestorage.googleapis.com/v0/b/node-images.appspot.com/o/products%2F1689821476692.patuzai.jpg?alt=media&token=49a9b5fa-7353-4e40-9710-b7009ce417b3
+          const data = {
+            department_organization_id: this.mid,
+            profile: image,
+            ...this.user,
+          };
+          // console.log(data);
+          await this.$axios
+            .post("/create-member-organization", data)
+            .then((res) => {
+              this.$toast.success("ສຳເລັດ");
+              this.dialogCreateEmployee = false;
+            });
+        }
+        // console.log('=========>',data);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    openEmployee(id) {
-      this.eid = id;
+    async openEmployee(id) {
+      await this.$axios.get(`/get-organization-member/${id}`).then((res) => {
+        this.employeeDepartmentDO = res?.data
+      });
       this.dialogEmployee = true;
     },
     moveTocreate(item) {
@@ -349,7 +442,6 @@ export default {
       this.depId = id;
       this.dialog = true;
     },
-
     async deleteData(id) {
       // console.log(id);
       await this.$axios
@@ -358,9 +450,8 @@ export default {
           console.log(res.data);
           this.$toast.success("ລືບຂໍ້ມູນສຳເລັດ");
         });
-      this.$store.dispatch("department/getDepartmentDO");
+        this.getDepartmentDO();
     },
-
     async createDO() {
       try {
         if (this.department_organization_title === "") {
@@ -373,18 +464,12 @@ export default {
         await this.$store.dispatch("department/createDepartmentDO", {
           ...data,
         });
-        this.$store.dispatch("department/getDepartmentDO");
+        this.getDepartmentDO();
         this.dialog = false;
       } catch (error) {
         console.log(error);
       }
     },
-    // getDepartment(id) {
-    //   if (!this.department.rows) return [];
-    //   return this.department.rows.filter(
-    //     (el) => el.department_organization_id === id
-    //   );
-    // },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="my-10">ຈັດການພະແນກຂອງກົມ</h1>
-
+<!-- {{ updateData }} -->
     <v-row>
       <v-col cols="6">
         <v-text-field
@@ -16,7 +16,7 @@
       </v-col>
       <v-col cols="6" class="d-flex justify-end">
         <v-btn color="primary" dark @click="dialogDepartment = true"
-          >ສ້າງສະມາຊິກ</v-btn
+          >ສ້າງພະແນກ</v-btn
         >
       </v-col>
     </v-row>
@@ -52,8 +52,8 @@
             <v-btn color="red" icon small @click="deleteUserDialog(item.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-            <v-btn color="primary" icon small>
-              <v-icon>mdi-account-edit</v-icon>
+            <v-btn color="primary" icon small @click="openUpdate(item)">
+              <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </div>
         </template>
@@ -136,13 +136,13 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title color="red">ສ້າງກົມ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງພະແນກ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ກົມ</p>
+          <p class="black--text">ຊື່ພະແນກ</p>
           <v-text-field
             v-model="title"
-            label="ຊື່ກົມ"
+            label="ຊື່ພະແນກ"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
@@ -155,7 +155,37 @@
             >ຍົກເລິກ</v-btn
           >
           <v-btn color="primary" dark @click="createDepartment()"
-            >ສ້າງກົມ</v-btn
+            >ບັນທືກ</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="dialogUpdate"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text">ອັບເດດພະແນກ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-3">
+          <p class="black--text">ຊື່ພະແນກ</p>
+          <v-text-field
+            v-model="updateData.department_title"
+            label="ຊື່ພະແນກ"
+            outlined
+            dense
+            :rules="[(v) => !!v || 'ຈຳເປັນ']"
+          ></v-text-field>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer> 
+          <v-btn color="red" outlined dark @click="dialogUpdate = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary" dark @click="updateDepartment()"
+            >ບັນທືກ</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -193,6 +223,8 @@ export default {
       dialog: false,
       singleExpand: false,
       deleteDialog: false,
+      dialogUpdate: false,
+      updateData:{},
       search:'',
       image: "",
       userId: "",
@@ -211,12 +243,6 @@ export default {
         { text: "ວັນທີ່ສ້າງ", value: "created_at" },
         { text: "", value: "actions" },
       ],
-      //   items: [
-      //       {
-      //         index: 1,
-      //     name:'ພະແນກການເງີນ'
-      //   }
-      // ]
     };
   },
   mounted() {
@@ -233,12 +259,29 @@ export default {
     seleteDepartment() {
       try {
         this.$axios.get(`/select_all_department_id/${this.id}`).then((res) => {
-          // console.log('dddd---------------->',res.data);
           this.items = res?.data;
         });
       } catch (error) {
         console.log(error);
       }
+    },
+    openUpdate(item) {
+      this.updateData = item;
+      // console.log(item);
+      this.dialogUpdate = true
+    },
+    updateDepartment() {
+      const data = {
+        department: this.updateData.department_title
+      }
+      this.$axios.put(`/department/${this.updateData.id}`, data)
+        .then((res) => {
+          console.log(res.data);
+          this.dialogUpdate = false;
+          this.$toast.success('ສຳເລັດ')
+        }).catch((err) => {
+      this.$toast.error('ບໍສຳເລັດ')
+     })
     },
   async  createDepartment() {
       try {
