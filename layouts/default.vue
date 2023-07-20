@@ -208,8 +208,8 @@
       </v-tab>
         
       </div>
-      <v-btn outlined icon class="ml-4" @click="dialog = true">
-        <v-icon>mdi-power</v-icon>
+      <v-btn icon class="ml-4" @click="dialog = true">
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>

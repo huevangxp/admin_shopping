@@ -93,7 +93,8 @@
                   color="success"
                   dark
                   v-on="on"
-                  @click.stop="openEmployee(item.id)">
+                  @click.stop="openEmployee(item.id)"
+                >
                   <v-icon>mdi-account-group</v-icon>
                 </v-btn>
               </template>
@@ -135,33 +136,70 @@
             <v-btn dark text @click="dialogEmployee = false"> ປິດ </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-
-        <div class="mt-5 mx-5 ">
+        <div class="mt-5 mx-5">
           <v-row>
-            <v-col v-for="(item, index) in employeeDepartmentDO.rows" :key="index" cols="4" md="4">
-              <v-card>
-                <v-img :src="item.profile" style="width:100%; height:200px"></v-img>
-                <v-card-title>ທ່ານ {{item.name}} {{ item.last_name }}</v-card-title>
-               <v-card-text>
-                <div>
-                <ul>
-                  <li>ເບີໂທ: {{ item.phone }}</li>
-                  <li>ຕຳແໜງ: {{ item.position }}</li>
-                  <li>ທີ່ຢູ່: {{ item.address }}</li>
-                </ul>
-               </div>
-               <div class="mt-3 ml-2" >
-                {{ item.details }}
+            <v-col
+              v-for="(item, index) in employeeDepartmentDO.rows"
+              :key="index"
+              cols="12"
+            >
+              <v-row>
+                <v-col cols="2">
+                  <v-img
+                    :src="item.profile"
+                    style="width: 100%; height: 200px; object-fit: contain"
+                  ></v-img>
+                </v-col>
+                <v-col cols="10">
+                  <div>
+                    <div class="d-flex justify-space-between">
+                      <h2>
+                        ທ່ານ {{ item.name }} {{ item.last_name }} (
+                        {{ item.position }} )
+                      </h2>
+                      <v-speed-dial
+                        v-model="fab"
+                        :direction="direction"
+                        :open-on-hover="hover"
+                        :transition="transition"
+                      >
+                        <template v-slot:activator>
+                          <v-btn v-model="fab" color="blue darken-2" icon dark>
+                            <v-icon v-if="fab"> mdi-close </v-icon>
+                            <v-icon v-else> mdi-dots-vertical </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="red"
+                          @click.stop="deleteEm(item.id)"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                        <v-btn icon dark small color="green" @click.stop="updateEm(item.id)">
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </v-speed-dial>
+                    </div>
 
-               </div>
-               </v-card-text>
-
-              </v-card>
+                    <div class="mt-2">
+                      <!-- <p class="black--text">ຕຳແໜງ: </p> -->
+                      <p class="black--text">ເບີໂທ: {{ item.phone }}</p>
+                      <p class="black--text">ທີ່ຢູ່: {{ item.address }}</p>
+                    </div>
+                    <p class="black--text">
+                      ປະຫັວດ:
+                      {{ item.details }}
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-divider class="mt-2"></v-divider>
             </v-col>
           </v-row>
         </div>
-
-        <v-divider></v-divider>
       </v-card>
     </v-dialog>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
@@ -188,7 +226,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogUpdateDO" max-width="500px" transition="dialog-transition">
+    <v-dialog
+      v-model="dialogUpdateDO"
+      max-width="500px"
+      transition="dialog-transition"
+    >
       <v-card>
         <v-card-title color="red">ອັບເດບກົມ</v-card-title>
         <v-divider></v-divider>
@@ -206,7 +248,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" outlined dark @click="dialogUpdateDO = false"
-            >ຍົກເລິກ</v-btn>
+            >ຍົກເລິກ</v-btn
+          >
           <v-btn color="primary" dark @click="updated()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
@@ -214,11 +257,11 @@
     <v-dialog
       persistent
       v-model="dialogCreateEmployee"
-      max-width="800px"
+      max-width="500px"
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title color="red">ສ້າງພະນັກງານ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງພະນັກງານ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="d-none">
           <v-file-input
@@ -227,7 +270,7 @@
             @change="uploadImage"
           ></v-file-input>
         </v-card-text>
-        <div class="d-flex justify-center">
+        <div class="d-flex justify-center my-5">
           <v-avatar size="150" v-if="image">
             <v-img :src="image" alt="profile"></v-img>
           </v-avatar>
@@ -277,7 +320,7 @@
                 :rules="[(v) => !!v || 'ຈຳເປັນ']"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12">
               <v-text-field
                 v-model="user.address"
                 label="ທີ່ຢູ່"
@@ -325,7 +368,13 @@ export default {
       dialog: false,
       dialogEmployee: false,
       dialogCreateEmployee: false,
-      dialogUpdateDO:false,
+      dialogUpdateDO: false,
+      direction: "bottom",
+      fab: false,
+      fling: false,
+      hover: false,
+      tabs: null,
+      transition: "slide-y-reverse-transition",
       eid: "",
       mData: {},
       role: this.$cookies.get("role"),
@@ -333,7 +382,7 @@ export default {
       depId: "",
       search: "",
       employeeDepartmentDO: {},
-      departmentDO:{},
+      departmentDO: {},
       department_organization_title: "",
 
       dessertHeaders: [
@@ -361,11 +410,23 @@ export default {
     // },
   },
   methods: {
-    getDepartmentDO() {
-       this.$axios.get(`/department-organizations/${this.id}`)
+  async  deleteEm(id) {
+     await this.$axios.delete(`/department-member/${id}`)
         .then((res) => {
-          this.departmentDO = res?.data
+          console.log(res.data);
+          this.$toast.success('ສຳເລັດ')
         })
+        await this.$axios.get(`/get-organization-member/${this.mid}`).then((res) => {
+        this.employeeDepartmentDO = res?.data;
+      });
+    },
+    updateEm(id) {
+      this.$router.push(`/ministry/department/update/${id}`);
+    },
+    getDepartmentDO() {
+      this.$axios.get(`/department-organizations/${this.id}`).then((res) => {
+        this.departmentDO = res?.data;
+      });
     },
     uploadImage(e) {
       this.url = URL.createObjectURL(e);
@@ -384,18 +445,18 @@ export default {
     },
     updated() {
       const data = {
-        department_organization_title:this.mData.department_organization_title
-      }
+        department_organization_title: this.mData.department_organization_title,
+      };
 
-      this.$axios.put(`/department-organization/${this.mData.id}`, data)
+      this.$axios
+        .put(`/department-organization/${this.mData.id}`, data)
         .then((res) => {
           console.log(res.data);
-          this.dialogUpdateDO = false,
-        this.$toast.success("ສຳເລັດ")
-        }).catch((err) => {
-        this.$toast.error('ອັບເດັບບໍສຳເລັດ')
-      })
-
+          (this.dialogUpdateDO = false), this.$toast.success("ສຳເລັດ");
+        })
+        .catch((err) => {
+          this.$toast.error("ອັບເດັບບໍສຳເລັດ");
+        });
     },
     async createEmployee() {
       try {
@@ -404,15 +465,12 @@ export default {
         const image = await this.$axios.post("upload", formData).then((res) => {
           return res?.data?.url;
         });
-        // console.log("image", image);
         if (image) {
-          // image https://firebasestorage.googleapis.com/v0/b/node-images.appspot.com/o/products%2F1689821476692.patuzai.jpg?alt=media&token=49a9b5fa-7353-4e40-9710-b7009ce417b3
           const data = {
             department_organization_id: this.mid,
             profile: image,
             ...this.user,
           };
-          // console.log(data);
           await this.$axios
             .post("/create-member-organization", data)
             .then((res) => {
@@ -420,15 +478,15 @@ export default {
               this.dialogCreateEmployee = false;
             });
         }
-        // console.log('=========>',data);
       } catch (error) {
         console.log(error);
       }
     },
 
     async openEmployee(id) {
+      this.mid = id;
       await this.$axios.get(`/get-organization-member/${id}`).then((res) => {
-        this.employeeDepartmentDO = res?.data
+        this.employeeDepartmentDO = res?.data;
       });
       this.dialogEmployee = true;
     },
@@ -450,7 +508,7 @@ export default {
           console.log(res.data);
           this.$toast.success("ລືບຂໍ້ມູນສຳເລັດ");
         });
-        this.getDepartmentDO();
+      this.getDepartmentDO();
     },
     async createDO() {
       try {

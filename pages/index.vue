@@ -43,7 +43,11 @@ export default {
   data() {
     return {
       dialog: false,
-      search:'',
+      search: '',
+      role: this.$cookies.get("role"),
+      title: this.$cookies.get('title'),
+      pid: this.$cookies.get('pid'),
+      id: this.$cookies.get('userId'),
       lists: [
                 {
                     title: "admin ໃຫຍ່",
@@ -60,13 +64,16 @@ export default {
                     src: "https://static.vecteezy.com/system/resources/thumbnails/011/299/670/small/businessman-and-company-staff-posing-character-3d-character-illustration-png.png",
                 },
                 
-            ],
-        
-      
+            ],   
     }
   },
   mounted() {
-    // this.$router.push('/login')
+    if (this.role == 'ministry_admin') {
+      this.$router.push(`/ministry/department/${this.id}`);
+   }
+    if (this.role == 'rural_admin') {
+      this.$router.push(`/rural/department/departmentType/data?id=${this.id}&pid=${this.pid}`)
+   }
   }
 }
 </script>
