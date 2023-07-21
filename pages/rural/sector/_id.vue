@@ -85,26 +85,42 @@
             </div>
           </template>
 
-          <template #item.employee>
-            <div>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon small color="primary" dark v-on="on">
-                    <v-icon>mdi-account-multiple-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>ເບີ່ງ</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon small color="primary" dark v-on="on">
-                    <v-icon>mdi-account-multiple-plus-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>ສ້າງ</span>
-              </v-tooltip>
-            </div>
-          </template>
+          <template v-slot:item.employee="{ item }">
+        <div class="d-flex">
+          <div>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="success"
+                  dark
+                  v-on="on"
+                  @click.stop="openEmployee(item.id)"
+                >
+                  <v-icon>mdi-account-group</v-icon>
+                </v-btn>
+              </template>
+              <span>ເບີ່ງພະນັກງານ</span>
+            </v-tooltip>
+            <v-tooltip bottom v-if="role === 'rural_admin'">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  small
+                  color="green"
+                  dark
+                  v-on="on"
+                  @click.stop="openCreateEmployee(item.id)"
+                >
+                  <v-icon>mdi-account-multiple-plus</v-icon>
+                </v-btn>
+              </template>
+              <span>ສ້າງພະນັກງານ</span>
+            </v-tooltip>
+          </div>
+        </div>
+      </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -209,6 +225,9 @@ export default {
     },
   },
   methods: {
+    openCreateEmployee(id) {
+      this.$router.push(`/rural/sector/create/${id}`);
+    },
     showUpdate(data) {
       console.log(data);
       this.dataUpdate = data;

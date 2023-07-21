@@ -1,0 +1,154 @@
+<template>
+    <div>
+      <h1 class="my-10">ລາຍງານພະນັກງານຂອງພະແນກ</h1>
+      <v-row>
+        <v-col cols="4">
+          <v-text-field
+            v-model="search"
+            name="ຄົ້ນຫາ"
+            label="ຄົ້ນຫາ"
+            id="id"
+            dense
+            outlined
+            append-icon="mdi-magnify"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4"> </v-col>
+        <v-col cols="4">
+          <download-excel
+            class="download"
+            :header="e_headers"
+            worksheet="ລາຍງານ"
+            :fetch="download"
+            :name="title"
+            :before-finish="finishDownload"
+          >
+            <v-btn color="primary" dark>
+              <v-icon left small>mdi-download</v-icon>
+              ດາວໂຫຼດ Excel
+            </v-btn>
+          </download-excel>
+        </v-col>
+      </v-row>
+      <v-data-table
+        :headers="dessertHeaders"
+        :items="dataEMDO.rows"
+        :single-expand="singleExpand"
+        :expanded.sync="expanded"
+        item-key="id"
+        class="elevation-1"
+        :search="search"
+      >
+        <!-- show-expand -->
+        <template #item.idx="{ index }">
+          <div>
+            <p>{{ index + 1 }}</p>
+          </div>
+        </template>
+        <template #item.profile="{ item }">
+          <div>
+            <!-- {{ item }} -->
+            <v-avatar size="60" color="promary">
+              <img :src="item.profile" alt="alt" />
+            </v-avatar>
+          </div>
+        </template>
+        <template #item.created_at="{ item }">
+          <div>
+            {{ $moment(item).format("DD/MM/YYYY") }}
+          </div>
+        </template>
+      </v-data-table>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        expanded: [],
+        search: "",
+        singleExpand: false,
+        role: this.$cookies.get("role"),
+        title: this.$cookies.get("title"),
+        id: this.$cookies.get("userId"),
+        dataEMDO: {},
+        search: "",
+  
+        dessertHeaders: [
+          {
+            text: "ລ/ດ",
+            align: "start",
+            sortable: false,
+            value: "idx",
+          },
+          { text: "ຮູບ", value: "profile" },
+          { text: "ຊື່", value: "name" },
+          { text: "ນາມສະກຸ່ນ", value: "last_name" },
+          { text: "ເບິໂທ", value: "phone" },
+          { text: "ທີ່ຢູ່", value: "address" },
+          { text: "ຕຳແໜງ", value: "position" },
+          { text: "ວັນທີ່ສ້າງ", value: "created_at" },
+        ],
+        e_headers: "ລາຍງານລາຍຈ່າຍ",
+        title:
+          "ລາຍງານພະນັກງານຂອງພະແນກຂອງສູນກາງ" +
+          new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+            .toISOString()
+            .substr(0, 10) +
+          ".xls",
+        json_meta: [
+          [
+            {
+              key: "charset",
+              value: "utf-8",
+            },
+          ],
+        ],
+      };
+    },
+    mounted() {
+      this.getData();
+    },
+    computed: {},
+    methods: {
+      async getData() {
+        console.log(this.id);
+        await this.$axios
+          .get(`/getAllByUserIdToReport/${this.id}`)
+          .then((res) => {
+            // console.log(res.data);
+            this.dataEMDO = res?.data;
+          });
+      },
+  
+      download() {
+        try {
+          var list = [],
+            index = 0;
+          for (let i = 0; i < this.dataEMDO.rows.length; i++) {
+            var el = this.dataEMDO.rows[i];
+            index = parseInt(i) + 1;
+            var obj = {
+              idx: index,
+              name: el.name,
+              last_name: el.last_name,
+              address: el.address,
+              phone: el.phone,
+              position: el.position,
+              date: this.$moment(el.created_at).format("DD/MM/YYYY"),
+            };
+            list.push(obj);
+          }
+          return list;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      finishDownload() {
+        this.$toast.success("download data to excel success...");
+      },
+    },
+  };
+  </script>
+  

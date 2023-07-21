@@ -6,8 +6,7 @@
                 v-for="item in lists"
                 :key="item.title"
                 cols="12"
-                md="3"
-            >
+                md="3">
                 <v-card 
                 hover shaped raised
                 class="white"
@@ -44,28 +43,58 @@ export default {
         return {
             lists: [
                 {
-                    title: "ຂໍ້ມູນຂອງກົມ",
+                    title: "ຂໍ້ມູນຂອງພະແນກ",
                     src: "https://picsum.photos/400/400",
                     icon: "mdi-database",
-                    to: "/reports/ministry/departmentDO",
-                },
-                {
-                    title: "ຂໍ້ມູນພະນັກງານຂອງກົມ",
-                    src: "https://picsum.photos/400/400",
-                    icon: "mdi-account",
-                    to: "/reports/ministry/departmentDOE",
-                },
-                {
-                    title: "ຂໍ້ມູນພະແນກຂອງກົມ",
-                    src: "https://picsum.photos/400/400",
-                    icon: "mdi-file-import",
-                    to: "/reports/ministry/department",
+                    to:"/reports/rural/department"
                 },
                 {
                     title: "ຂໍ້ມູນພະນັກງານຂອງພະແນກ",
                     src: "https://picsum.photos/400/400",
+                    icon: "mdi-account",
+                    to:"/reports/rural/departmentEm"
+                },
+                {
+                    title: "ຂໍ້ມູນຂອງຂະແໜງ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-import",
+                    to:"/reports/rural/sector"
+                },
+                {
+                    title: "ຂໍ້ມູນພະນັກງານຂອງຂະແໜງ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-import",
+                    to:"/reports/rural/sectorEm"
+                },
+                {
+                    title: "ຂໍ້ມູນເມືອງ",
+                    src: "https://picsum.photos/400/400",
                     icon: "mdi-file-export",
-                    to: "/reports/ministry/departmentEM",
+                    to:"/reports/rural/city"
+                },
+                {
+                    title: "ຂໍ້ມູນຫ້ອງການເມືອງ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-export",
+                    to:"/reports/rural/office"
+                },
+                {
+                    title: "ຂໍ້ມູນພະນັກງານຂອງຫ້ອງການເມືອງ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-export",
+                    to:"/reports/rural/officeEm"
+                },
+                {
+                    title: "ຂໍ້ມູນໜ່ວຍງານ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-export",
+                    to:"/reports/rural/unit"
+                },
+                {
+                    title: "ຂໍ້ມູນພະນັກງານຂອງໜ່ວຍງານ",
+                    src: "https://picsum.photos/400/400",
+                    icon: "mdi-file-export",
+                    to:"/reports/rural/unitEm"
                 },
             ],
         };

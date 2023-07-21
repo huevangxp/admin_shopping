@@ -436,8 +436,7 @@ export default {
       document.getElementById("picture").click();
     },
     openCreateEmployee(id) {
-      this.mid = id;
-      this.dialogCreateEmployee = true;
+      this.$router.push(`/ministry/department/create/${id}`);
     },
     updateDO(item) {
       this.mData = item;

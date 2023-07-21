@@ -29,14 +29,18 @@
       class="elevation-1"
       @click:row="moveToCityOffice"
     >
-      <!-- show-expand -->
-      <!-- v-if="role !== 'super_admin'" -->
+
       <template #[`item.idx`]="{ index }">
         <div>
           {{ index + 1 }}
         </div>
       </template>
-      <template #[`item.actions`] = "{item}">
+      <template #item.created_at="{item}">
+        <div>
+          {{ $moment(item.created_at).format("DD/MM/YYYY") }}
+        </div>
+      </template>
+      <!-- <template #[`item.actions`] = "{item}">
         <div class="d-flex">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -103,10 +107,9 @@
             </template>
             <span>ສ້າງ</span>
           </v-tooltip>
-          <!-- <v-btn color="primary" dark>view employee</v-btn> -->
-          <!-- <v-btn color="primary" dark>create employee</v-btn> -->
+
         </div>
-      </template>
+      </template> -->
     </v-data-table>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
@@ -160,9 +163,10 @@ export default {
           value: "idx",
         },
         { text: "ຊື່ພະແນກ", value: "district_title" },
-        { text: "", value: "actions" },
-        { text: "", value: "data-table-expand" },
-        { text: "", value: "employee" },
+        { text: "ວັນທີ່ສ້າງ", value: "created_at" },
+        // { text: "", value: "actions" },
+        // { text: "", value: "data-table-expand" },
+        // { text: "", value: "employee" },
       ],
     };
   },

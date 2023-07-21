@@ -274,7 +274,7 @@ export default {
         {
           icon: "mdi-chart-box",
           title: "ລາຍງານ",
-          to:'/reports/rarul'
+          to:'/reports/rural'
         },
       ],
       ministry: [

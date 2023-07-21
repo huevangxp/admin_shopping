@@ -30,27 +30,25 @@
         </download-excel>
       </v-col>
     </v-row>
-    <!-- {{ departmentDO.rows }} -->
     <v-data-table
       :headers="dessertHeaders"
-      :items="departmentDO.rows"
+      :items="dataDO.rows"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
       item-key="id"
       class="elevation-1"
       :search="search"
     >
-      <!-- show-expand -->
-      <template #item.idx="{index }">
+      <template #item.idx="{ index }">
         <div>
           <p>{{ index + 1 }}</p>
         </div>
       </template>
-      <template #item.created_at="{item}">
+      <template #item.created_at="{ item }">
         <div>
-            {{ $moment(item).format("DD/MM/YYYY") }}
+          {{ $moment(item).format("DD/MM/YYYY") }}
         </div>
-    </template>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -59,12 +57,13 @@
 export default {
   data() {
     return {
-        expanded: [],
-      search:'',
+      expanded: [],
+      search: "",
       singleExpand: false,
       role: this.$cookies.get("role"),
-        title: this.$cookies.get("title"),
-        desserts:[],
+      title: this.$cookies.get("title"),
+      id: this.$cookies.get("userId"),
+      dataDO:{},
       search: "",
 
       dessertHeaders: [
@@ -95,17 +94,19 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("department/getDepartmentDO");
+    this.getData();
   },
-  computed: {
-    id() {
-      return this.$route.params.id;
-    },
-    departmentDO() {
-      return this.$store.state.department.departmentDO;
-    },
-  },
+  computed: {},
   methods: {
+    async getData() {
+      await this.$axios
+        .get(`/department-organizations/${this.id}`)
+        .then((res) => {
+          // console.log(res.data);
+          this.dataDO = res?.data
+        });
+    },
+
     download() {
       try {
         var list = [],
@@ -116,7 +117,7 @@ export default {
           var obj = {
             idx: index,
             title: el.department_organization_title,
-            date: this.$moment(el.created_at).format('DD/MM/YYYY'),
+            date: this.$moment(el.created_at).format("DD/MM/YYYY"),
           };
           list.push(obj);
         }
