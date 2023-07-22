@@ -1,8 +1,13 @@
 <template>
-    <div>
-      <v-form onsubmit="member">
+  <div>
+    <v-form onsubmit="member">
       <v-card max-width="800px" class="mx-auto" elevation="0">
-        <v-card-title>ສ້າງພະນັກງານ</v-card-title>
+        <v-card-title>
+          <v-avatar class="mr-3 pa-1" size="40" color="teal">
+            <v-icon class="white">mdi-account-edit</v-icon>
+          </v-avatar>
+          ສ້າງພະນັກງານ</v-card-title
+        >
         <v-divider></v-divider>
         <v-card-text class="d-none">
           <v-file-input
@@ -94,87 +99,70 @@
           <v-btn color="primary" dark @click="updateData()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
-      </v-form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        user: {},
-        images: "",
-        image: "",
-        imageUrl:'',
-        loading: false,
-      };
-    },
-    mounted() {
-      this.$axios.get(`/department-organizations-member/${this.id}`)
-        .then((res) => {
-          this.user = res?.data[0]
-        })
-    },
-    computed: {
-      id() {
-        return this.$route.params.id;
-      },
-    },
-    methods: {
-     async uploadImage(e) {
-        this.url = URL.createObjectURL(e);
-        this.image = this.url;
-        const formData = new FormData();
-        formData.append("file", this.images);
-       await  this.$axios.post("upload", formData).then((res) => {
-           console.log(res.data.url);
-          this.imageUrl  = res.data.url;
-        });
-      },
-      getImage() {
-        document.getElementById("picture").click();
-      },
-      async updateData() {
-        try {
+    </v-form>
+  </div>
+</template>
 
-          const data = {
-            profile: this.imageUrl,
-            ...this.user,
-          };
-          console.log(data);
-          await this.$axios.put(`/department-organization-member/${this.id}`, data)
-            .then((res) => {
-              this.$toast.success("ສຳເລັດ");
-              this.$router.back();
-              this.loading = false;
-            });
- 
+<script>
+export default {
+  layout:'Black',
+  data() {
+    return {
+      user: {},
+      images: "",
+      image: "",
+      imageUrl: "",
+      loading: false,
+    };
+  },
+  mounted() {
+    this.$axios.get(`/get-unit-one/${this.id}`).then((res) => {
+      this.user = res?.data[0];
+    });
+  },
+  computed: {
+    id() {
+      return this.$route.params.id;
+    },
+  },
+  methods: {
+    async uploadImage(e) {
+      this.url = URL.createObjectURL(e);
+      this.image = this.url;
+      const formData = new FormData();
+      formData.append("file", this.images);
+      await this.$axios.post("upload", formData).then((res) => {
+        console.log(res.data.url);
+        this.imageUrl = res.data.url;
+      });
+    },
+    getImage() {
+      document.getElementById("picture").click();
+    },
+    async updateData() {
+      try {
+        const data = {
+          profile: this.imageUrl,
+          name: this.user.name,
+          last_name: this.user.last_name,
+          phone: this.user.phone,
+          position: this.user.position,
+          address: this.user.address,
+          details: this.user.details,
+        };
+        console.log(data);
+        await this.$axios
+          .put(`/update-unit-member/${this.id}`, data)
+          .then((res) => {
+            this.$toast.success("ສຳເລັດ");
+            this.$router.back();
+            this.loading = false;
+          });
       } catch (error) {
-            console.log(error);
+        console.log(error);
         this.loading = false;
-        }
       }
-    }
+    },
+  },
 };
-    //     try {
-    //       const formData = new FormData();
-    //       formData.append('file', this.images);
-    //       const image = await this.$axios.post('upload'.formData)
-    //           .then((res) => {
-    //         return res.data.url
-    //       })
-    //         await this.$axios
-    //           .put(`/department-organization-member/${this.id}`, {...this.user,profile:image})
-    //           .then((res) => {
-    //             this.$toast.success("ສຳເລັດ");
-    //             this.$router.back();
-    //           });
-          
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   },
-    // },
-  // };
-  </script>
-  
+</script>

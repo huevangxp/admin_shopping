@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1 class="my-10">ຈັດການພະແນກຂອງກົມ</h1>
-<!-- {{ updateData }} -->
+    <!-- {{ updateData }} -->
     <v-row>
       <v-col cols="6">
         <v-text-field
           v-model="search"
-          name="search"
-          label="search"
+          name="ຄົ້ນຫາ"
+          label="ຄົ້ນຫາ"
           id="id"
           dense
           outlined
@@ -15,7 +15,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="6" class="d-flex justify-end">
-        <v-btn color="primary" dark @click="dialogDepartment = true"
+        <v-btn color="primary" outlined dark @click="dialogDepartment = true"
           >ສ້າງພະແນກ</v-btn
         >
       </v-col>
@@ -28,7 +28,6 @@
         :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
         fixed-header
         :search="search"
-        @click:row="menubar"
       >
         <template #item.profile="{ item }">
           <div>
@@ -58,41 +57,43 @@
           </div>
         </template>
         <template v-slot:item.employee="{ item }">
-        <div class="d-flex">
-          <div>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="success"
-                  dark
-                  v-on="on"
-                  @click.stop="openEmployee(item.id)"
-                >
-                  <v-icon>mdi-account-group</v-icon>
-                </v-btn>
-              </template>
-              <span>ເບີ່ງພະນັກງານ</span>
-            </v-tooltip>
-            <v-tooltip bottom v-if="role === 'ministry_admin'">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="green"
-                  dark
-                  v-on="on"
-                  @click.stop="$router.push(`/ministry/departData/create/${item.id}`)"
-                >
-                  <v-icon>mdi-account-multiple-plus</v-icon>
-                </v-btn>
-              </template>
-              <span>ສ້າງພະນັກງານ</span>
-            </v-tooltip>
+          <div class="d-flex">
+            <div>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    small
+                    color="success"
+                    dark
+                    v-on="on"
+                    @click.stop="openShowUser(item)"
+                  >
+                    <v-icon>mdi-account-group</v-icon>
+                  </v-btn>
+                </template>
+                <span>ເບີ່ງພະນັກງານ</span>
+              </v-tooltip>
+              <v-tooltip bottom v-if="role === 'ministry_admin'">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    small
+                    color="green"
+                    dark
+                    v-on="on"
+                    @click.stop="
+                      $router.push(`/ministry/departData/create/${item.id}`)
+                    "
+                  >
+                    <v-icon>mdi-account-multiple-plus</v-icon>
+                  </v-btn>
+                </template>
+                <span>ສ້າງພະນັກງານ</span>
+              </v-tooltip>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
       </v-data-table>
     </div>
     <v-dialog
@@ -218,9 +219,7 @@
           <v-btn color="red" outlined dark @click="dialogDepartment = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="createDepartment()"
-            >ບັນທືກ</v-btn
-          >
+          <v-btn color="primary" dark @click="createDepartment()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -244,12 +243,11 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-spacer></v-spacer> 
+          <v-spacer></v-spacer>
           <v-btn color="red" outlined dark @click="dialogUpdate = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="updateDepartment()"
-            >ບັນທືກ</v-btn>
+          <v-btn color="primary" dark @click="updateDepartment()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -267,13 +265,100 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" small outlined @click="deleteDialog = false"
+          <v-btn color="red" outlined @click="deleteDialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary " small @click="deleteUser(userId)"
-            >ລືມຂໍ້ມູນ</v-btn
-          >
+          <v-btn color="primary " @click="deleteUser(userId)">ລືມຂໍ້ມູນ</v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="dialogEmployee"
+      max-width="500px"
+      fullscreen
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-toolbar elevation="1">
+          <v-avatar class="mx-2" size="40" color="primary" dark>
+            <v-icon color="white">mdi-account</v-icon>
+          </v-avatar>
+          <v-toolbar-title
+            >ພະນັກງານຂອງ {{ showData?.department_title }}</v-toolbar-title
+          >
+          <v-spacer></v-spacer>
+          <div>
+            <v-btn fab elevation="0" @click="dialogEmployee = false">
+              <v-icon>mdi-power</v-icon>
+            </v-btn>
+          </div>
+        </v-toolbar>
+        <div class="mt-5 mx-5">
+          <v-row>
+            <v-col v-for="(item, index) in dataView" :key="index" cols="12">
+              <v-row>
+                <v-col cols="2">
+                  <v-img
+                    :src="item.profile"
+                    style="width: 100%; height: 200px; object-fit: contain"
+                  ></v-img>
+                </v-col>
+                <v-col cols="10">
+                  <div>
+                    <div class="d-flex justify-space-between">
+                      <h2>
+                        ທ່ານ {{ item.name }} {{ item.last_name }} (
+                        {{ item.position }} )
+                      </h2>
+                      <v-speed-dial
+                        
+                        :direction="direction"
+                        :open-on-hover="hover"
+                        :transition="transition"
+                      >
+                        <template v-slot:activator>
+                          <v-btn  color="blue darken-2" icon dark>
+                            <v-icon v-if="fab == true"> mdi-close </v-icon>
+                            <v-icon v-else> mdi-dots-vertical </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="red"
+                          >
+                          <!-- @click.stop="deleteEm(item.id)" -->
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="green"
+                          @click.stop="updateEm(item.id)"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </v-speed-dial>
+                    </div>
+
+                    <div class="mt-2">
+                      <p class="black--text">ເບີໂທ: {{ item.phone }}</p>
+                      <p class="black--text">ທີ່ຢູ່: {{ item.address }}</p>
+                    </div>
+                    <p class="black--text">
+                      ປະຫັວດ:
+                      {{ item.details }}
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-divider class="mt-2"></v-divider>
+            </v-col>
+          </v-row>
+        </div>
       </v-card>
     </v-dialog>
   </div>
@@ -287,18 +372,29 @@ export default {
       images: "",
       image: "",
       dialog: false,
+      dataView: [],
       singleExpand: false,
       deleteDialog: false,
       dialogUpdate: false,
-      did:'',
+      dialogEmployee: false,
+      did: "",
+      showData: {},
       dialogCreateEmployee: false,
-      updateData:{},
-      search:'',
+      updateData: {},
+      search: "",
       userId: "",
       title: "",
-      items:[],
+      items: [],
+      direction: "bottom",
+      fab: false,
+      fling: false,
+      hover: false,
+      tabs: null,
+      imageUrl: "",
+      transition: "slide-y-reverse-transition",
+      eid: "",
       dialogDepartment: false,
-      role: this.$cookies.get('role'),
+      role: this.$cookies.get("role"),
       headers: [
         {
           text: "ລ/ດ",
@@ -324,6 +420,22 @@ export default {
   },
 
   methods: {
+    updateEm(id) {
+      try {
+        this.$router.push(`/ministry/departData/update/${id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    openShowUser(item) {
+      this.showData = item;
+      console.log(item.id);
+      this.dialogEmployee = true;
+      this.$axios.get(`/departmentMember_department/${item.id}`).then((res) => {
+        // console.log(res.data);
+        this.dataView = res?.data;
+      });
+    },
     seleteDepartment() {
       try {
         this.$axios.get(`/select_all_department_id/${this.id}`).then((res) => {
@@ -336,29 +448,31 @@ export default {
     openUpdate(item) {
       this.updateData = item;
       // console.log(item);
-      this.dialogUpdate = true
+      this.dialogUpdate = true;
     },
     updateDepartment() {
       const data = {
-        department: this.updateData.department_title
-      }
-      this.$axios.put(`/department/${this.updateData.id}`, data)
+        department: this.updateData.department_title,
+      };
+      this.$axios
+        .put(`/department/${this.updateData.id}`, data)
         .then((res) => {
           console.log(res.data);
           this.dialogUpdate = false;
-          this.$toast.success('ສຳເລັດ')
-        }).catch((err) => {
-      this.$toast.error('ບໍສຳເລັດ')
-     })
+          this.$toast.success("ສຳເລັດ");
+        })
+        .catch((err) => {
+          this.$toast.error("ບໍສຳເລັດ");
+        });
     },
-  async  createDepartment() {
+    async createDepartment() {
       try {
         const data = {
           department_title: this.title,
           department_organization_id: this.id,
         };
-      await  this.$axios.post("/department", data).then((res) => {
-          this.$toast.success("ສ້າງສຳເລັດ"); 
+        await this.$axios.post("/department", data).then((res) => {
+          this.$toast.success("ສ້າງສຳເລັດ");
           this.dialogDepartment = false;
         });
         this.seleteDepartment();
@@ -370,27 +484,19 @@ export default {
       this.did = id;
       this.dialogCreateEmployee = true;
     },
-   async member() {
+    async member() {
       try {
-        const formData = new FormData();
-        formData.append("file", this.images);
-        const image = await this.$axios.post("upload", formData).then((res) => {
-          return res?.data?.url;
+        // if (image) {
+        const data = {
+          department_id: this.did,
+          profile: this.imageUrl,
+          ...this.user
+        };
+        await this.$axios.post("/department-menber", data).then((res) => {
+          this.$toast.success("ສຳເລັດ");
+          this.dialogCreateEmployee = false;
         });
-        if (image) {
-          const data = {
-            department_id: this.did,
-            profile: image,
-            ...this.user,
-          };
-          // console.log(data);
-          await this.$axios
-            .post("/department-menber", data)
-            .then((res) => {
-              this.$toast.success("ສຳເລັດ");
-              this.dialogCreateEmployee = false;
-            });
-        }
+        // }
         // console.log('=========>',data);
       } catch (error) {
         console.log(error);
@@ -403,6 +509,11 @@ export default {
     uploadImage(e) {
       this.url = URL.createObjectURL(e);
       this.image = this.url;
+      const formData = new FormData();
+      formData.append("file", this.images);
+      this.$axios.post("upload", formData).then((res) => {
+        this.imageUrl = res?.data?.url;
+      });
     },
     getImage() {
       document.getElementById("picture").click();

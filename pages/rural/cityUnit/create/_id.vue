@@ -2,7 +2,16 @@
   <div>
     <v-form onsubmit="member">
     <v-card max-width="800px" class="mx-auto" elevation="0">
-      <v-card-title>ສ້າງພະນັກງານ</v-card-title>
+      <v-card-title>
+        <v-avatar
+        class="mr-3 pa-1"
+        size="40"
+        color="teal"
+      >
+       <v-icon class="white">mdi-account</v-icon>
+      </v-avatar>
+        ສ້າງພະນັກງານ
+      </v-card-title>
       <v-divider></v-divider>
       <v-card-text class="d-none">
         <v-file-input
@@ -88,8 +97,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
-          >ຍົກເລິກ</v-btn
-        >
+          >ຍົກເລິກ</v-btn>
         <v-btn color="primary" dark @click="member()">ບັນທືກ</v-btn>
       </v-card-actions>
     </v-card>
@@ -99,6 +107,7 @@
 
 <script>
 export default {
+  layout:'Black',
   data() {
     return {
       user: {},
@@ -128,26 +137,18 @@ export default {
       },
     async member() {
       try {
-        // const formData = new FormData();
-        // formData.append("file", this.images);
-        // const image = await this.$axios.post("upload", formData).then((res) => {
-        //   return res?.data?.url;
-        // });
-        // if (image) {
         const data = {
-          department_id: this.id,
+          unit_id: this.id,
           profile: this.imageUrl,
           ...this.user,
         };
         console.log(data);
           await this.$axios
-            .post("/department-menber", data)
+            .post("/create-unit-member", data)
             .then((res) => {
               this.$toast.success("ສຳເລັດ");
-              // this.dialogCreateEmployee = false;
               this.$router.back();
             });
-        // }
       } catch (error) {
         console.log(error);
       }

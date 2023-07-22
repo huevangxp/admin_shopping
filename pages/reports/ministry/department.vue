@@ -32,7 +32,7 @@
       </v-row>
       <v-data-table
         :headers="dessertHeaders"
-        :items="dataDO.rows"
+        :items="data"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="id"
@@ -63,7 +63,7 @@
         role: this.$cookies.get("role"),
         title: this.$cookies.get("title"),
         id: this.$cookies.get("userId"),
-        dataDO:{},
+        data:[],
         search: "",
   
         dessertHeaders: [
@@ -73,12 +73,13 @@
             sortable: false,
             value: "idx",
           },
-          { text: "ຊື່ພະແນກ", value: "department_organization_title" },
+          { text: "ຊື່ພະແນກ", value: "department_title" },
+          { text: "ຂອງກົມ", value: "department_organization_title" },
           { text: "ວັນທີ່ສ້າງ", value: "created_at" },
         ],
-        e_headers: "ລາຍງານລາຍຈ່າຍ",
+        e_headers: "ລາຍງານພະແນກຂອງກົມ",
         title:
-          "ລາຍງານກົມຂອງສູນກາງ" +
+          "ລາຍງານພະແນກ" +
           new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
             .toISOString()
             .substr(0, 10) +
@@ -100,10 +101,10 @@
     methods: {
       async getData() {
         await this.$axios
-          .get(`/department-organizations/${this.id}`)
+          .get(`/department-report/${this.id}`)
           .then((res) => {
-            // console.log(res.data);
-            this.dataDO = res?.data
+            console.log(res.data);
+            this.data = res?.data
           });
       },
   
@@ -111,8 +112,8 @@
         try {
           var list = [],
             index = 0;
-          for (let i = 0; i < this.departmentDO.rows.length; i++) {
-            var el = this.departmentDO.rows[i];
+          for (let i = 0; i < this.data.length; i++) {
+              var el = this.data[i];
             index = parseInt(i) + 1;
             var obj = {
               idx: index,

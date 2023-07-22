@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4">
-        <v-btn color="primary" @click="dialog = true">ສ້າງຂະແໜງ</v-btn>
+        <v-btn v-if="role === 'rural_admin'" outlined color="primary" @click="dialog = true">ສ້າງຂະແໜງ</v-btn>
       </v-col>
     </v-row>
     <v-card>
@@ -58,7 +58,7 @@
             </div>
           </template>
           <template #[`item.actions`]="{ item }">
-            <div class="d-flex">
+            <div v-if="role === 'rural_admin'" class="d-flex">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -67,7 +67,7 @@
                     color="red"
                     dark
                     v-on="on"
-                    @click="deleteData(item.id)"
+                    @click="openDeleteSector(item.id)"
                   >
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
@@ -124,6 +124,7 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <!-- create sector -->
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
         <v-card-title color="red">ສ້າງນະແໜງ</v-card-title>
@@ -147,6 +148,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- update sector -->
     <v-dialog v-model="dialogUpdate" max-width="500px" transition="dialog-transition">
       <v-card>
         <v-card-title color="red">ອັບເດດນະແໜງ</v-card-title>
@@ -170,6 +172,116 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+     <!-- show employee -->
+    <v-dialog
+      v-model="dialogEmployee"
+      max-width="500px"
+      fullscreen
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-toolbar elevation="1">
+          <v-avatar class="mx-2" size="40" color="primary" dark>
+            <v-icon color="white">mdi-account</v-icon>
+          </v-avatar>
+          <v-toolbar-title>ພະນັກງານນອງກົມ</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <div>
+            <v-btn  fab elevation="0" @click="dialogEmployee = false"> <v-icon>mdi-power</v-icon> </v-btn>
+          </div>
+        </v-toolbar>
+        <div class="mt-5 mx-5">
+          <v-row>
+            <v-col
+              v-for="(item, index) in sectorEmployee.rows"
+              :key="index"
+              cols="12"
+            >
+              <v-row>
+                <v-col cols="2">
+                  <v-img
+                  lazy-src="/loading.gif"
+                    :src="item.profile"
+                    style="width: 100%; height: 200px; object-fit: contain"
+                  ></v-img>
+                </v-col>
+                <v-col cols="10">
+                  <div>
+                    <div class="d-flex justify-space-between">
+                      <h2>
+                        ທ່ານ {{ item.name }} {{ item.last_name }} (
+                        {{ item.position }} )
+                      </h2>
+                      <v-speed-dial
+                        v-model="fab"
+                        :direction="direction"
+                        :open-on-hover="hover"
+                        :transition="transition"
+                      >
+                        <template v-slot:activator>
+                          <v-btn v-model="fab" color="blue darken-2" icon dark>
+                            <v-icon v-if="fab"> mdi-close </v-icon>
+                            <v-icon v-else> mdi-dots-vertical </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="red"
+                          @click.stop="deleteEm(item.id)"
+                          >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                        <v-btn icon dark small color="green" @click.stop="updateEm(item.id)">
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </v-speed-dial>
+                    </div>
+
+                    <div class="mt-2">
+                      <!-- <p class="black--text">ຕຳແໜງ: </p> -->
+                      <p class="black--text">ເບີໂທ: {{ item.phone }}</p>
+                      <p class="black--text">ທີ່ຢູ່: {{ item.address }}</p>
+                    </div>
+                    <p class="black--text">
+                      ປະຫັວດ:
+                      {{ item.details }}
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-divider class="mt-2"></v-divider>
+            </v-col>
+          </v-row>
+        </div>
+      </v-card>
+    </v-dialog>
+    <!-- delete data sector -->
+    <v-dialog
+      v-model="deleteDialog"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+    <v-card>
+        <v-card-title color="red">ລືບຂະແໜງ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" dark small  @click="deleteDialog = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " outlined small @click="deleteData"
+            >ລືບຂໍ້ມູນ</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -185,6 +297,16 @@ export default {
       loading: false,
       sectorData: [],
       search: "",
+      dialogEmployee: false,
+      direction: "bottom",
+      fab: false,
+      fling: false,
+      hover: false,
+      tabs: null,
+      transition: "slide-y-reverse-transition",
+      sectorEmployee: {},
+      deleteDialog: false,
+      sid:'',
       headers: [
         {
           text: "ລ/ດ",
@@ -225,6 +347,31 @@ export default {
     },
   },
   methods: {
+    async  deleteEm(id) {
+     await this.$axios.delete(`/delete-sector-member/${id}`)
+        .then((res) => {
+          // console.log(res.data);
+          this.$toast.success('ສຳເລັດ')
+        })
+         this.$axios.get(`/get-all-byId/${this.sid}`).then((res) => {
+        this.sectorEmployee = res?.data;
+      });
+    },
+    updateEm(id) {
+      this.$router.push(`/rural/sector/update/${id}`);
+    },
+    openDeleteSector(id) {
+      this.sid = id;
+      this.deleteDialog = true;
+    },
+    async openEmployee(id) {
+      this.sid = id;
+      console.log(id);
+      await this.$axios.get(`/get-all-byId/${id}`).then((res) => {
+        this.sectorEmployee = res?.data;
+      });
+      this.dialogEmployee = true;
+    },
     openCreateEmployee(id) {
       this.$router.push(`/rural/sector/create/${id}`);
     },
@@ -237,7 +384,6 @@ export default {
       const data = {
         sector_title:this.dataUpdate.sector_title
       }
-      // console.log(data);
       this.$axios.put(`/sector/${this.dataUpdate.id}`, data)
         .then((res) => {
           // this.dataUpdate = false
@@ -260,9 +406,9 @@ export default {
           console.log(err);
         });
     },
-    async deleteData(id) {
+    async deleteData() {
       try {
-        await this.$axios.delete(`/sector/${id}`).then((data) => {
+        await this.$axios.delete(`/sector/${this.sid}`).then((data) => {
           // console.log(data);
         });
         this.getData();

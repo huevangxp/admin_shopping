@@ -56,10 +56,9 @@ export default {
         duration: 3000,
         position: 'top-right',
         iconPack: 'mdi',
-        // icon: "",
-        // theme: 'outline',
         type: 'error',
         closeOnSwipe: false,
+        width:'300px'
       },
     ],
   ],
@@ -71,7 +70,7 @@ export default {
       light: true,
       themes: {
         light: {
-          primary: '#087235',
+          primary: colors.teal.lighten1,
           accent: colors.grey.lighten3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

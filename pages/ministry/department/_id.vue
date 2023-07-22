@@ -10,8 +10,8 @@
       <v-col cols="4">
         <v-text-field
           v-model="search"
-          name="search"
-          label="search"
+          name="ຄົ້ນຫາ"
+          label="ຄົ້ນຫາ"
           id="id"
           dense
           outlined
@@ -19,11 +19,12 @@
         ></v-text-field>
       </v-col>
       <v-col cols="4"> </v-col>
-      <v-col cols="4">
+      <v-col cols="4" class="d-flex justify-end">
         <v-btn
+          outlined
           v-if="role === 'ministry_admin'"
           color="primary"
-          @click="openCreate()"
+          @click="dialog = true"
           >ສ້າງກົມຈັດຕັ້ງ</v-btn
         >
       </v-col>
@@ -126,15 +127,19 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-avatar class="mx-2" size="40" color="white">
-            <v-icon color="primary">mdi-account</v-icon>
+        <v-toolbar elevation="1">
+          <v-avatar class="mx-2" size="40" color="primary" dark>
+            <v-icon color="white">mdi-account</v-icon>
           </v-avatar>
-          <v-toolbar-title>ພະນັກງານນອງກົມ</v-toolbar-title>
+          <v-toolbar-title
+            >ພະນັກງານຂອງ{{ unitData?.unit_title }}</v-toolbar-title
+          >
           <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark text @click="dialogEmployee = false"> ປິດ </v-btn>
-          </v-toolbar-items>
+          <div>
+            <v-btn fab elevation="0" @click="dialogEmployee = false">
+              <v-icon>mdi-power</v-icon>
+            </v-btn>
+          </div>
         </v-toolbar>
         <div class="mt-5 mx-5">
           <v-row>
@@ -178,7 +183,13 @@
                         >
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                        <v-btn icon dark small color="green" @click.stop="updateEm(item.id)">
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="green"
+                          @click.stop="updateEm(item.id)"
+                        >
                           <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                       </v-speed-dial>
@@ -204,7 +215,7 @@
     </v-dialog>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title color="red">ສ້າງກົມ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງກົມ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <p class="black--text">ຊື່ກົມ</p>
@@ -232,7 +243,7 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title color="red">ອັບເດບກົມ</v-card-title>
+        <v-card-title class="primary white--text">ອັບເດບກົມ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <p class="black--text">ຊື່ກົມ</p>
@@ -353,6 +364,29 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- delete department oganization -->
+    <v-dialog
+      v-model="deleteDialog"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລືມຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red"  outlined @click="deleteDialog = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary "  @click="deleteDO"
+            >ລືມຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -363,12 +397,13 @@ export default {
       user: {},
       images: "",
       image: "",
+      deleteDialog:false,
       expanded: [],
       singleExpand: false,
       dialog: false,
-      dialogEmployee: false,
       dialogCreateEmployee: false,
       dialogUpdateDO: false,
+      dialogEmployee: false,
       direction: "bottom",
       fab: false,
       fling: false,
@@ -379,7 +414,7 @@ export default {
       mData: {},
       role: this.$cookies.get("role"),
       title: this.$cookies.get("title"),
-      depId: "",
+      doId: "",
       search: "",
       employeeDepartmentDO: {},
       departmentDO: {},
@@ -405,20 +440,27 @@ export default {
     id() {
       return this.$route.params.id;
     },
-    // departmentDO() {
-    //   return this.$store.state.department.departmentDO;
-    // },
+  
   },
   methods: {
-  async  deleteEm(id) {
-     await this.$axios.delete(`/department-member/${id}`)
+   async deleteDO(){
+      await this.$axios.$delete(`/department-organization/${this.doId}`)
         .then((res) => {
           console.log(res.data);
-          this.$toast.success('ສຳເລັດ')
-        })
-        await this.$axios.get(`/get-organization-member/${this.mid}`).then((res) => {
-        this.employeeDepartmentDO = res?.data;
+          this.$toast.success("ລືບຂໍ້ມູນສຳເລັດ");
+        });
+      this.getDepartmentDO();
+    },
+    async deleteEm(id) {
+      await this.$axios.delete(`/department-member/${id}`).then((res) => {
+        console.log(res.data);
+        this.$toast.success("ສຳເລັດ");
       });
+      await this.$axios
+        .get(`/get-organization-member/${this.mid}`)
+        .then((res) => {
+          this.employeeDepartmentDO = res?.data;
+        });
     },
     updateEm(id) {
       this.$router.push(`/ministry/department/update/${id}`);
@@ -492,22 +534,11 @@ export default {
     moveTocreate(item) {
       this.$router.push(`/ministry/departData/${item.id}`);
     },
-    openCreate() {
-      this.dialog = true;
-    },
-    createPhane(id) {
-      this.depId = id;
-      this.dialog = true;
-    },
+
     async deleteData(id) {
       // console.log(id);
-      await this.$axios
-        .$delete(`/department-organization/${id}`)
-        .then((res) => {
-          console.log(res.data);
-          this.$toast.success("ລືບຂໍ້ມູນສຳເລັດ");
-        });
-      this.getDepartmentDO();
+      this.doId = id;
+      this.deleteDialog = true;
     },
     async createDO() {
       try {
