@@ -88,7 +88,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
+          <v-btn color="red" outlined dark @click="$router.back()"
             >ຍົກເລິກ</v-btn
           >
           <v-btn color="primary" dark @click="updateData()">ບັນທືກ</v-btn>

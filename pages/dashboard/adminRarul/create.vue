@@ -125,13 +125,12 @@ export default {
     },
   },
   methods: {
-    
     async create() {
       try {
-     
           const data = {
             province_id: this.province.id,
             pid: this.province.pid,
+            profile:this.province.profile,
             title: this.user.title,
             user_name: this.user.user_name,
             password: this.user.password,
@@ -142,7 +141,6 @@ export default {
             this.$router.back();
             this.$toast.success("ສ້າງສຳເລັດແລ້ວ");
           });
-     
       } catch (error) {
         console.log(error);
       }

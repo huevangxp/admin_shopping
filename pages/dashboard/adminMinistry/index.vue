@@ -1,6 +1,7 @@
 <template>
   <div>
       <!-- {{ ministry }} -->
+      <h1 class="my-10">ຈັດການຂໍ້ມູນ admin ຂອງກະຊວງ </h1>
       <v-row>
       <v-col md="6">
         <v-text-field
@@ -10,7 +11,7 @@
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
-        <v-btn  color="primary" dark to="/dashboard/adminMinistry/create">ສ້າງ admin ຂອງກະຊວງ</v-btn>
+        <v-btn outlined color="primary" dark to="/dashboard/adminMinistry/create">ສ້າງ admin ຂອງກະຊວງ</v-btn>
       </v-col>
     </v-row>
     <v-data-table

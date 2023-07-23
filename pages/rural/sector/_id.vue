@@ -7,7 +7,6 @@
           v-model="search"
           name="ຄົ້ນຫາ"
           label="ຄົ້ນຫາ"
-          id="id"
           dense
           outlined
           append-icon="mdi-magnify"
@@ -15,10 +14,16 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4">
-        <v-btn v-if="role === 'rural_admin'" outlined color="primary" @click="dialog = true">ສ້າງຂະແໜງ</v-btn>
+        <v-btn
+          v-if="role === 'rural_admin'"
+          outlined
+          color="primary"
+          @click="dialog = true"
+          >ສ້າງຂະແໜງ</v-btn
+        >
       </v-col>
     </v-row>
-    <v-card>
+    <v-card elevation="0">
       <v-card-text flat v-if="sectorData.length <= 0">
         <v-data-table
           :headers="headers"
@@ -35,11 +40,7 @@
             class=""
             style="font-size: 20px; color: grey; margin-top: 40px"
           >
-            <v-progress-circular
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            ກຳລັງໂຫຼດຂໍ້ມູນ
+            <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
           </v-card>
         </v-row>
         <v-skeleton-loader style="margin-top: -125px" class="" type="image">
@@ -76,7 +77,14 @@
               </v-tooltip>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon small color="primary" dark v-on="on" @click="showUpdate(item)">
+                  <v-btn
+                    icon
+                    small
+                    color="primary"
+                    dark
+                    v-on="on"
+                    @click="showUpdate(item)"
+                  >
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -84,55 +92,54 @@
               </v-tooltip>
             </div>
           </template>
-
           <template v-slot:item.employee="{ item }">
-        <div class="d-flex">
-          <div>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="success"
-                  dark
-                  v-on="on"
-                  @click.stop="openEmployee(item.id)"
-                >
-                  <v-icon>mdi-account-group</v-icon>
-                </v-btn>
-              </template>
-              <span>ເບີ່ງພະນັກງານ</span>
-            </v-tooltip>
-            <v-tooltip bottom v-if="role === 'rural_admin'">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="green"
-                  dark
-                  v-on="on"
-                  @click.stop="openCreateEmployee(item.id)"
-                >
-                  <v-icon>mdi-account-multiple-plus</v-icon>
-                </v-btn>
-              </template>
-              <span>ສ້າງພະນັກງານ</span>
-            </v-tooltip>
-          </div>
-        </div>
-      </template>
+            <div class="d-flex">
+              <div>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      small
+                      color="success"
+                      dark
+                      v-on="on"
+                      @click.stop="openEmployee(item.id)"
+                    >
+                      <v-icon>mdi-account-group</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>ເບີ່ງພະນັກງານ</span>
+                </v-tooltip>
+                <v-tooltip bottom v-if="role === 'rural_admin'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      small
+                      color="green"
+                      dark
+                      v-on="on"
+                      @click.stop="openCreateEmployee(item.id)"
+                    >
+                      <v-icon>mdi-account-multiple-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>ສ້າງພະນັກງານ</span>
+                </v-tooltip>
+              </div>
+            </div>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
     <!-- create sector -->
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title color="red">ສ້າງນະແໜງ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງນະແໜງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ນະແໜງ</p>
           <v-text-field
             v-model="sector_title"
+            class="pt-10"
             label="ຊື່ຂະແໜງ"
             outlined
             dense
@@ -149,13 +156,18 @@
       </v-card>
     </v-dialog>
     <!-- update sector -->
-    <v-dialog v-model="dialogUpdate" max-width="500px" transition="dialog-transition">
+    <v-dialog
+      v-model="dialogUpdate"
+      max-width="500px"
+      transition="dialog-transition"
+    >
       <v-card>
-        <v-card-title color="red">ອັບເດດນະແໜງ</v-card-title>
+        <v-card-title class="primary white--text">ອັບເດດຂະແໜງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ນະແໜງ</p>
+          <!-- <p class="black--text">ຊື່ນະແໜງ</p> -->
           <v-text-field
+            class="pt-10"
             v-model="dataUpdate.sector_title"
             label="ຊື່ຂະແໜງ"
             outlined
@@ -172,7 +184,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-     <!-- show employee -->
+    <!-- show employee -->
     <v-dialog
       v-model="dialogEmployee"
       max-width="500px"
@@ -187,10 +199,42 @@
           <v-toolbar-title>ພະນັກງານນອງກົມ</v-toolbar-title>
           <v-spacer></v-spacer>
           <div>
-            <v-btn  fab elevation="0" @click="dialogEmployee = false"> <v-icon>mdi-power</v-icon> </v-btn>
+            <v-btn fab elevation="0" @click="dialogEmployee = false">
+              <v-icon color="primary">mdi-power</v-icon>
+            </v-btn>
           </div>
         </v-toolbar>
-        <div class="mt-5 mx-5">
+        <div v-if="sectorEmployee?.rows?.length <= 0">
+          <v-card elevation="0">
+            <v-card-text>
+              <v-data-table
+                :headers="headers"
+                :search="search"
+                sort-by="index"
+                class="elevation-0"
+                hide-default-footer
+                no-data-text=""
+                :header-props="{ sortIcon: null }"
+              ></v-data-table>
+              <v-row class="justify-center mx-4 mt-4">
+                <v-card
+                  flat
+                  class=""
+                  style="font-size: 20px; color: grey; margin-top: 40px"
+                >
+                  <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+                </v-card>
+              </v-row>
+              <v-skeleton-loader
+                style="margin-top: -125px"
+                class=""
+                type="image"
+              >
+              </v-skeleton-loader>
+            </v-card-text>
+          </v-card>
+        </div>
+        <div v-else class="mt-5 mx-5">
           <v-row>
             <v-col
               v-for="(item, index) in sectorEmployee.rows"
@@ -200,7 +244,7 @@
               <v-row>
                 <v-col cols="2">
                   <v-img
-                  lazy-src="/loading.gif"
+                    lazy-src="/loading.gif"
                     :src="item.profile"
                     style="width: 100%; height: 200px; object-fit: contain"
                   ></v-img>
@@ -213,14 +257,13 @@
                         {{ item.position }} )
                       </h2>
                       <v-speed-dial
-                        v-model="fab"
                         :direction="direction"
                         :open-on-hover="hover"
                         :transition="transition"
                       >
                         <template v-slot:activator>
-                          <v-btn v-model="fab" color="blue darken-2" icon dark>
-                            <v-icon v-if="fab"> mdi-close </v-icon>
+                          <v-btn color="blue darken-2" icon dark>
+                            <v-icon v-if="fab == true"> mdi-close </v-icon>
                             <v-icon v-else> mdi-dots-vertical </v-icon>
                           </v-btn>
                         </template>
@@ -229,18 +272,23 @@
                           dark
                           small
                           color="red"
-                          @click.stop="deleteEm(item.id)"
-                          >
+                          @click.stop="openDeleteEm(item.id)"
+                        >
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                        <v-btn icon dark small color="green" @click.stop="updateEm(item.id)">
-                          <v-icon>mdi-pencil</v-icon>
+                        <v-btn
+                          icon
+                          dark
+                          small
+                          color="primary"
+                          @click.stop="updateEm(item.id)"
+                        >
+                          <v-icon>mdi-account-edit</v-icon>
                         </v-btn>
                       </v-speed-dial>
                     </div>
 
                     <div class="mt-2">
-                      <!-- <p class="black--text">ຕຳແໜງ: </p> -->
                       <p class="black--text">ເບີໂທ: {{ item.phone }}</p>
                       <p class="black--text">ທີ່ຢູ່: {{ item.address }}</p>
                     </div>
@@ -265,20 +313,43 @@
       max-width="500px"
       transition="dialog-transition"
     >
-    <v-card>
-        <v-card-title color="red">ລືບຂະແໜງ</v-card-title>
+      <v-card>
+        <v-card-title class="primary white--text">ລຶບຂະແໜງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="py-6 text-center black--text">
           ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" dark small  @click="deleteDialog = false"
+          <v-btn color="red" dark outlined @click="deleteDialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary " outlined small @click="deleteData"
-            >ລືບຂໍ້ມູນ</v-btn
+          <v-btn color="primary" @click="deleteData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- delete data sector Employee -->
+    <v-dialog
+      v-model="deleteEmDialog"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"
+          >ລຶບພະນັກງານຂອງຂະແໜງ</v-card-title
+        >
+        <v-divider></v-divider>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" dark outlined @click="deleteEmDialog = false"
+            >ຍົກເລິກ</v-btn
           >
+          <v-btn color="primary" @click="deleteEm">ລຶບຂໍ້ມູນ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -291,14 +362,15 @@ export default {
     return {
       role: this.$cookies.get("role"),
       sector_title: "",
+      deleteEmDialog: false,
       dialog: false,
       dialogUpdate: false,
-      dataUpdate:{},
+      dataUpdate: {},
       loading: false,
       sectorData: [],
       search: "",
       dialogEmployee: false,
-      direction: "bottom",
+      direction: "left",
       fab: false,
       fling: false,
       hover: false,
@@ -306,7 +378,7 @@ export default {
       transition: "slide-y-reverse-transition",
       sectorEmployee: {},
       deleteDialog: false,
-      sid:'',
+      sid: "",
       headers: [
         {
           text: "ລ/ດ",
@@ -347,13 +419,18 @@ export default {
     },
   },
   methods: {
-    async  deleteEm(id) {
-     await this.$axios.delete(`/delete-sector-member/${id}`)
+    openDeleteEm(id) {
+      this.sid = id;
+      this.deleteEmDialog = true;
+    },
+    async deleteEm() {
+      await this.$axios
+        .delete(`/delete-sector-member/${this.sid}`)
         .then((res) => {
-          // console.log(res.data);
-          this.$toast.success('ສຳເລັດ')
-        })
-         this.$axios.get(`/get-all-byId/${this.sid}`).then((res) => {
+          this.$toast.success("ສຳເລັດ");
+          this.deleteEmDialog = false;
+        });
+      this.$axios.get(`/get-all-byId/${this.sid}`).then((res) => {
         this.sectorEmployee = res?.data;
       });
     },
@@ -378,20 +455,22 @@ export default {
     showUpdate(data) {
       console.log(data);
       this.dataUpdate = data;
-      this.dialogUpdate = true
+      this.dialogUpdate = true;
     },
     updateSector() {
       const data = {
-        sector_title:this.dataUpdate.sector_title
-      }
-      this.$axios.put(`/sector/${this.dataUpdate.id}`, data)
+        sector_title: this.dataUpdate.sector_title,
+      };
+      this.$axios
+        .put(`/sector/${this.dataUpdate.id}`, data)
         .then((res) => {
           // this.dataUpdate = false
-          this.dialogUpdate = false
-        console.log(res.data);
-        }).catch((err) => {
-          this.$toast.error('ບໍ່ສຳເລັດ')
+          this.dialogUpdate = false;
+          console.log(res.data);
         })
+        .catch((err) => {
+          this.$toast.error("ບໍ່ສຳເລັດ");
+        });
     },
     getData() {
       this.loading = true;
@@ -410,6 +489,8 @@ export default {
       try {
         await this.$axios.delete(`/sector/${this.sid}`).then((data) => {
           // console.log(data);
+          this.deleteDialog = false;
+          this.$toast.success("ສຳເລັດ");
         });
         this.getData();
       } catch (error) {

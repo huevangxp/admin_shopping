@@ -144,13 +144,13 @@ export default {
         // });
         // if (image) {
         const data = {
-          department_id: this.id,
+          department_organization_id: this.id,
           profile: this.imageUrl,
           ...this.user,
         };
         console.log(data);
           await this.$axios
-            .post("/department-menber", data)
+            .post("/create-member-organization", data)
             .then((res) => {
               this.$toast.success("ສຳເລັດ");
               // this.dialogCreateEmployee = false;

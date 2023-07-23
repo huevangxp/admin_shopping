@@ -1,17 +1,19 @@
 <template>
   <div>
     <!-- {{ ministry }} -->
+    <h1 class="my-10">ຈັດການຂໍ້ມູນ admin ຂອງທ້ອງຖີ່ນ</h1>
     <v-row>
       <v-col md="6">
         <v-text-field
           outlined
           dense
           placeholder="ຄົ້ນຫາ admin ທ້ອງຖີ້ມ"
+          append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
-        <v-btn color="primary" dark @click="dialog = true"
-          >ສ້າງ admin ຂອງກະຊວງ</v-btn
+        <v-btn outlined color="primary" dark @click="dialog = true"
+          >ສ້າງ admin ຂອງທ້ອງຖີ່ນ</v-btn
         >
       </v-col>
     </v-row>

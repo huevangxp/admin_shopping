@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- {{ items }} -->
-        <h1 class="my-3">admin ຂອງທ້ອງຖີ່ມ <span class="primary--text" style="border-bottom: 1px solid #000;">{{ items[0]?.ministry_title }}</span></h1>
+        <h1 class="my-10">admin ຂອງ <span class="primary--text" style="border-bottom: 1px solid #000;">{{ items[0]?.ministry_title }}</span></h1>
         <v-data-table
             :headers="headers"
             :items="items"
@@ -43,7 +43,6 @@ export default {
     mounted() {
         this.$axios.get(`/ministry/${this.id}`)
             .then((res) => {
-                // console.log('--------->',res.data);
             this.items.push(res.data);
         })
     },

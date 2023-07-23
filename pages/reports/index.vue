@@ -5,13 +5,13 @@
             <v-col
                 v-for="item in lists"
                 :key="item.title"
-                cols="12"
+                cols="6"
                 sm="4"
                 md="4"
             >
                 <v-card 
                 hover shaped raised
-                class="white"
+                class="white ma-3"
                 @click="$router.push(item.to)"
                  height="150px"
                   >
@@ -54,7 +54,7 @@ export default {
                     title: "ຂໍ້ມູນຜູ້ບໍລິຫານຂອງກະຊວງ",
                     src: "https://picsum.photos/400/400",
                     icon: "mdi-bank",
-                    to: "/reports/ministry",
+                    to: "/reports/ministryData",
                 },
                 {
                     title: "ຂໍ້ມູນກົມຈັດຕັ້ງຂອງກະຊວງ",

@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1 class="my-10">ຈັດການພະແນກຂອງກົມ</h1>
-    <!-- {{ updateData }} -->
     <v-row>
       <v-col cols="6">
         <v-text-field
@@ -15,12 +14,48 @@
         ></v-text-field>
       </v-col>
       <v-col cols="6" class="d-flex justify-end">
-        <v-btn color="primary" outlined dark @click="dialogDepartment = true"
+        <v-btn
+          v-if="role === 'ministry_admin'"
+          color="primary"
+          outlined
+          dark
+          @click="dialogDepartment = true"
           >ສ້າງພະແນກ</v-btn
         >
       </v-col>
     </v-row>
     <div>
+      <div v-if="items?.length <=0">
+        <v-card elevation="0">
+            <v-card-text>
+              <v-data-table
+                :headers="headers"
+                :search="search"
+                sort-by="index"
+                class="elevation-0"
+                hide-default-footer
+                no-data-text=""
+                :header-props="{ sortIcon: null }"
+              ></v-data-table>
+              <v-row class="justify-center mx-4 mt-4">
+                <v-card
+                  flat
+                  class=""
+                  style="font-size: 20px; color: grey; margin-top: 40px"
+                >
+                  <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+                </v-card>
+              </v-row>
+              <v-skeleton-loader
+                style="margin-top: -125px"
+                class=""
+                type="image"
+              >
+              </v-skeleton-loader>
+            </v-card-text>
+          </v-card>
+      </div>
+      <div v-else>
       <v-data-table
         :headers="headers"
         :items="items"
@@ -47,13 +82,16 @@
           </div>
         </template>
         <template #item.actions="{ item }">
-          <div>
+          <div v-if="role === 'ministry_admin'">
             <v-btn color="red" icon small @click="deleteUserDialog(item.id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
             <v-btn color="primary" icon small @click="openUpdate(item)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
+          </div>
+          <div v-else>
+            <span class="red--text">ບໍ່ສາມາດແກ້ໄຂໄດ້</span>
           </div>
         </template>
         <template v-slot:item.employee="{ item }">
@@ -95,106 +133,9 @@
           </div>
         </template>
       </v-data-table>
+      </div>
     </div>
-    <v-dialog
-      persistent
-      v-model="dialogCreateEmployee"
-      max-width="500px"
-      transition="dialog-transition"
-    >
-      <v-card>
-        <v-card-title class="primary white--text">ສ້າງພະນັກງານ</v-card-title>
-        <v-divider></v-divider>
-        <v-card-text class="d-none">
-          <v-file-input
-            id="picture"
-            v-model="images"
-            @change="uploadImage"
-          ></v-file-input>
-        </v-card-text>
-        <div class="d-flex justify-center my-5">
-          <v-avatar size="150" v-if="image">
-            <v-img :src="image" alt="profile"></v-img>
-          </v-avatar>
-          <v-avatar size="150" color="primary" @click="getImage" v-else>
-            <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon>
-          </v-avatar>
-        </div>
-        <v-card-text class="mt-3">
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="user.name"
-                label="ຊື່"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="user.last_name"
-                label="ນາມສະກຸ່ມ"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="user.phone"
-                label="ເບີໂທ"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="user.position"
-                label="ຕຳແໜງ"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="user.address"
-                label="ທີ່ຢູ່"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="user.details"
-                counter="50"
-                label="ປະຫັວດຫຍໍ້"
-                outlined
-                dense
-                hide-details="auto"
-                :rules="[(v) => !!v || 'ຈຳເປັນ']"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
-            >ຍົກເລິກ</v-btn
-          >
-          <v-btn color="primary" dark @click="member()">ບັນທືກ</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+   
     <v-dialog
       v-model="dialogDepartment"
       max-width="500px"
@@ -204,9 +145,10 @@
         <v-card-title class="primary white--text">ສ້າງພະແນກ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ພະແນກ</p>
+          <!-- <p class="black--text">ຊື່ພະແນກ</p> -->
           <v-text-field
             v-model="title"
+            class="pt-10"
             label="ຊື່ພະແນກ"
             outlined
             dense
@@ -232,9 +174,10 @@
         <v-card-title class="primary white--text">ອັບເດດພະແນກ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ພະແນກ</p>
+          <!-- <p class="black--text">ຊື່ພະແນກ</p> -->
           <v-text-field
             v-model="updateData.department_title"
+            class="pt-10"
             label="ຊື່ພະແນກ"
             outlined
             dense
@@ -268,11 +211,32 @@
           <v-btn color="red" outlined @click="deleteDialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary " @click="deleteUser(userId)">ລືມຂໍ້ມູນ</v-btn>
+          <v-btn color="primary " @click="deleteUser()">ລືມຂໍ້ມູນ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+    <v-dialog
+      v-model="openDeleteData"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລືມຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="openDeleteData = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " @click="deleteEm">ລືມຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- open show employee -->
     <v-dialog
       v-model="dialogEmployee"
       max-width="500px"
@@ -290,11 +254,36 @@
           <v-spacer></v-spacer>
           <div>
             <v-btn fab elevation="0" @click="dialogEmployee = false">
-              <v-icon>mdi-power</v-icon>
+              <v-icon color="primary">mdi-power</v-icon>
             </v-btn>
           </div>
         </v-toolbar>
-        <div class="mt-5 mx-5">
+        <div v-if="dataView.length <= 0">
+          <v-card elevation="0">
+          <v-card-text>
+            <v-data-table
+          :search="search"
+          sort-by="index"
+          class="elevation-0"
+          hide-default-footer
+          no-data-text=""
+          :header-props="{ sortIcon: null }"
+        ></v-data-table>
+        <v-row class="justify-center mx-4 mt-4">
+          <v-card
+            flat
+            class=""
+            style="font-size: 20px; color: grey; margin-top: 40px"
+          >
+            <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+          </v-card>
+        </v-row>
+        <v-skeleton-loader style="margin-top: -125px" class="" type="image">
+        </v-skeleton-loader>
+          </v-card-text>
+         </v-card>
+        </div>
+        <div v-else class="mt-5 mx-5">
           <v-row>
             <v-col v-for="(item, index) in dataView" :key="index" cols="12">
               <v-row>
@@ -312,13 +301,12 @@
                         {{ item.position }} )
                       </h2>
                       <v-speed-dial
-                        
                         :direction="direction"
                         :open-on-hover="hover"
                         :transition="transition"
                       >
                         <template v-slot:activator>
-                          <v-btn  color="blue darken-2" icon dark>
+                          <v-btn color="blue darken-2" icon dark>
                             <v-icon v-if="fab == true"> mdi-close </v-icon>
                             <v-icon v-else> mdi-dots-vertical </v-icon>
                           </v-btn>
@@ -328,18 +316,18 @@
                           dark
                           small
                           color="red"
-                          >
-                          <!-- @click.stop="deleteEm(item.id)" -->
+                          @click="openDelete(item.id)"
+                        >
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
                         <v-btn
                           icon
                           dark
                           small
-                          color="green"
+                          color="primary"
                           @click.stop="updateEm(item.id)"
                         >
-                          <v-icon>mdi-pencil</v-icon>
+                          <v-icon>mdi-account-edit</v-icon>
                         </v-btn>
                       </v-speed-dial>
                     </div>
@@ -370,22 +358,25 @@ export default {
     return {
       user: {},
       images: "",
+      knowledge: 0,
       image: "",
       dialog: false,
       dataView: [],
+      emId: "",
       singleExpand: false,
       deleteDialog: false,
       dialogUpdate: false,
       dialogEmployee: false,
       did: "",
       showData: {},
+      openDeleteData: false,
       dialogCreateEmployee: false,
       updateData: {},
       search: "",
       userId: "",
       title: "",
       items: [],
-      direction: "bottom",
+      direction: "left",
       fab: false,
       fling: false,
       hover: false,
@@ -420,9 +411,32 @@ export default {
   },
 
   methods: {
+    openDelete(id) {
+      this.emId = id;
+      this.openDeleteData = true;
+    },
+
     updateEm(id) {
       try {
         this.$router.push(`/ministry/departData/update/${id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteEm() {
+      try {
+        await this.$axios
+          .delete(`/department-member/${this.emId}`)
+          .then((res) => {
+            this.$toast.success("ສຳເລັດ");
+            this.openDeleteData = false;
+          });
+
+        await this.$axios
+          .get(`/departmentMember_department/${this.showData.id}`)
+          .then((res) => {
+            this.dataView = res?.data;
+          });
       } catch (error) {
         console.log(error);
       }
@@ -432,7 +446,6 @@ export default {
       console.log(item.id);
       this.dialogEmployee = true;
       this.$axios.get(`/departmentMember_department/${item.id}`).then((res) => {
-        // console.log(res.data);
         this.dataView = res?.data;
       });
     },
@@ -490,7 +503,7 @@ export default {
         const data = {
           department_id: this.did,
           profile: this.imageUrl,
-          ...this.user
+          ...this.user,
         };
         await this.$axios.post("/department-menber", data).then((res) => {
           this.$toast.success("ສຳເລັດ");
@@ -505,6 +518,21 @@ export default {
     deleteUserDialog(id) {
       this.userId = id;
       this.deleteDialog = true;
+    },
+  async deleteUser() {
+      try {
+        await this.$axios.delete(`/department/${this.userId}`)
+          .then((res) => {
+            console.log(res.data);
+            this.$toast.success('ສຳເລັດ')
+            this.deleteDialog = false;
+          }).catch((err) => {
+        this.$toast.error('ບໍ່ສາມາດລຶບໄດ້')
+          })
+        this.seleteDepartment();
+      } catch (error) {
+        console.log(error);
+      }
     },
     uploadImage(e) {
       this.url = URL.createObjectURL(e);

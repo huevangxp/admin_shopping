@@ -15,58 +15,57 @@
     </v-row>
     <div>
       <v-data-table
-      :headers="headers"
-      :items="admin.rows"
-      class="elevation-3"
-      :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
-      dense
-      fixed-header 
-      @click:row="showDetails"
-    >
-    <template #item.profile= "{item}">
-      <div>
-        <v-avatar
-          size="70"
-          color="red"
-        >   
-        <v-img
-         :src="item?.profile" alt="profile"></v-img>
-        </v-avatar>
-      </div>
-    </template>
-      <template #item.idx="{  index }">
-        <div>
-          {{ index + 1 }}
-        </div>
-      </template>
-      <template #item.createdAt = '{item}'>
-        <div>
-          {{ $moment(item.createdAt).format('DD/MM/YYYY') }}
-        </div>
-      </template>
-      <template #item.actions="{item}">
-        <div>
-          <v-btn color="red" icon small @click.stop="deleteUserDialog(item.id)">
-          <v-icon>mdi-delete</v-icon>
-          </v-btn>
-          <v-btn color="primary"  icon small>
-            <v-icon>mdi-account-edit</v-icon>
-          </v-btn>
-        </div>
-      </template>
-    </v-data-table>
+        :headers="headers"
+        :items="admin.rows"
+        class="elevation-3"
+        :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
+        dense
+        fixed-header
+        @click:row="showDetails"
+      >
+        <template #item.profile="{ item }">
+          <div>
+            <v-avatar size="70" color="red">
+              <v-img :src="item?.profile" alt="profile"></v-img>
+            </v-avatar>
+          </div>
+        </template>
+        <template #item.idx="{ index }">
+          <div>
+            {{ index + 1 }}
+          </div>
+        </template>
+        <template #item.createdAt="{ item }">
+          <div>
+            {{ $moment(item.createdAt).format("DD/MM/YYYY") }}
+          </div>
+        </template>
+        <template #item.actions="{ item }">
+          <div>
+            <v-btn
+              color="red"
+              icon
+              small
+              @click.stop="deleteUserDialog(item.id)"
+            >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <v-btn color="primary" icon small>
+              <v-icon>mdi-account-edit</v-icon>
+            </v-btn>
+          </div>
+        </template>
+      </v-data-table>
     </div>
     <v-dialog
       v-model="dialog"
       persistent
+      fullscreen
       :overlay="false"
-      max-width="500px"
-     transition="dialog-transition"
-    >
-      <v-card>
-        <v-card-title class="primary white--text">
-          ສ້າງສະມາຊິກ
-        </v-card-title>
+      class="mx-16"
+      transition="dialog-transition">
+      <v-card max-width="400px">
+        <v-card-title class="primary white--text"> ສ້າງສະມາຊິກ </v-card-title>
         <v-card-title class="d-flex justify-center">
           <v-card-text class="d-none">
             <v-file-input
@@ -82,45 +81,120 @@
             <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon>
           </v-avatar>
         </v-card-title>
-        <v-card-text class="pt-2">
-          <v-text-field v-model="user.name" placeholder="ຊື່" outlined dense></v-text-field>
-          <v-text-field v-model="user.lastName" placeholder="ນາມສະກຸນ" outlined dense></v-text-field>
-          <v-text-field v-model="user.phone" placeholder="ເບີ" outlined dense></v-text-field>
-          <v-text-field v-model="user.email" placeholder="ອີເມວ" outlined dense></v-text-field>
-          <v-text-field v-model="user.status" placeholder="ສະຖານະ" outlined dense></v-text-field>
-          <v-select
-           :items="items"
-            v-model="user.role" 
-            outlined
-            dense
-            label="ສິບ"></v-select>
-          <v-text-field v-model="user.position" placeholder="ຕຳແໜ່ງ" outlined dense></v-text-field>
-          <v-text-field v-model="user.password" placeholder="ລະຫັດຜ່ານ" outlined dense></v-text-field>
+        <v-card-text class="pt-2" style="padding-left: 300px; padding-right: 300px;" >
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.name"
+                placeholder="ຊື່"
+                outlined
+                hide-details="auto"
+                :rules="[(v) => !!v || '']"
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.lastName"
+                placeholder="ນາມສະກຸນ"
+                outlined
+                hide-details="auto"
+                :rules="[(v) => !!v || '']"
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.phone"
+                placeholder="ເບີ"
+                outlined
+                hide-details="auto"
+                :rules="[(v) => !!v || '']"
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.email"
+                placeholder="ອີເມວ"
+                outlined
+                hide-details="auto"
+                :rules="[(v) => !!v || '']"
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.status"
+                placeholder="ສະຖານະ"
+                :rules="[(v) => !!v || '']"
+                outlined
+                dense
+                hide-details="auto"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                :items="items"
+                v-model="user.role"
+                :rules="[(v) => !!v || '']"
+                outlined
+                dense
+                hide-details="auto"
+                label="ສິບ"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="user.position"
+                :rules="[(v) => !!v || '']"
+                hide-details="auto"
+                placeholder="ຕຳແໜ່ງ"
+                outlined
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+              v-model="user.password"
+              placeholder="ລະຫັດຜ່ານ"
+              outlined
+              hide-details="auto"
+              dense
+              :rules="[(v) => !!v || '']"
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions style="padding-left: 300px; padding-right: 300px;">
           <v-spacer></v-spacer>
           <v-btn color="red" outlined @click="dialog = false">ຍົກເລິກ</v-btn>
-          <v-btn color="primary white--text" @click="createAdmin()">ສ້າງສະມາຊິກ</v-btn>
+          <v-btn color="primary white--text" @click="createAdmin()"
+            >ບັນທຶກ</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog
-      v-model="deleteDialog"  
-      persistent :overlay="false"
+      v-model="deleteDialog"
+      persistent
+      :overlay="false"
       max-width="500px"
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title class="primary white--text">
-          ລືມຂໍ້ມູນ
-        </v-card-title>
+        <v-card-title class="primary white--text"> ລືມຂໍ້ມູນ </v-card-title>
         <v-card-text class="py-6 text-center black--text">
           ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
         </v-card-text>
         <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red" small outlined @click='deleteDialog = false'>ຍົກເລິກ</v-btn>
-        <v-btn color="primary " small  @click='deleteUser(userId)'>ລືມຂໍ້ມູນ</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="red" small outlined @click="deleteDialog = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " small @click="deleteUser(userId)"
+            >ລືມຂໍ້ມູນ</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -134,10 +208,10 @@ export default {
       dialog: false,
       deleteDialog: false,
       image: "",
-      userId:'',
+      userId: "",
       user: {},
       headers: [
-      {
+        {
           text: "ລ/ດ",
           align: "start",
           sortable: false,
@@ -160,17 +234,17 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('user/getAdmin');
+    this.$store.dispatch("user/getAdmin");
   },
   computed: {
     admin() {
-     return this.$store.state.user.admin
-    }
+      return this.$store.state.user.admin;
+    },
   },
 
   methods: {
     showDetails() {
-      alert('test')
+      alert("test");
     },
     deleteUserDialog(id) {
       this.userId = id;
@@ -183,16 +257,16 @@ export default {
     getImage() {
       document.getElementById("picture").click();
     },
-   async createAdmin() {
-     await this.$store.dispatch('user/createAdmin', { ...this.user });
-     this.$store.dispatch('user/getAdmin');
-     this.dialog = false
+    async createAdmin() {
+      await this.$store.dispatch("user/createAdmin", { ...this.user });
+      this.$store.dispatch("user/getAdmin");
+      this.dialog = false;
     },
     async deleteUser(id) {
-      await this.$store.dispatch('user/deleteUser', id);
-     this.$store.dispatch('user/getAdmin');
-     this.deleteDialog= false
-    }
+      await this.$store.dispatch("user/deleteUser", id);
+      this.$store.dispatch("user/getAdmin");
+      this.deleteDialog = false;
+    },
   },
 };
 </script>

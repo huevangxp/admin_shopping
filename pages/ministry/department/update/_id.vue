@@ -144,7 +144,7 @@ export default {
     async updateData() {
       try {
         const data = {
-          profile: this.imageUrl,
+          profile: this.imageUrl == '' ? this.user.profile : this.imageUrl,
           name: this.user.name,
           last_name: this.user.last_name,
           phone: this.user.phone,

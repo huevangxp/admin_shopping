@@ -96,10 +96,10 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red"  dark @click="$router.back()"
+        <v-btn color="red" outlined  dark @click="$router.back()"
           >ຍົກເລິກ</v-btn
         >
-        <v-btn color="primary" outlined  dark @click="member()">ບັນທືກ</v-btn>
+        <v-btn color="primary"   dark @click="member()">ບັນທືກ</v-btn>
       </v-card-actions>
     </v-card>
     </v-form>

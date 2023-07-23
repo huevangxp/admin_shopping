@@ -30,7 +30,7 @@
     <!-- {{ id }} -->
     <v-data-table
       :headers="dessertHeaders"
-      :items="provinceDepartment"
+      :items="provinceDepartment?.rows"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
       item-key="name"
@@ -44,75 +44,8 @@
           {{ index + 1 }}
         </div>
       </template>
-      <template #[`item.actions`]>
-        <div class="d-flex">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="red"
-                dark
-                v-on="on"
-                @click="createPhane(item.id)"
-              >
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </template>
-            <span>ລືບ</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="primary"
-                dark
-                v-on="on"
-                @click="createPhane(item.id)"
-              >
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-            </template>
-            <span>ແກ້ໄຂຂໍ້ມູນ</span>
-          </v-tooltip>
-        </div>
-      </template>
 
-      <template #item.employee>
-        <div>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="primary"
-                dark
-                v-on="on"
-                @click="createPhane(item.id)"
-              >
-                <v-icon>mdi-account-multiple-outline</v-icon>
-              </v-btn>
-            </template>
-            <span>ເບີ່ງ</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="primary"
-                dark
-                v-on="on"
-                @click="createPhane(item.id)"
-              >
-                <v-icon>mdi-account-multiple-plus-outline</v-icon>
-              </v-btn>
-            </template>
-            <span>ສ້າງ</span>
-          </v-tooltip>
-        </div>
-      </template>
+  
     </v-data-table>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
@@ -174,13 +107,12 @@ export default {
   mounted() {
     this.$axios.get(`/rarul_department/${this.id}`)
       .then((res) => {
-      // console.log(res.data);
+      console.log(res.data);
       this.provinceDepartment = res?.data
     })
   },
   methods: {
     moveTodepartmentType(item) {
-      // console.log(item);
       this.$router.push(`/rural/department/departmentType/data?id=${item.id}&pid=${item.pid}`);
     },
     createRuralDepartment() {

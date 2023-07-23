@@ -1,10 +1,7 @@
 <template>
   <v-container fluid>
-    <h1>ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
-    <!-- <div class="d-flex justify-space-between">
-      <h1 class="my-4 text-h6">ກະຊວງທັງໜົດ ( {{ ministry.count }} )</h1>
-      <v-btn color="primary" @click="createMinistry()">ສ້າງກະຊວງ</v-btn>
-    </div> -->
+    <h1 class="mb-10">ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
+
     <v-row>
       <v-col v-for="data in ministry.rows" :key="data.id" cols="6" md="3">
         <v-card max-width="400px" @click="moveDepartment(data.id)">
@@ -105,7 +102,7 @@ export default {
       document.getElementById("picture").click();
     },
     moveDepartment(id) {
-      this.$router.push(`/ministry/department/departmentData/${id}`);
+      this.$router.push(`/ministry/department/${id}`);
     },
     createMinistry() {
       this.dialog = true;

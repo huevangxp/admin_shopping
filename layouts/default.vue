@@ -296,12 +296,12 @@ export default {
           to: "/",
         },
         {
-          icon: "mdi-database",
+          icon: "mdi-account",
           title: "ຈັດການ admin ກະຊວງ",
           to: "/dashboard/adminMinistry",
         },
         {
-          icon: "mdi-database",
+          icon: "mdi-account",
           title: "ຈັດການ admin ທ້ອງຖີ້ມ",
           to: "/dashboard/adminRarul",
         },

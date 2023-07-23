@@ -22,105 +22,132 @@
           @click="dialog = true"
           >ສ້າງຫ້ອງເມືອງ</v-btn
         >
-        <!-- <v-btn color="green" dark>Export To excel</v-btn> -->
       </v-col>
     </v-row>
-    <!-- {{ id }} -->
-    <v-data-table
-      :headers="dessertHeaders"
-      :items="office"
-      :single-expand="singleExpand"
-      :expanded.sync="expanded"
-      item-key="name"
-      class="elevation-1"
-      @click:row="moveToCityOffice"
-    >
-      <!-- show-expand -->
-      <!-- v-if="role !== 'super_admin'" -->
-      <template #[`item.idx`]="{ index }">
-        <div>
-          {{ index + 1 }}
-        </div>
-      </template>
-      <template #[`item.actions`]="{ item }">
-        <div v-if="role === 'rural_admin'" class="d-flex">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="red"
-                dark
-                v-on="on"
-                @click.stop="deleteData(item.id)"
+    <v-card elevation="0">
+      <v-card-text v-if="office?.length <= 0">
+        <v-card elevation="0">
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :search="search"
+              sort-by="index"
+              class="elevation-0"
+              hide-default-footer
+              no-data-text=""
+              :header-props="{ sortIcon: null }"
+            ></v-data-table>
+            <v-row class="justify-center mx-4 mt-4">
+              <v-card
+                flat
+                class=""
+                style="font-size: 20px; color: grey; margin-top: 40px"
               >
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </template>
-            <span>ລືບ</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                small
-                color="primary"
-                dark
-                v-on="on"
-                @click.stop="openUpdate(item)"
-              >
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-            </template>
-            <span>ແກ້ໄຂຂໍ້ມູນ</span>
-          </v-tooltip>
-        </div>
-      </template>
+                <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+              </v-card>
+            </v-row>
+            <v-skeleton-loader style="margin-top: -125px" class="" type="image">
+            </v-skeleton-loader>
+          </v-card-text>
+        </v-card>
+      </v-card-text>
+      <v-card-text v-else>
+        <v-data-table
+          :headers="dessertHeaders"
+          :items="office"
+          :single-expand="singleExpand"
+          :expanded.sync="expanded"
+          item-key="name"
+          class="elevation-1"
+          @click:row="moveToCityOffice"
+        >
+          <template #[`item.idx`]="{ index }">
+            <div>
+              {{ index + 1 }}
+            </div>
+          </template>
+          <template #[`item.actions`]="{ item }">
+            <div v-if="role === 'rural_admin'" class="d-flex">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    small
+                    color="red"
+                    dark
+                    v-on="on"
+                    @click.stop="openDelete(item)"
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+                <span>ລຶບ</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    small
+                    color="primary"
+                    dark
+                    v-on="on"
+                    @click.stop="openUpdate(item)"
+                  >
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                </template>
+                <span>ແກ້ໄຂຂໍ້ມູນ</span>
+              </v-tooltip>
+            </div>
+          </template>
 
-      <template v-slot:item.employee="{ item }">
-        <div class="d-flex">
-          <div>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="success"
-                  dark
-                  v-on="on"
-                  @click.stop="openEmployee(item)"
-                >
-                  <v-icon>mdi-account-group</v-icon>
-                </v-btn>
-              </template>
-              <span>ເບີ່ງພະນັກງານ</span>
-            </v-tooltip>
-            <v-tooltip bottom v-if="role === 'rural_admin'">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  small
-                  color="green"
-                  dark
-                  v-on="on"
-                  @click.stop="openCreateEmployee(item.id)"
-                >
-                  <v-icon>mdi-account-multiple-plus</v-icon>
-                </v-btn>
-              </template>
-              <span>ສ້າງພະນັກງານ</span>
-            </v-tooltip>
-          </div>
-        </div>
-      </template>
-    </v-data-table>
+          <template v-slot:item.employee="{ item }">
+            <div class="d-flex">
+              <div>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      small
+                      color="success"
+                      dark
+                      v-on="on"
+                      @click.stop="openEmployee(item)"
+                    >
+                      <v-icon>mdi-account-group</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>ເບີ່ງພະນັກງານ</span>
+                </v-tooltip>
+                <v-tooltip bottom v-if="role === 'rural_admin'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      small
+                      color="green"
+                      dark
+                      v-on="on"
+                      @click.stop="openCreateEmployee(item.id)"
+                    >
+                      <v-icon>mdi-account-multiple-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>ສ້າງພະນັກງານ</span>
+                </v-tooltip>
+              </div>
+            </div>
+          </template>
+        </v-data-table>
+      </v-card-text>
+    </v-card>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title color="red">ສ້າງຊື່ຫ້ອງເມືອງ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງຫ້ອງເມືອງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ຫ້ອງການເມືອງ</p>
+          <!-- <p class="black--text">ຊື່ຫ້ອງການເມືອງ</p> -->
           <v-text-field
+          class="pt-10"
             v-model="title"
             label="ຊື່ຫ້ອງການເມືອງ"
             outlined
@@ -145,17 +172,17 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title color="red">ຫ້ອງການ</v-card-title>
+        <v-card-title class="primary white--text">ຫ້ອງການ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ຫ້ອງການ</p>
-          <v-text-field v-model="officeData.office_title"></v-text-field>
+          <!-- <p class="black--text">ຊື່ຫ້ອງການ</p> -->
+          <v-text-field class="pt-10" dense outlined v-model="officeData.office_title" :rules="[(v) => !!v || '']"></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" dark @click="dialogUdate = false">ຍົກເລິກ</v-btn>
-          <v-btn color="primary" outlined dark @click="updateOffice()"
+          <v-btn color="red" dark outlined @click="dialogUdate = false">ຍົກເລິກ</v-btn>
+          <v-btn color="primary"  dark @click="updateOffice()"
             >ບັນທືກ</v-btn
           >
         </v-card-actions>
@@ -179,11 +206,41 @@
           <v-spacer></v-spacer>
           <div>
             <v-btn fab elevation="0" @click="dialogEmployee = false">
-              <v-icon>mdi-power</v-icon>
+              <v-icon color="primary">mdi-power</v-icon>
             </v-btn>
           </div>
         </v-toolbar>
-        <div class="mt-5 mx-5">
+        <div v-if="officeGetData?.rows?.length <= 0">
+          <v-card elevation="0">
+            <v-card-text>
+              <v-data-table
+                :headers="headers"
+                :search="search"
+                sort-by="index"
+                class="elevation-0"
+                hide-default-footer
+                no-data-text=""
+                :header-props="{ sortIcon: null }"
+              ></v-data-table>
+              <v-row class="justify-center mx-4 mt-4">
+                <v-card
+                  flat
+                  class=""
+                  style="font-size: 20px; color: grey; margin-top: 40px"
+                >
+                  <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+                </v-card>
+              </v-row>
+              <v-skeleton-loader
+                style="margin-top: -125px"
+                class=""
+                type="image"
+              >
+              </v-skeleton-loader>
+            </v-card-text>
+          </v-card>
+        </div>
+        <div v-else class="mt-5 mx-5">
           <v-row>
             <v-col
               v-for="(item, index) in officeGetData?.rows"
@@ -206,14 +263,13 @@
                         {{ item.position }} )
                       </h2>
                       <v-speed-dial
-                        v-model="fab"
                         :direction="direction"
                         :open-on-hover="hover"
                         :transition="transition"
                       >
                         <template v-slot:activator>
-                          <v-btn v-model="fab" color="blue darken-2" icon dark>
-                            <v-icon v-if="fab"> mdi-close </v-icon>
+                          <v-btn color="blue darken-2" icon dark>
+                            <v-icon v-if="fab == true"> mdi-close </v-icon>
                             <v-icon v-else> mdi-dots-vertical </v-icon>
                           </v-btn>
                         </template>
@@ -230,10 +286,10 @@
                           icon
                           dark
                           small
-                          color="green"
+                          color="primary"
                           @click.stop="updateEm(item.id)"
                         >
-                          <v-icon>mdi-pencil</v-icon>
+                          <v-icon>mdi-account-edit</v-icon>
                         </v-btn>
                       </v-speed-dial>
                     </div>
@@ -255,6 +311,50 @@
         </div>
       </v-card>
     </v-dialog>
+    <!-- delete office -->
+    <v-dialog
+      v-model="openDeleteData"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລຶບຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລຶບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="openDeleteData = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " @click="deleteData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- delete office employee -->
+    <v-dialog
+      v-model="openDeleteEmData"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລຶບຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລຶບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="openDeleteEmData = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " @click="deleteEmData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -264,6 +364,8 @@ export default {
   data() {
     return {
       expanded: [],
+      openDeleteData: false,
+      openDeleteEmData: false,
       title: "",
       singleExpand: false,
       dialogUdate: false,
@@ -271,10 +373,11 @@ export default {
       officeData: {},
       officeGetData: {},
       dialog: false,
-      direction: "bottom",
+      direction: "left",
       fab: false,
       fling: false,
       hover: false,
+      ofId: "",
       tabs: null,
       transition: "slide-y-reverse-transition",
       search: "",
@@ -306,15 +409,37 @@ export default {
       console.log(item.id);
       this.dialogEmployee = true;
       this.$axios.get(`/get-office-all-byId/${item.id}`).then((res) => {
-        // console.log(res.data);
         this.officeGetData = res?.data;
       });
     },
-    
+    deleteEm(id) {
+      this.ofId = id;
+      this.openDeleteEmData = true;
+    },
+
+    async deleteEmData() {
+      await this.$axios
+        .delete(`/delete-office-member/${this.ofId}`)
+        .then((res) => {
+          console.log(res.data);
+          this.$toast.success("ສຳເລັດ");
+          this.openDeleteEmData = false;
+        });
+      this.$axios
+        .get(`/get-office-all-byId/${this.officeData.id}`)
+        .then((res) => {
+          this.officeGetData = res?.data;
+        });
+    },
+
     openUpdate(item) {
-      console.log(item);
       this.officeData = item;
       this.dialogUdate = true;
+    },
+    openDelete(item) {
+      console.log(item.id);
+      this.officeData = item;
+      this.openDeleteData = true;
     },
     async updateOffice() {
       const data = {
@@ -342,11 +467,14 @@ export default {
         console.log(error);
       }
     },
-    async deleteData(id) {
+    async deleteData() {
       try {
-        await this.$axios.delete(`/office/${id}`).then((data) => {
-          this.$toast.success("ລຶບຂໍ້ມູນສຳເລັດ");
-        });
+        await this.$axios
+          .delete(`/office/${this.officeData.id}`)
+          .then((data) => {
+            this.$toast.success("ລຶບຂໍ້ມູນສຳເລັດ");
+            this.openDeleteData = false;
+          });
         this.seleteData();
       } catch (error) {
         console.log(error);

@@ -15,6 +15,13 @@
             </div>
         </template>
 
+        <template #item.status="{item}">
+            <div>
+                <h4 v-if="item.status == '0'" class="primary--text">ເປິດໃຊ້ງານ</h4>
+                <h4 v-else class="red--text">ປິດໃຊ້ງານ</h4>
+            </div>
+        </template>
+
         <template #item.created_at="{item}">
             <div>
                 {{ $moment(item.created_at).format('DD/MM/YYYY') }}
@@ -36,6 +43,7 @@ export default {
                 { text: "ຈັດການພະແນກ", value: "title" },
                 { text: "ຊື່", value: "user_name" },
                 { text: "ສິດ", value: "role" },
+                { text: "ສະຖານະ", value: "status" },
                 { text: "ວັນທີສ້າງ", value: "created_at" },
             ]
 

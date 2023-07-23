@@ -30,6 +30,33 @@
           </download-excel>
         </v-col>
       </v-row>
+      <div v-if="data?.rows?.length <= 0">
+        <v-card elevation="0">
+          <v-card-text>
+            <v-data-table
+              :headers="dessertHeaders"
+              :search="search"
+              sort-by="index"
+              class="elevation-0"
+              hide-default-footer
+              no-data-text=""
+              :header-props="{ sortIcon: null }"
+            ></v-data-table>
+            <v-row class="justify-center mx-4 mt-4">
+              <v-card
+                flat
+                class=""
+                style="font-size: 20px; color: grey; margin-top: 40px"
+              >
+                <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+              </v-card>
+            </v-row>
+            <v-skeleton-loader style="margin-top: -125px" class="" type="image">
+            </v-skeleton-loader>
+          </v-card-text>
+        </v-card>
+      </div>
+      <div v-else>
       <v-data-table
         :headers="dessertHeaders"
         :items="data.rows"
@@ -50,6 +77,7 @@
           </div>
         </template>
       </v-data-table>
+      </div>
     </div>
   </template>
   
@@ -94,7 +122,7 @@
       };
     },
     mounted() {
-        console.log(this.id);
+        console.log('user id',this.id);
       this.getData();
     },
     computed: {},

@@ -18,11 +18,40 @@
         <v-btn v-if="role === 'rural_admin'" outlined color="primary" @click="getCity">ສ້າງເມືອງ</v-btn>
       </v-col>
     </v-row>
+    <v-card elevation="0">
+      <v-card-text v-if="getCityData?.length <= 0">
+        <v-card elevation="0">
+          <v-card-text>
+            <v-data-table
+          :headers="headers"
+          :search="search"
+          sort-by="index"
+          class="elevation-0"
+          hide-default-footer
+          no-data-text=""
+          :header-props="{ sortIcon: null }"
+        ></v-data-table>
+        <v-row class="justify-center mx-4 mt-4">
+          <v-card
+            flat
+            class=""
+            style="font-size: 20px; color: grey; margin-top: 40px"
+          >
+            <span class="red--text">ຍັງບໍ່ມີຂໍ້ມູນ</span>
+          </v-card>
+        </v-row>
+        <v-skeleton-loader style="margin-top: -125px" class="" type="image">
+        </v-skeleton-loader>
+          </v-card-text>
+         </v-card>
+      </v-card-text>
+      <v-card-text v-else>
     <v-data-table
       :headers="headers"
       :items="getCityData"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
+      :search="search"
       item-key="name"
       class="elevation-1"
       @click:row="moveToCityOffice"
@@ -47,7 +76,7 @@
                 color="red"
                 dark
                 v-on="on"
-                @click.stop="deleteCity(item.id)"
+                @click.stop="openDelete(item)"
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
@@ -72,13 +101,15 @@
         </div>
       </template>
     </v-data-table>
+    </v-card-text>
+    </v-card>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title color="red">ສ້າງເມືອງ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງເມືອງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ເມືອງ</p>
           <v-select
+          class="pt-10"
             v-model="title"
             label="ເລືອກຊື່ເມືອງ"
             :items="city"
@@ -100,20 +131,43 @@
     </v-dialog>
     <v-dialog v-model="dialogUdate" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title color="red">ເມືອງ</v-card-title>
-        <v-divider></v-divider>
-        <v-card-text class="mt-3">
-          <p class="black--text">ຊື່ເມືອງ</p>
+        <v-card-title class="primary white--text">ແກ້ໄຂເມືອງ</v-card-title>
+        <v-divider class="pb-7"></v-divider>
+        <v-card-text >
           <v-text-field
+          class="py-4"
+          outlined
+          dense
           v-model="cityData.district_title"
           ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red"  dark @click="dialogUdate = false"
+          <v-btn color="red" outlined  dark @click="dialogUdate = false"
             >ຍົກເລິກ</v-btn>
-          <v-btn color="primary" outlined dark @click="updateCity()">ສ້າງເມືອງ</v-btn>
+          <v-btn color="primary"  dark @click="updateCity()">ສ້າງເມືອງ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="openDeleteData"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລືມຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="openDeleteData = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " @click="deleteCity">ລືມຂໍ້ມູນ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -126,6 +180,7 @@ export default {
   data() {
     return {
       expanded: [],
+      openDeleteData: false,
       singleExpand: false,
       dialogUdate:false,
       dialog: false,
@@ -154,6 +209,11 @@ export default {
     });
   },
   methods: {
+    openDelete(item) {
+      console.log(item);
+      this.cityData = item
+      this.openDeleteData = true;
+    },
     openUdate(item) { 
       this.dialogUdate = true;
       this.cityData = item;
@@ -164,14 +224,15 @@ export default {
       }
       this.$axios.put(`/district/${this.cityData.id}`, data).
         then((res) => {
-          // console.log(res.data);
           this.$toast.success('ສຳເລັດ');
           this.dialogUdate = false
       })
     },
-    async deleteCity(id) {
+    async deleteCity() {
       try {
-        await this.$axios.delete(`/district/${id}`).then((res) => {});
+        await this.$axios.delete(`/district/${this.cityData.id}`).then((res) => {
+          this.openDeleteData = false;
+        });
         this.$axios.get(`/district/${this.id}`).then((res) => {
           console.log(res.data);
           this.getCityData = res?.data;

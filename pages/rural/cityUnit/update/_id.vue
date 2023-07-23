@@ -93,7 +93,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
+          <v-btn color="red" outlined dark @click="$router.back()"
             >ຍົກເລິກ</v-btn
           >
           <v-btn color="primary" dark @click="updateData()">ບັນທືກ</v-btn>
@@ -142,7 +142,7 @@ export default {
     async updateData() {
       try {
         const data = {
-          profile: this.imageUrl,
+          profile: this.imageUrl == '' ? this.user.profile : this.imageUrl,
           name: this.user.name,
           last_name: this.user.last_name,
           phone: this.user.phone,

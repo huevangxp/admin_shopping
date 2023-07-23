@@ -92,7 +92,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red" outlined dark @click="dialogCreateEmployee = false"
+          <v-btn color="red" outlined dark @click="$router.back()"
             >ຍົກເລິກ</v-btn
           >
           <v-btn color="primary" dark @click="updateData()">ບັນທືກ</v-btn>
@@ -104,6 +104,7 @@
 
 <script>
 export default {
+  layout:'Black',
   data() {
     return {
       user: {},
@@ -140,7 +141,7 @@ export default {
     async updateData() {
       try {
         const data = {
-          profile: this.imageUrl,
+          profile: this.imageUrl == '' ? this.user.profile : this.imageUrl,
           name: this.user.name,
           last_name: this.user.last_name,
           phone: this.user.phone,
@@ -163,24 +164,4 @@ export default {
     },
   },
 };
-//     try {
-//       const formData = new FormData();
-//       formData.append('file', this.images);
-//       const image = await this.$axios.post('upload'.formData)
-//           .then((res) => {
-//         return res.data.url
-//       })
-//         await this.$axios
-//           .put(`/department-organization-member/${this.id}`, {...this.user,profile:image})
-//           .then((res) => {
-//             this.$toast.success("ສຳເລັດ");
-//             this.$router.back();
-//           });
-
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   },
-// },
-// };
 </script>
