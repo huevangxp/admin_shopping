@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4">
-        <v-btn v-if="role !== 'ministry_amdin'" color="primary" @click="openCreate()">ສ້າງກົມຈັດຕັ້ງ</v-btn>
+        <!-- <v-btn v-if="role !== 'ministry_amdin'" color="primary" @click="openCreate()">ສ້າງກົມຈັດຕັ້ງ</v-btn> -->
       </v-col>
     </v-row>
     <v-data-table
@@ -25,6 +25,7 @@
       :expanded.sync="expanded"
       item-key="id"
       class="elevation-1"
+      :search="search"
       @click:row="moveTocreate"
       >
       <!-- show-expand -->

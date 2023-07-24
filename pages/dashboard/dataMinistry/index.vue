@@ -1,16 +1,20 @@
 <template>
   <div>
     <!-- {{ ministry }} -->
+    <h1 class="my-10">ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
+
     <v-row>
       <v-col md="6">
         <v-text-field
+        v-model="search"
           outlined
           dense
-          placeholder="ຄົ້ນຫາ admin ຂອງກະຊວງ"
+          placeholder="ຄົ້ນຫາກະຊວງ"
+        append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
-        <v-btn color="primary" dark to="/dashboard/adminMinistry/create"
+        <v-btn outlined color="primary" dark to="/dashboard/adminMinistry/create"
           >ສ້າງ admin ຂອງກະຊວງ</v-btn
         >
       </v-col>
@@ -20,14 +24,14 @@
       :items="ministry.rows"
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
-      dense
+      :search="search"
       fixed-header
     >
       <!-- @click:row="showDetails" -->
       <template #item.profile="{ item }">
         <div>
-          <v-avatar size="70" color="red">
-            <v-img :src="item?.profile" alt="profile"></v-img>
+          <v-avatar size="70">
+            <v-img lazy-src="/loading.gif" :src="item?.profile" alt="profile"></v-img>
           </v-avatar>
         </div>
       </template>
@@ -43,21 +47,46 @@
       </template>
       <template #item.actions="{ item }">
         <div>
-          <v-btn color="red" icon small @click.stop="deleteData(item.id)">
+          <v-btn color="red" icon small @click.stop="openDelete(item)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
-          <v-btn color="primary" icon small>
+          <v-btn color="primary" icon small @click.stop="$router.push(`/dashboard/adminMinistry/update/${item.id}`)">
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </div>
       </template>
     </v-data-table>
+        <!-- delete data amdin ministry -->
+        <v-dialog
+      v-model="deleteDialog"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text">ລຶບຂະແໜງ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" dark outlined @click="deleteDialog = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary" @click="deleteData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      search: '',
+      deleteDialog:false,
       headers: [
         {
           text: "ລ/ດ",
@@ -81,9 +110,19 @@ export default {
     this.$store.dispatch("ministry/getMinistry");
   },
   methods: {
-    async deleteData(id) {
+   async openDelete(item) {
+      try {
+        this.data = item;
+        this.deleteDialog = true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteData() {
       // console.log(id);
-      await this.$store.dispatch("ministry/deleteMinistry", id);
+      await this.$store.dispatch("ministry/deleteMinistry", this.data.id);
+      this.deleteDialog = false;
+      this.$toast.success('ສຳເລັດ')
       this.$store.dispatch("ministry/getMinistry");
     },
   },

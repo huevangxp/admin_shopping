@@ -2,7 +2,7 @@
   <div>
     <div class="font-weight-bold mb-3" style="font-size: 30px">ການລາຍງານ</div>
     <v-row dense>
-      <v-col v-for="item in lists" :key="item.title" cols="12" md="3">
+      <v-col v-for="item in lists" :key="item.title" cols="12" md="4">
         <v-card
           hover
           shaped

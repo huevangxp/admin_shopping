@@ -25,14 +25,14 @@ export const actions = {
     async getProvince({ commit }) {
         await this.$axios.get('/province')
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 commit('setProvince', res.data)
             })
     },
     async getAllProvince({ commit }) {
         this.$axios.get('/address/province')
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 commit('setAddress', res?.data)
             })
     },

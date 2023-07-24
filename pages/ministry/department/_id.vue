@@ -230,7 +230,7 @@
                         :open-on-hover="hover"
                         :transition="transition"
                       >
-                        <template v-slot:activator>
+                        <template v-slot:activator v-if="role === 'ministry_admin'">
                           <v-btn color="blue darken-2" icon dark>
                             <v-icon v-if="fab == true"> mdi-close </v-icon>
                             <v-icon v-else> mdi-dots-vertical </v-icon>

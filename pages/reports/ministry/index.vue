@@ -5,8 +5,8 @@
             <v-col
                 v-for="item in lists"
                 :key="item.title"
-                cols="12"
-                md="3"
+                cols="6"
+                md="4"
             >
                 <v-card 
                 hover shaped raised

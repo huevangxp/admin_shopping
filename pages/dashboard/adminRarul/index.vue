@@ -4,9 +4,11 @@
     <v-row>
       <v-col md="6">
         <v-text-field
+          v-model="search"
           outlined
           dense
           placeholder="ຄົ້ນຫາ admin ທ້ອງຖີ່ນ"
+          append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
@@ -20,7 +22,7 @@
       :items="department.rows"
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
-      dense
+      :search="search"
       fixed-header
     >
       <template #item.profile="{ item }">
@@ -35,6 +37,11 @@
           {{ index + 1 }}
         </div>
       </template>
+      <template #item.role="{item}">
+        <div>
+          <span v-if="item.role === 'rural_admin'">admin ບໍລິຫານຂອງພະແນກຂັ້ນທ້ອງຖີ່ນ</span>
+        </div>
+      </template>
       <template #item.createdAt="{ item }">
         <div>
           {{ $moment(item.createdAt).format("DD/MM/YYYY") }}
@@ -42,21 +49,53 @@
       </template>
       <template #item.actions="{ item }">
         <div>
-          <v-btn color="red" icon small @click.stop="deleteData(item.id)">
+          <v-btn color="red" icon small @click.stop="openDeleteEm(item.id)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
-          <v-btn color="primary" icon small>
-            <v-icon>mdi-pencil</v-icon>
+          <v-btn
+            color="primary"
+            icon
+            small
+            @click.stop="
+              $router.push(`/dashboard/adminRarul/update/${item.id}`)
+            "
+          >
+            <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </div>
       </template>
     </v-data-table>
+    <!-- delete admin Rural -->
+    <v-dialog
+      v-model="openDeleteEmData"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text"> ລຶບຂໍ້ມູນ </v-card-title>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລຶບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" outlined @click="openDeleteEmData = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary " @click="deleteEmData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      search: "",
+      openDeleteEmData: false,
+      rid: "",
       headers: [
         {
           text: "ລ/ດ",
@@ -81,10 +120,26 @@ export default {
     this.$store.dispatch("province/getDepartment");
   },
   methods: {
-    async deleteData(id) {
-      console.log(id);
-      // await this.$store.dispatch("ministry/deleteProvince", id);
-      // this.$store.dispatch("ministry/getAllProvince");
+    openDeleteEm(id) {
+      this.rid = id;
+      this.openDeleteEmData = true;
+    },
+    async deleteEmData() {
+      try {
+        await this.$axios
+          .delete(`/delete-rural/${this.rid}`)
+          .then((res) => {
+            console.log(res.data);
+            this.openDeleteEmData = false;
+            this.$toast.success("ສຳເລັດ");
+          })
+          .catch((err) => {
+            this.$toast.error("ບໍ່ສຳເລັດ");
+          });
+        this.$store.dispatch("province/getDepartment");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

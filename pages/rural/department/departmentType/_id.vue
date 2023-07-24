@@ -1,7 +1,7 @@
 <template>
     <div>
      <!-- {{ id }} -->
-     <div class="font-weight-bold mb-3" style="font-size: 30px">ຈັດການຂໍ້ມູນຂອງພະແນກ</div>
+     <div class="font-weight-bold mb-10 mt-5" style="font-size: 30px">ຈັດການຂໍ້ມູນຂອງພະແນກ</div>
      <v-row dense>
        <v-col cols="12" sm="4" md="3">
          <v-card  @click="$router.push(`/rural/sector/${id}`)">

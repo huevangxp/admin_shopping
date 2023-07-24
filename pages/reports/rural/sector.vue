@@ -104,7 +104,7 @@
           { text: "ຊື່ພະແນກ", value: "sector_title" },
           { text: "ວັນທີ່ສ້າງ", value: "created_at" },
         ],
-        e_headers: "ລາຍງານລາຍຈ່າຍ",
+        e_headers: "ລາຍງານກົມ",
         title:
           "ລາຍງານກົມຂອງສູນກາງ" +
           new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -140,12 +140,12 @@
         try {
           var list = [],
             index = 0;
-          for (let i = 0; i < this.data.rows.length; i++) {
-            var el = this.data.rows[i];
+          for (let i = 0; i < this.data?.length; i++) {
+            var el = this.data[i];
             index = parseInt(i) + 1;
             var obj = {
               idx: index,
-              title: el.title,
+              title: el.sector_title,
               date: this.$moment(el.created_at).format("DD/MM/YYYY"),
             };
             list.push(obj);
@@ -156,7 +156,7 @@
         }
       },
       finishDownload() {
-        this.$toast.success("download data to excel success...");
+        this.$toast.success("ດາວໂຫຼດຂໍ້ມູນເຂົ້າ excel ສຳເລັດແລ້ວ...");
       },
     },
   };

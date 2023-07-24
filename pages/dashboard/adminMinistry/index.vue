@@ -5,9 +5,11 @@
       <v-row>
       <v-col md="6">
         <v-text-field
+        v-model="search"
           outlined
           dense
           placeholder="ຄົ້ນຫາ admin ຂອງກະຊວງ"
+          append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
@@ -16,13 +18,12 @@
     </v-row>
     <v-data-table
       :headers="headers"
-      :items="ministry.rows"
+      :items="ministry?.rows"
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
-      dense
       fixed-header 
+      :search="search"
       >
-      <!-- @click:row="showDetails" -->
     <template #item.profile= "{item}">
       <div>
         <v-avatar
@@ -39,6 +40,11 @@
           {{ index + 1 }}
         </div>
       </template>
+      <template #item.role="{ item }">
+        <div>
+          <span v-if="item?.role === 'ministry_admin'">admin ບໍລິຫານກະຊວງ</span>
+        </div>
+      </template>
       <template #item.createdAt = '{item}'>
         <div>
           {{ $moment(item.createdAt).format('DD/MM/YYYY') }}
@@ -46,15 +52,38 @@
       </template>
       <template #item.actions="{item}">
         <div>
-          <v-btn color="red" icon small @click.stop="deleteData(item.id)">
+          <v-btn color="red" icon small @click.stop="openDelete(item.id)">
           <v-icon>mdi-delete</v-icon>
           </v-btn>
-          <v-btn color="primary"  icon small>
+          <v-btn color="primary"  icon small @click.stop="$router.push(`/dashboard/adminMinistry/update/${item.id}`)">
             <v-icon>mdi-account-edit</v-icon>
           </v-btn>
         </div>
       </template>
     </v-data-table>
+        <!-- delete data amdin ministry -->
+        <v-dialog
+      v-model="deleteAdminDialog"
+      persistent
+      :overlay="false"
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title class="primary white--text">ລຶບຂະແໜງ</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="py-6 text-center black--text">
+          ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" dark outlined @click="deleteAdminDialog = false"
+            >ຍົກເລິກ</v-btn
+          >
+          <v-btn color="primary" @click="deleteData">ລຶບຂໍ້ມູນ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -62,6 +91,8 @@
 export default {
   data() {
     return {
+      deleteAdminDialog: false,
+      search:'',
       headers: [
         {
           text: "ລ/ດ",
@@ -86,9 +117,15 @@ export default {
     this.$store.dispatch('ministry/getMinistry')
   },
   methods: {
-    async deleteData(id) {
+    openDelete(id) {
+      this.aid = id;
+      this.deleteAdminDialog = true;
+    },
+    async deleteData() {
       // console.log(id);
-      await this.$store.dispatch("ministry/deleteMinistry", id);
+      await this.$store.dispatch("ministry/deleteMinistry", this.aid);
+      this.deleteAdminDialog = false;
+      this.$toast.success('ລຶບສຳເລັດ')
       this.$store.dispatch("ministry/getMinistry");
     },
   },

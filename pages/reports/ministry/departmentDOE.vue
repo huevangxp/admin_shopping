@@ -174,7 +174,7 @@ export default {
       }
     },
     finishDownload() {
-      this.$toast.success("download data to excel success...");
+      this.$toast.success("ດາວໂຫຼດຂໍ້ມູນເຂົ້າ excel ສຳເລັດແລ້ວ...");
     },
   },
 };

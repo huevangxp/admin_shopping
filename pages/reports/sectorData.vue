@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1 class="my-10">ລາຍງານພະນັກງານຂອງຂະແໜງ (<span class="primary--text"> {{ data?.count }} ຄົນ </span> )</h1>
+      <h1 class="my-10">ລາຍງານຂະແໜງ (<span class="primary--text"> {{ data?.count }} ຂະແໜງ </span> )</h1>
       <v-row>
         <v-col cols="4">
           <v-text-field
@@ -30,7 +30,7 @@
           </download-excel>
         </v-col>
       </v-row>
-      <div v-if="data?.rows?.length <= 0">
+      <div v-if="data?.length <= 0">
         <v-card elevation="0">
           <v-card-text>
             <v-data-table
@@ -59,25 +59,16 @@
       <div v-else>
       <v-data-table
         :headers="dessertHeaders"
-        :items="data.rows"
+        :items="data?.rows"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="id"
         class="elevation-1"
         :search="search"
       >
-        <!-- show-expand -->
         <template #item.idx="{ index }">
           <div>
             <p>{{ index + 1 }}</p>
-          </div>
-        </template>
-        <template #item.profile="{ item }">
-          <div>
-            <!-- {{ item }} -->
-            <v-avatar size="60" color="promary">
-              <img :src="item.profile" alt="alt" />
-            </v-avatar>
           </div>
         </template>
         <template #item.created_at="{ item }">
@@ -100,7 +91,7 @@
         role: this.$cookies.get("role"),
         title: this.$cookies.get("title"),
         id: this.$cookies.get("userId"),
-        data: {},
+        data:[],
         search: "",
   
         dessertHeaders: [
@@ -110,17 +101,12 @@
             sortable: false,
             value: "idx",
           },
-          { text: "ຮູບ", value: "profile" },
-          { text: "ຊື່", value: "name" },
-          { text: "ນາມສະກຸ່ນ", value: "last_name" },
-          { text: "ເບິໂທ", value: "phone" },
-          { text: "ທີ່ຢູ່", value: "address" },
-          { text: "ຕຳແໜງ", value: "position" },
+          { text: "ຊື່ກົມ", value: "sector_title" },
           { text: "ວັນທີ່ສ້າງ", value: "created_at" },
         ],
-        e_headers: "ລາຍງານລາຍຈ່າຍ",
+        e_headers: "ລາຍງານ",
         title:
-          "ລາຍງານພະນັກງານຂອງກົມຂອງສູນກາງ" +
+          "ລາຍງານຂະແໜງ" +
           new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
             .toISOString()
             .substr(0, 10) +
@@ -136,17 +122,16 @@
       };
     },
     mounted() {
-      this.getData();
+      this.getData(this.id);
     },
     computed: {},
     methods: {
-      async getData() {
-        console.log(this.id);
+      async getData(id) {
         await this.$axios
-          .get(`/get-office-member-report/${this.id}`)
+          .get(`/sector`)
               .then((res) => {
-            // console.log(res.data);
-            this.data = res?.data;
+            // console.log('----------->',res.data);
+            this.data = res?.data
           });
       },
   
@@ -159,11 +144,7 @@
             index = parseInt(i) + 1;
             var obj = {
               idx: index,
-              name: el.name,
-              last_name: el.last_name,
-              address: el.address,
-              phone: el.phone,
-              position: el.position,
+              title: el.sector_title,
               date: this.$moment(el.created_at).format("DD/MM/YYYY"),
             };
             list.push(obj);

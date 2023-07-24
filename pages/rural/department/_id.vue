@@ -21,13 +21,9 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4" class="d-flex justify-content-end">
-        <v-btn color="primary" @click="dialog = true"
-          >ສ້າງພະແນກ</v-btn
-        >
-        <!-- <v-btn color="green" dark>Export To excel</v-btn> -->
+       
       </v-col>
     </v-row>
-    <!-- {{ id }} -->
     <v-data-table
       :headers="dessertHeaders"
       :items="provinceDepartment?.rows"
@@ -35,6 +31,7 @@
       :expanded.sync="expanded"
       item-key="name"
       class="elevation-1"
+      :search="search"
       @click:row="moveTodepartmentType"
     >
       <!-- show-expand -->

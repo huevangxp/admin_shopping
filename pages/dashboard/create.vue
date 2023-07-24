@@ -1,16 +1,20 @@
 <template>
   <div>
+    <h1 class="my-10">ຈັດການຂໍ້ມູນຂອງ admin ໃຫຍ່ສຸດຂອງລະບົບ</h1>
+
     <v-row>
       <v-col cols="6">
         <v-text-field
+          v-model="search"
           name="search"
           label="search"
           dense
           outlined
+          append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
       <v-col cols="6" class="d-flex justify-end">
-        <v-btn color="primary" dark @click="dialog = true">ສ້າງສະມາຊິກ</v-btn>
+        <v-btn color="primary" outlined dark @click="dialog = true">ສ້າງສະມາຊິກ</v-btn>
       </v-col>
     </v-row>
     <div>
@@ -21,13 +25,18 @@
         :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
         dense
         fixed-header
-        @click:row="showDetails"
+        :search="search"
       >
         <template #item.profile="{ item }">
           <div>
-            <v-avatar size="70" color="red">
-              <v-img :src="item?.profile" alt="profile"></v-img>
+            <v-avatar size="70">
+              <v-img lazy-src="/loading.gif" :src="item?.profile" alt="profile"></v-img>
             </v-avatar>
+          </div>
+        </template>
+        <template #item.role="{item}">
+          <div>
+            <span v-if="item.role === 'super_admin'" class="primary--text">ຜູ້ບໍລິຫານສູຸງສຸດ</span>
           </div>
         </template>
         <template #item.idx="{ index }">
@@ -50,7 +59,7 @@
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-            <v-btn color="primary" icon small>
+            <v-btn color="primary" icon small @click.stop="$router.push(`/dashboard/updateSuperAdmin/${item.id}`)">
               <v-icon>mdi-account-edit</v-icon>
             </v-btn>
           </div>
@@ -200,13 +209,13 @@
     </v-dialog>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
       dialog: false,
       deleteDialog: false,
+      search:'',
       image: "",
       userId: "",
       user: {},
@@ -219,7 +228,7 @@ export default {
         },
         { text: "ຮູບ", value: "profile" },
         { text: "ຊື່", value: "name" },
-        { text: "ນາມສະກຸນ", value: "lastName" },
+        { text: "ນາມສະກຸນ", value: "last_name" },
         { text: "ເບິ", value: "phone" },
         { text: "ອີເມວ", value: "email" },
         { text: "ສະຖານະ", value: "role" },
@@ -228,8 +237,8 @@ export default {
       ],
       items: [
         { id: 1, text: "super_admin" },
-        { id: 1, text: "ministry_admin" },
-        { id: 1, text: "rural_admin" },
+        { id: 2, text: "ministry_admin" },
+        { id: 3, text: "rural_admin" },
       ],
     };
   },
@@ -243,9 +252,6 @@ export default {
   },
 
   methods: {
-    showDetails() {
-      alert("test");
-    },
     deleteUserDialog(id) {
       this.userId = id;
       this.deleteDialog = true;

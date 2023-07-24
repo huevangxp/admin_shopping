@@ -199,7 +199,14 @@
       <div class="mx-4">version {{ VERSION }}</div>
       <div class="d-flex">
         <p class="mt-4" style="border-bottom: 1px solid #fff">ຜູ້ໃຊ້ລະບົບ:</p>
-        <v-tab @click="$router.push(`/dashboard/admin/${id}`)">
+        <v-tab v-if="role === 'super_admin'" @click="$router.push(`/dashboard/admin/${id}`)">
+        <v-badge
+          color="primary"
+          dot>
+        <span class="font-weight-bold">{{ name }}</span>
+        </v-badge>
+      </v-tab>
+        <v-tab v-else>
         <v-badge
           color="primary"
           dot>
@@ -209,7 +216,7 @@
         
       </div>
       <v-btn icon class="ml-4" @click="dialog = true">
-        <v-icon>mdi-logout</v-icon>
+        <v-icon color="red">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -301,7 +308,7 @@ export default {
           to: "/dashboard/adminMinistry",
         },
         {
-          icon: "mdi-account",
+          icon: "mdi-account-box",
           title: "ຈັດການ admin ທ້ອງຖີ້ມ",
           to: "/dashboard/adminRarul",
         },

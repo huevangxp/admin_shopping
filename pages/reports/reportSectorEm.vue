@@ -59,7 +59,7 @@
       <div v-else>
       <v-data-table
         :headers="dessertHeaders"
-        :items="data.rows"
+        :items="data?.rows"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
         item-key="id"
@@ -76,7 +76,7 @@
           <div>
             <!-- {{ item }} -->
             <v-avatar size="60" color="promary">
-              <img :src="item.profile" alt="alt" />
+              <img lazy-src="/loading.gif" :src="item.profile" alt="alt" />
             </v-avatar>
           </div>
         </template>
@@ -118,9 +118,9 @@
           { text: "ຕຳແໜງ", value: "position" },
           { text: "ວັນທີ່ສ້າງ", value: "created_at" },
         ],
-        e_headers: "ລາຍງານລາຍຈ່າຍ",
+        e_headers: "ລາຍງານພະນັກງານຂະແໜງ",
         title:
-          "ລາຍງານພະນັກງານຂອງກົມຂອງສູນກາງ" +
+          "ລາຍງານພະນັກງານຂອງຂະແໜງ" +
           new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
             .toISOString()
             .substr(0, 10) +
@@ -141,11 +141,10 @@
     computed: {},
     methods: {
       async getData() {
-        console.log(this.id);
         await this.$axios
-          .get(`/get-office-member-report/${this.id}`)
+          .get(`/get-all-sector`)
               .then((res) => {
-            // console.log(res.data);
+            console.log(res.data);
             this.data = res?.data;
           });
       },

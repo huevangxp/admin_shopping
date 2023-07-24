@@ -139,8 +139,8 @@ export default {
       try {
         var list = [],
           index = 0;
-        for (let i = 0; i < this.departmentDO.rows.length; i++) {
-          var el = this.departmentDO.rows[i];
+        for (let i = 0; i < this.dataDO.rows.length; i++) {
+          var el = this.dataDO.rows[i];
           index = parseInt(i) + 1;
           var obj = {
             idx: index,
@@ -155,7 +155,7 @@ export default {
       }
     },
     finishDownload() {
-      this.$toast.success("download data to excel success...");
+      this.$toast.success("ດາວໂຫຼດຂໍ້ມູນເຂົ້າ excel ສຳເລັດແລ້ວ...");
     },
   },
 };

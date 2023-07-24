@@ -22,19 +22,16 @@
           </v-card-text>
           <div class="d-flex justify-center">
             <v-avatar size="150" v-if="image">
-              
-              <v-img 
-              v-if="loading"
-              src="/loading.gif" alt="profile"></v-img>
-              <v-img 
-              v-else
-              :src="image" alt="profile">
-            </v-img>
+              <v-img v-if="loading" src="/loading.gif" alt="profile"></v-img>
+              <v-img v-else :src="image" alt="profile"> </v-img>
             </v-avatar>
             <v-avatar size="150" color="primary" @click="getImage" v-else>
-              <v-icon size="70" color="white"
-                >mdi-file-image-plus-outline</v-icon
-              >
+              <v-avatar size="148" color="primary">
+                <img :src="user.profile" alt="alt" />
+              </v-avatar>
+              <!-- <v-icon size="70" color="white"
+                  >mdi-file-image-plus-outline</v-icon
+                > -->
             </v-avatar>
           </div>
           <v-card-text>
@@ -44,7 +41,6 @@
               dense
               type="text"
               placeholder="ຊື່ກະຊວງ"
-              :rules="[(v)=> !!v || '']"
             ></v-text-field>
           </v-card-text>
         </v-window-item>
@@ -59,7 +55,6 @@
                   outlined
                   placeholder="ຊື່ຂອງ admin ຈັດການກະຊວງ"
                   hide-details="auto"
-                  :rules="[(v)=> !!v || '']"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -71,24 +66,15 @@
                   label="ເລືອກສິດຂອງ admin"
                   dense
                   outlined
-                  :rules="[(v)=> !!v || '']"
                 ></v-select>
-                <!-- <v-text-field
-                v-model="user.role"
-                dense
-                outlined
-                placeholder="ສິດຂອງ admin"
-                hide-details="auto"
-                ></v-text-field> -->
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="user.password"
+                  v-model="password"
                   dense
                   outlined
                   placeholder="ລະຫັດຜ່ານ"
                   hide-details="auto"
-                  :rules="[(v)=> !!v || '']"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -119,6 +105,7 @@ export default {
       image: "",
       imageUrl: "",
       loading: false,
+      password: "",
       user: {},
       step: 1,
       data: [
@@ -128,7 +115,16 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.$axios.get(`/ministry/${this.id}`).then((res) => {
+      console.log(res.data);
+      this.user = res?.data;
+    });
+  },
   computed: {
+    id() {
+      return this.$route.params.id;
+    },
     currentTitle() {
       switch (this.step) {
         case 1:
@@ -140,35 +136,35 @@ export default {
   },
   methods: {
     async uploadImage(e) {
-    this.loading = true;
+      this.loading = true;
       this.url = URL.createObjectURL(e);
       this.image = this.url;
       const formData = new FormData();
-        formData.append("file", this.images);
-         await this.$axios.post("upload", formData).then((res) => {
-           this.imageUrl = res?.data?.url;
-          this.loading  = false;
-        });
+      formData.append("file", this.images);
+      await this.$axios.post("upload", formData).then((res) => {
+        this.imageUrl = res?.data?.url;
+        this.loading = false;
+      });
     },
     getImage() {
       document.getElementById("picture").click();
     },
     async create() {
       try {
-        if (!this.user.ministry_title || !this.user.role || !this.user.password || !this.user.user_name) {
-        return  this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ")
-        }
         const data = {
           ministry_title: this.user.ministry_title,
           user_name: this.user.user_name,
-          password: this.user.password,
-          profile: this.imageUrl,
+          password: this.password,
+          profile: this.imageUrl == "" ? this.user.profile : this.imageUrl,
           role: this.user.role,
         };
-          await this.$axios.post("/ministry", data).then((data) => {
-            this.$router.back();
-            this.$toast.success('ສຳເລັດ')
-          });
+        console.log(data);
+        await this.$axios.put(`/update-ministry/${this.id}`, data).then((data) => {
+          this.$router.back();
+          this.$toast.success('ສຳເລັດ')
+        }).catch((error) => {
+            this.$toast.error('ອັບເດດບໍ່ສຳເລັດ')
+        })
       } catch (error) {
         console.log(error);
       }

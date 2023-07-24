@@ -1,11 +1,7 @@
 <template>
     <v-container fluid>
-      <h1>ຈັດການຂໍ້ມູນຂອງອົງກອນທຽວເທົ່າກະຊວງ</h1>
-      <div class="d-flex justify-space-between">
-        <h1></h1>
-        <!-- <h1 class="my-4 text-h6">ກະຊວງທັງໜົດ ( {{ ministry.count }} )</h1> -->
-        <v-btn color="primary" @click="createMinistry()">ສ້າງກະຊວງ</v-btn>
-      </div>
+      <h1 class="pb-10">ຈັດການຂໍ້ມູນຂອງອົງກອນທຽວເທົ່າກະຊວງ</h1>
+    
       <v-row>
         <v-col v-for="data in ministry.rows" :key="data.id" cols="6" md="3">
           <v-card max-width="400px" @click="moveDepartment(data.id)">
