@@ -38,7 +38,7 @@
           active-class="primary white--text"
         >
           <template #activator>
-            <v-list-item-title class="py-2">{{ item.title }}</v-list-item-title>
+            <v-list-item-title class="py-2" style="font-size: 16px;">{{ item.title }}</v-list-item-title>
           </template>
           <v-list-item
             v-for="(subItem, subI) in item.children"
@@ -50,7 +50,7 @@
           >
           
             <v-list-item-action>
-              <v-icon>{{ subItem.icon }}</v-icon>
+              <v-icon>mdi-minus</v-icon>
             </v-list-item-action>
             <v-list-item-title class="py-2" style="font-size: 14px">{{
               subItem.title
@@ -199,7 +199,7 @@
       <div class="mx-4">version {{ VERSION }}</div>
       <div class="d-flex">
         <p class="mt-4" style="border-bottom: 1px solid #fff">ຜູ້ໃຊ້ລະບົບ:</p>
-        <v-tab v-if="role === 'super_admin'" @click="$router.push(`/dashboard/admin/${id}`)">
+        <v-tab v-if="role === 'super_admin'" >
         <v-badge
           color="primary"
           dot>
@@ -301,6 +301,50 @@ export default {
           icon: "mdi-database",
           title: "ຈັດການຂໍ້ມູນພື້ນຖາມ",
           to: "/",
+        },
+        {
+          icon: "mdi-bank",
+          title: "ຈັດການຂໍ້ມູນພື້ນຖາມຂອງກະຊວງ",
+      
+          children: [
+            {
+              icon: "mdi-bank-outline",
+              title: "ກົມ",
+              to: "/dashboard/importMinistry/departmentO",
+            },
+            {
+              icon: "mdi-bank-outline",
+              title: "ພະແນກ",
+              to: "/dashboard/importMinistry/department",
+            },
+          ],
+        },
+        {
+          icon: "mdi-bank",
+          title: "ຈັດການຂໍ້ມູນພື້ນຖາມທ້ອງຖິ່ນ",
+      
+          children: [
+            {
+              icon: "mdi-page-previous",
+              title: "ແຂວງ",
+            },
+            {
+              icon: "mdi-page-previous",
+              title: "ຂະແໜງ",
+            },
+            {
+              icon: "mdi-decagram",
+              title: "ພະແນກ",
+            },
+            {
+              icon: "mdi-office-building-plus",
+              title: "ຫ້ອງການ",
+            },
+            {
+              icon: "mdi-package-up",
+              title: "ໜ່ວຍງານ",
+            },
+          ],
         },
         {
           icon: "mdi-account",

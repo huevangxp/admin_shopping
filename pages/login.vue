@@ -77,8 +77,8 @@ export default {
     return {
       show: false,
       user: {
-        user_name: "vangthong",
-        password: "12345",
+        user_name: "huevang",
+        password: "huevang",
       },
     };
   },
