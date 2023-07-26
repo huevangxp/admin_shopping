@@ -140,14 +140,17 @@
         <v-card-title class="primary white--text">ສ້າງຊື່ໜ່ວຍງານ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <v-text-field
+          <v-select
             v-model="title"
+            :items="dataPrepare"
+            item-text="title"
+            item-value="title"
             class="pt-10"
-            label="ຊື່ໜ່ວຍງານ"
+            label="ເລືອກໜ່ວຍງານ"
             outlined
             dense
             :rules="[(v) => !!v || '']"
-          ></v-text-field>
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -377,6 +380,7 @@ export default {
       hover: false,
       tabs: null,
       transition: "slide-y-reverse-transition",
+      dataPrepare:[],
       title: "",
       search: "",
       uid: "",
@@ -407,8 +411,14 @@ export default {
   },
   mounted() {
     this.getUnit();
+    this.getDataAll();
   },
   methods: {
+    getDataAll() {
+      this.$axios.get(`/get-all-department-prepare?status=unit`).then((res) => {
+          this.dataPrepare = res?.data;
+        });
+      },
     openDeleteEm(id) {
       this.uid = id;
       this.openDeleteEmData = true;

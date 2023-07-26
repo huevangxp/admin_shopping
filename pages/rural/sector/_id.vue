@@ -134,16 +134,19 @@
     <!-- create sector -->
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title class="primary white--text">ສ້າງນະແໜງ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງຂະແໜງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <v-text-field
+          <v-select
             v-model="sector_title"
+            :items="dataPrepare"
+            item-text="title"
+            item-value="title"
             class="pt-10"
-            label="ຊື່ຂະແໜງ"
+            label="ເລຶອກຂະແໜງ"
             outlined
             dense
-          ></v-text-field>
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -368,6 +371,7 @@ export default {
       dataUpdate: {},
       loading: false,
       sectorData: [],
+      dataPrepare:[],
       search: "",
       dialogEmployee: false,
       direction: "left",
@@ -411,6 +415,7 @@ export default {
     };
   },
   mounted() {
+    this.getDataAll();
     this.getData();
   },
   computed: {
@@ -419,6 +424,12 @@ export default {
     },
   },
   methods: {
+    getDataAll() {
+      this.$axios.get(`/get-all-department-prepare?status=sector`).then((res) => {
+            // console.log('---------->', res.data);
+          this.dataPrepare = res?.data;
+        });
+      },
     openDeleteEm(id) {
       this.sid = id;
       this.deleteEmDialog = true;

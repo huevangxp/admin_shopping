@@ -128,6 +128,9 @@ export default {
   methods: {
     async create() {
       try {
+        if (!this.province || !this.user.title || !this.user.password || !this.user.user_name || !this.user.role) {
+        return  this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ")
+        }
           const data = {
             province_id: this.province.id,
             province_title: this.province.pn,

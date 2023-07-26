@@ -258,7 +258,11 @@ export default {
         });
     },
     async createProvince() {
+
       try {
+        if (!this.province || !this.imageUrl) {
+        return  this.$toast.error("ກະລຸນາເລືອກຂໍ້ມູນໃຫ້ຄົບ")
+        }
         const data = {
           province_title: this.province.pn,
           pid: this.province.pid,

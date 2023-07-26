@@ -75,8 +75,8 @@
         <template #item.profile="{ item }">
           <div>
             <!-- {{ item }} -->
-            <v-avatar size="60" color="promary">
-              <img lazy-src="/loading.gif" :src="item.profile" alt="alt" />
+            <v-avatar size="60">
+              <v-img lazy-src="/loading.gif" :src="item.profile" alt="alt" />
             </v-avatar>
           </div>
         </template>

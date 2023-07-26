@@ -121,7 +121,7 @@
                     dark
                     v-on="on"
                     @click.stop="
-                      $router.push(`/ministry/departData/create/${item.id}`)
+                      $router.push(`/ministry/departData/member/${item.id}`)
                     "
                   >
                     <v-icon>mdi-account-multiple-plus</v-icon>
@@ -146,14 +146,17 @@
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ພະແນກ</p> -->
-          <v-text-field
+          <v-select
             v-model="title"
+            :items="dataPrepare"
+            item-text="title"
+            item-value="title"
             class="pt-10"
             label="ຊື່ພະແນກ"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-text-field>
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -178,7 +181,7 @@
           <v-text-field
             v-model="updateData.department_title"
             class="pt-10"
-            label="ຊື່ພະແນກ"
+            label="ເລືອກພະແນກ"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
@@ -376,6 +379,7 @@ export default {
       userId: "",
       title: "",
       items: [],
+      dataPrepare:[],
       direction: "left",
       fab: false,
       fling: false,
@@ -402,6 +406,7 @@ export default {
   },
   mounted() {
     this.seleteDepartment();
+    this.getData();
   },
 
   computed: {
@@ -411,6 +416,11 @@ export default {
   },
 
   methods: {
+    getData() {
+          this.$axios.get(`/get-all-department-prepare?status=department`).then((res) => {
+          this.dataPrepare = res?.data;
+        });
+      },
     openDelete(id) {
       this.emId = id;
       this.openDeleteData = true;

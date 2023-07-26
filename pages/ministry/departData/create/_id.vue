@@ -21,10 +21,12 @@
       </v-card-text>
       <div class="d-flex justify-center my-5">
         <v-avatar size="150" v-if="image" @click="getImage">
-          <v-img :src="image" alt="profile"></v-img>
+          <v-img v-if="loading" src="/loading.gif"  alt="profile"></v-img>
+          <v-img v-else lazy-src="/loading.gif" :src="image" alt="profile"></v-img>
         </v-avatar>
         <v-avatar size="150" color="primary" @click="getImage" v-else>
-          <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon>
+          <v-img lazy-src="/loading.gif" :src="user.profile" alt="profile"></v-img>
+          <!-- <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon> -->
         </v-avatar>
       </div>
       <v-card-text class="mt-3">
@@ -113,23 +115,40 @@ export default {
       user: {},
       images: "",
       image: "",
-      imageUrl:'',
+      imageUrl: '',
+      loading:false,
     };
+  },
+  mounted() {
+    this.getOneMember();
   },
   computed: {
     id() {
-     return this.$route.params.id;
+     return this.$route.query.id;
     },
+    mid() {
+      return this.$route.query.mId;
+    }
   },
   methods: {
+    getOneMember() {
+      this.$axios
+      .get(`/get-one-member/${this.mid}`)
+      .then((res) => {
+        console.log(res.data);
+        this.user = res?.data;
+      });
+    },
     async uploadImage(e) {
+      this.loading = true;
         this.url = URL.createObjectURL(e);
         this.image = this.url;
         const formData = new FormData();
         formData.append("file", this.images);
        await  this.$axios.post("upload", formData).then((res) => {
            console.log(res.data.url);
-          this.imageUrl  = res.data.url;
+         this.imageUrl = res.data.url;
+          this.loading = false;
         });
       },
       getImage() {
@@ -139,10 +158,15 @@ export default {
       try {
         const data = {
           department_id: this.id,
-          profile: this.imageUrl,
-          ...this.user,
+          profile: this.imageUrl == '' ? this.user.profile : this.imageUrl,
+          name: this.user.name,
+          last_name: this.user.last_name,
+          phone: this.user.phone,
+          position: this.user.position,
+          address: this.user.address,
+          details: this.user.details,
         };
-        console.log(data);
+        // console.log(data);
           await this.$axios
             .post("/department-menber", data)
             .then((res) => {

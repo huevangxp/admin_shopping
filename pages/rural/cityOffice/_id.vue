@@ -29,7 +29,6 @@
         <v-card elevation="0">
           <v-card-text>
             <v-data-table
-              :headers="headers"
               :search="search"
               sort-by="index"
               class="elevation-0"
@@ -146,13 +145,16 @@
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ຫ້ອງການເມືອງ</p> -->
-          <v-text-field
+          <v-select
           class="pt-10"
             v-model="title"
-            label="ຊື່ຫ້ອງການເມືອງ"
+            :items="dataPrepare"
+            item-text="title"
+            item-value="title"
+            label="ເລືອກຫ້ອງການເມືອງ"
             outlined
             dense
-          ></v-text-field>
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -379,6 +381,7 @@ export default {
       hover: false,
       ofId: "",
       tabs: null,
+      dataPrepare:[],
       transition: "slide-y-reverse-transition",
       search: "",
       office: [],
@@ -399,8 +402,15 @@ export default {
   },
   mounted() {
     this.seleteData();
+    this.getDataAll();
   },
   methods: {
+    getDataAll() {
+      this.$axios.get(`/get-all-department-prepare?status=office`).then((res) => {
+            // console.log('---------->', res.data);
+          this.dataPrepare = res?.data;
+        });
+      },
     updateEm(id) {
       this.$router.push(`/rural/cityOffice/update/${id}`);
     },

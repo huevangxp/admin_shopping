@@ -55,14 +55,14 @@ export default {
         {
           icon: "mdi-account-multiple-plus",
           title: "ຈັດການພະນັກງາານ",
-          to: "/dashboard/dataRarul",
+          to: "/dashboard/member",
          
         },
-        {
-          icon: "mdi-vector-difference",
-          title: "ຈັດການຂະແໜງ",
-          to: "/dashboard/dataRarul",
-        },
+        // {
+        //   icon: "mdi-vector-difference",
+        //   title: "ຈັດການຂະແໜງ",
+        //   to: "/dashboard/dataRarul",
+        // },
       ]
     };
   },

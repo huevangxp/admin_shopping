@@ -23,11 +23,11 @@
           <div class="d-flex justify-center">
             <v-avatar size="150" v-if="image">
               <v-img v-if="loading" src="/loading.gif" alt="profile"></v-img>
-              <v-img v-else :src="image" alt="profile"> </v-img>
+              <v-img v-else src="/loading.gif" :src="image" alt="profile"> </v-img>
             </v-avatar>
             <v-avatar size="150" color="primary" @click="getImage" v-else>
               <v-avatar size="148" color="primary">
-                <img :src="user.profile" alt="alt" />
+                <v-img src="/loading.gif"  :src="user.profile" alt="alt" />
               </v-avatar>
               <!-- <v-icon size="70" color="white"
                   >mdi-file-image-plus-outline</v-icon

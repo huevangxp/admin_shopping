@@ -280,14 +280,17 @@
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ກົມ</p> -->
-          <v-text-field
+          <v-select
             v-model="department_organization_title"
             class="pt-10"
-            label="ຊື່ກົມ"
+            label="ເລືອກກົມ"
+            :items="dataPrepare"
+            item-text="title"
+            item-value="title"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-text-field>
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -385,6 +388,7 @@ export default {
       deleteDialog: false,
       deleteEmDialog: false,
       expanded: [],
+      dataPrepare:[],
       singleExpand: false,
       dialog: false,
       dialogCreateEmployee: false,
@@ -422,6 +426,7 @@ export default {
   },
   mounted() {
     this.getDepartmentDO();
+    this.getData();
   },
   computed: {
     id() {
@@ -429,6 +434,11 @@ export default {
     },
   },
   methods: {
+    getData() {
+          this.$axios.get(`/get-all-department-prepare?status=department_oganization`).then((res) => {
+          this.dataPrepare = res?.data;
+        });
+      },
     deleteEm(id) {
       console.log(id);
       this.doId = id;
@@ -489,7 +499,7 @@ export default {
       document.getElementById("picture").click();
     },
     openCreateEmployee(id) {
-      this.$router.push(`/ministry/department/create/${id}`);
+      this.$router.push(`/ministry/department/member/${id}`);
     },
     updateDO(item) {
       this.mData = item;

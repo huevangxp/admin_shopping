@@ -150,7 +150,7 @@
                 outlined
                 dense
                 hide-details="auto"
-                label="ສິບ"
+                label="ສິດ"
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
@@ -237,8 +237,6 @@ export default {
       ],
       items: [
         { id: 1, text: "super_admin" },
-        { id: 2, text: "ministry_admin" },
-        { id: 3, text: "rural_admin" },
       ],
     };
   },
@@ -264,6 +262,9 @@ export default {
       document.getElementById("picture").click();
     },
     async createAdmin() {
+      if (!this.user.name || !this.user.user_name || !this.user.password || !this.user.email || !this.user.status || !this.user.role || !this.user.position) {
+        return  this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ")
+        }
       await this.$store.dispatch("user/createAdmin", { ...this.user });
       this.$store.dispatch("user/getAdmin");
       this.dialog = false;

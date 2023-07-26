@@ -303,6 +303,16 @@ export default {
           to: "/",
         },
         {
+          icon: "mdi-account",
+          title: "ຈັດການ admin ກະຊວງ",
+          to: "/dashboard/adminMinistry",
+        },
+        {
+          icon: "mdi-account-box",
+          title: "ຈັດການ admin ທ້ອງຖີ້ມ",
+          to: "/dashboard/adminRarul",
+        },
+        {
           icon: "mdi-bank",
           title: "ຈັດການຂໍ້ມູນພື້ນຖາມຂອງກະຊວງ",
       
@@ -320,41 +330,32 @@ export default {
           ],
         },
         {
-          icon: "mdi-bank",
+          icon: "mdi-set-left",
           title: "ຈັດການຂໍ້ມູນພື້ນຖາມທ້ອງຖິ່ນ",
       
           children: [
             {
               icon: "mdi-page-previous",
               title: "ແຂວງ",
+              to:'/dashboard/dataRarul'
             },
             {
               icon: "mdi-page-previous",
               title: "ຂະແໜງ",
-            },
-            {
-              icon: "mdi-decagram",
-              title: "ພະແນກ",
+              to:'/dashboard/importRural/sector'
             },
             {
               icon: "mdi-office-building-plus",
               title: "ຫ້ອງການ",
+              to:'/dashboard/importRural/office'
             },
             {
               icon: "mdi-package-up",
               title: "ໜ່ວຍງານ",
+              to:'/dashboard/importRural/unit'
+
             },
           ],
-        },
-        {
-          icon: "mdi-account",
-          title: "ຈັດການ admin ກະຊວງ",
-          to: "/dashboard/adminMinistry",
-        },
-        {
-          icon: "mdi-account-box",
-          title: "ຈັດການ admin ທ້ອງຖີ້ມ",
-          to: "/dashboard/adminRarul",
         },
         {
           icon: "mdi-bank",
@@ -405,7 +406,6 @@ export default {
     moveRarul() {
       this.$router.push(`/rural/department/departmentType/data?id=${this.id}&pid=${this.pid}`)
     },
-   
     confirmLogout() {
       this.$cookies.remove("name");
       this.$cookies.remove("lastName");
