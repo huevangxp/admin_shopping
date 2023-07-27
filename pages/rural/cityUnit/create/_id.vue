@@ -172,7 +172,7 @@ export default {
           details: this.user.details,
         };
         console.log(data);
-        await this.$axios.post("/create-unit-member", data).then((res) => {
+        await this.$axios.post(`/create-unit-member/${this.mid}`, data).then((res) => {
           this.$toast.success("ສຳເລັດ");
           this.$router.back();
         });

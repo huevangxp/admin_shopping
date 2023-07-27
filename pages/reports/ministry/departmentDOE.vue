@@ -14,7 +14,9 @@
         ></v-text-field>
       </v-col>
       <v-col cols="4"> </v-col>
-      <v-col cols="4">
+      <v-col cols="4" class="d-flex">
+        <v-btn color="red" class="mx-3 white--text" @click="$router.back()">ຍົກເລິກ</v-btn>
+
         <download-excel
           class="download"
           :header="e_headers"

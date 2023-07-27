@@ -171,7 +171,7 @@ export default {
         };
         console.log(data);
           await this.$axios
-            .post("/create-member-organization", data)
+            .post(`/create-member-organization/${this.mid}`, data)
             .then((res) => {
               this.$toast.success("ສຳເລັດ");
               // this.dialogCreateEmployee = false;

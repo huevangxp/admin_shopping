@@ -21,6 +21,7 @@
           </v-col>
           <v-col cols="4"> </v-col>
           <v-col cols="4" class="d-flex justify-end">
+
             <v-btn outlined color="primary" @click="dialog = true"
               >ສ້າງຫ້ອງການ</v-btn
             >

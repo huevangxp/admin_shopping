@@ -13,6 +13,8 @@
         ></v-text-field>
       </v-col>
       <v-col md="6" class="d-flex justify-end">
+        <v-btn color="red" class="mx-3 white--text" @click="$router.back()">ຍົກເລິກ</v-btn>
+
         <v-btn outlined color="primary" dark @click="dialog = true"
           >ສ້າງ admin ຂອງທ້ອງຖີ່ນ</v-btn
         >

@@ -19,7 +19,7 @@ export const actions = {
                             const token = res.data.token
                          
                             const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-                            console.log('login',data);
+                            // console.log('login',data);
                             this.$cookies.set('name', data.name);
                             this.$cookies.set('userId', data.id);
                             this.$cookies.set('role', data.role);
@@ -28,11 +28,13 @@ export const actions = {
                             this.$cookies.set('token', token);
                             this.$cookies.set('pid', data.pid);
                             
-                            if (data?.role == 'ministry_admin') {
+                            if (data.role == 'ministry_admin') {
                                     this.$router.push(`/ministry/department/${data.id}`)
                             } else {
                                 this.$router.push(`/rural/department/departmentType/data?id=${data.id}&pid=${data.pid}`)
                                 }
+                        }).catch(() => {
+                            this.$toast.error('ຊື່ ແລະ ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
                    })
                 }
 
@@ -52,9 +54,8 @@ export const actions = {
                     this.$cookies.set("profile", data.profile);
                     this.$router.push('/');  
                 } 
-
-            }).catch((err) => {
-                console.log(err);
+            }).catch(() => {
+                // console.log(err);
                 commit('setLoading', false)
             })
     }

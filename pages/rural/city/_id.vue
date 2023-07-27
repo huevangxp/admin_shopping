@@ -15,6 +15,7 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4" class="d-flex justify-content-end">
+        <v-btn color="red" class="mx-3 white--text" @click="$router.back()">ຍົກເລິກ</v-btn>
         <v-btn v-if="role === 'rural_admin'" outlined color="primary" @click="getCity">ສ້າງເມືອງ</v-btn>
       </v-col>
     </v-row>

@@ -20,6 +20,8 @@
       </v-col>
       <v-col cols="4"> </v-col>
       <v-col cols="4" class="d-flex justify-end">
+        <v-btn v-if="role === 'super_admin'" color="red" class="mx-3 white--text" @click="$router.back()">ຍົກເລິກ</v-btn>
+
         <v-btn
           outlined
           v-if="role === 'ministry_admin'"

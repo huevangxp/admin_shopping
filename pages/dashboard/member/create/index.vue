@@ -131,12 +131,12 @@ export default {
     },
     async member() {
       try {
-        if (!this.imageUrl || !this.user.name || !this.user.password || !this.user.user_name || !this.user.role || !this.user.phone || !this.user.address) {
+        if (!this.imageUrl || !this.user.name  || !this.user.last_name || !this.user.phone || !this.user.address) {
         return  this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນໃຫ້ຄົບ")
         }
         const data = {
             profile: this.imageUrl,
-            position:"ໃສ່ຕຳແໜງ",
+            position:"----",
           ...this.user,
         };
         await this.$axios.post("/create-member", data).then((res) => {

@@ -168,7 +168,7 @@ export default {
         };
         // console.log(data);
           await this.$axios
-            .post("/department-menber", data)
+            .post(`/department-menber/${this.mid}`, data)
             .then((res) => {
               this.$toast.success("ສຳເລັດ");
               this.$router.back();

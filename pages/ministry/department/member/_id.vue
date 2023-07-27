@@ -2,7 +2,6 @@
     <div>
       <h1 class="my-10 ml-3">
         ຂໍ້ມູນພະນັກງານທັງໜົດ
-    
       </h1>
       <v-card elevation="0" class="mx-3">
         <v-row>
@@ -24,7 +23,7 @@
         </v-row>
       </v-card>
       <v-card elevation="0">
-        <v-card-text v-if="departmentDO?.length <= 0">
+        <v-card-text v-if="dataPrepare?.length <= 0">
           <v-card elevation="0">
             <v-card-text>
               <v-data-table
@@ -124,7 +123,7 @@
             }
         },
       getData() {
-          this.$axios.get(`/get-all-member`).then((res) => {
+          this.$axios.get(`/get-all-member?status=0`).then((res) => {
           this.dataPrepare = res?.data;
         });
       },

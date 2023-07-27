@@ -21,9 +21,10 @@
           </v-col>
           <v-col cols="4"> </v-col>
           <v-col cols="4" class="d-flex justify-end">
-            <v-btn outlined color="primary" to="/dashboard/member/create"
-              >ສ້າງພະນັກງານ</v-btn
-            >
+            <v-btn class="mx-2" outlined color="primary" to="/dashboard/member/create"
+              >ສ້າງພະນັກງານ</v-btn>
+            <v-btn color="pick" dark to="/dashboard/member/oldMember"
+              >ເບີ່ງພະນັກງານເກົ່າ</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -114,6 +115,12 @@
                   </v-tooltip>
                 </div>
               </div>
+            </template >
+            <template #item.status="{item}">
+              <div>
+                  <span v-if="item.status === '0'" class="primary--text">ໃໜ່</span>
+                  <span v-else class="red--text">ເກົ່າ</span>
+              </div>
             </template>
           </v-data-table>
         </v-card-text>
@@ -176,6 +183,7 @@
           { text: "ນາມສະກຸມ", value: "last_name" },
           { text: "ເບີ", value: "phone" },
           { text: "ຕຳແໜງ", value: "position" },
+          { text: "ສະຖະນາ", value: "status" },
           { text: "ປະຫັວດ", value: "details" },
           { text: "", value: "actions" },
         ],
@@ -205,7 +213,8 @@
       },
   
       getData() {
-          this.$axios.get(`/get-all-member`).then((res) => {
+          this.$axios.get(`/get-all-member?status=0`).then((res) => {
+            console.log(res.data);
           this.dataPrepare = res?.data;
         });
       },

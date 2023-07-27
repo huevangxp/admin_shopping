@@ -161,7 +161,7 @@ export default {
         };
         console.log(data);
           await this.$axios
-            .post("/create-sector-member", data)
+            .post(`/create-sector-member/${this.mid}`, data)
             .then((res) => {
               this.$toast.success("ສຳເລັດ");
               this.$router.back();
