@@ -485,7 +485,7 @@ export default {
       });
     },
     openCreateEmployee(id) {
-      this.$router.push(`/rural/cityUnit/create/${id}`);
+      this.$router.push(`/rural/cityUnit/member/${id}`);
     },
 
     getUnit() {

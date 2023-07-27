@@ -465,7 +465,7 @@ export default {
       this.seleteData();
     },
     openCreateEmployee(id) {
-      this.$router.push(`/rural/cityOffice/create/${id}`);
+      this.$router.push(`/rural/cityOffice/member/${id}`);
     },
     seleteData() {
       try {

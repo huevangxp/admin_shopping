@@ -461,7 +461,7 @@ export default {
       this.dialogEmployee = true;
     },
     openCreateEmployee(id) {
-      this.$router.push(`/rural/sector/create/${id}`);
+      this.$router.push(`/rural/sector/member/${id}`);
     },
     showUpdate(data) {
       console.log(data);
