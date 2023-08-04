@@ -50,7 +50,7 @@
           >
           
             <v-list-item-action>
-              <v-icon>mdi-minus</v-icon>
+              <v-icon>{{ subItem.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-title class="py-2" style="font-size: 14px">{{
               subItem.title
@@ -193,7 +193,11 @@
       <v-avatar size="60" color="white" v-else>
         <v-img lazy-src="/loading.gif" :src="profile" alt="alt" />
       </v-avatar>
-      <v-toolbar-title v-if="role == 'super_admin'" class="ml-3">ອົງການທີ່ຂື້ນກັບລັດຖະບານ</v-toolbar-title>
+      <v-toolbar-title v-if="role == 'super_admin'" class="ml-3">
+        <!-- ອົງການທີ່ຂື້ນກັບລັດຖະບານ -->
+        ລະບົບຄຸ້ມຄອງສະຖິຕິກົງຈັກການຈັດຕັ້ງລັດຖະບານແຫ່ງ ສປປລາວ ຂອງກະຊວງພາຍໃນ
+
+        </v-toolbar-title>
       <v-toolbar-title  v-else class="ml-3">{{ title }}</v-toolbar-title>
       <v-spacer />
       <div class="mx-4">version {{ VERSION }}</div>
@@ -279,6 +283,11 @@ export default {
           to: "/rural/admin",
         },
         {
+          icon: "mdi-account-group",
+          title: "ຈັດການພະນັກງານ",
+          to: "/rural/member",
+        },
+        {
           icon: "mdi-chart-box",
           title: "ລາຍງານ",
           to:'/reports/rural'
@@ -289,6 +298,11 @@ export default {
           icon: "mdi-account",
           title: "ຈັດການ admin",
           to: "/ministry/admin",
+        },
+        {
+          icon: "mdi-account-group",
+          title: "ຈັດການພະນັກງານ",
+          to: "/ministry/member",
         },
         {
           icon: "mdi-chart-box",
@@ -303,8 +317,13 @@ export default {
           to: "/",
         },
         {
+          icon: "mdi-account-child-circle",
+          title: "ຈັດການຂໍ້ມູນ super admin",
+          to: "/dashboard/create",
+        },
+        {
           icon: "mdi-account",
-          title: "ຈັດການ admin ກະຊວງ",
+          title: "ຈັດການ admin ສູນກາງ",
           to: "/dashboard/adminMinistry",
         },
         {
@@ -312,51 +331,51 @@ export default {
           title: "ຈັດການ admin ທ້ອງຖີ້ມ",
           to: "/dashboard/adminRarul",
         },
-        {
-          icon: "mdi-bank",
-          title: "ຈັດການຂໍ້ມູນພື້ນຖາມຂອງກະຊວງ",
+        // {
+        //   icon: "mdi-bank",
+        //   title: "ຈັດການຂໍ້ມູນພື້ນຖາມຂອງກະຊວງ",
       
-          children: [
-            {
-              icon: "mdi-bank-outline",
-              title: "ກົມ",
-              to: "/dashboard/importMinistry/departmentO",
-            },
-            {
-              icon: "mdi-bank-outline",
-              title: "ພະແນກ",
-              to: "/dashboard/importMinistry/department",
-            },
-          ],
-        },
-        {
-          icon: "mdi-set-left",
-          title: "ຈັດການຂໍ້ມູນພື້ນຖາມທ້ອງຖິ່ນ",
+        //   children: [
+        //     {
+        //       icon: "mdi-bank-outline",
+        //       title: "ກົມ",
+        //       to: "/dashboard/importMinistry/departmentO",
+        //     },
+        //     {
+        //       icon: "mdi-bank-outline",
+        //       title: "ພະແນກ",
+        //       to: "/dashboard/importMinistry/department",
+        //     },
+        //   ],
+        // },
+        // {
+        //   icon: "mdi-set-left",
+        //   title: "ຈັດການຂໍ້ມູນພື້ນຖາມທ້ອງຖິ່ນ",
       
-          children: [
-            {
-              icon: "mdi-page-previous",
-              title: "ແຂວງ",
-              to:'/dashboard/dataRarul'
-            },
-            {
-              icon: "mdi-page-previous",
-              title: "ຂະແໜງ",
-              to:'/dashboard/importRural/sector'
-            },
-            {
-              icon: "mdi-office-building-plus",
-              title: "ຫ້ອງການ",
-              to:'/dashboard/importRural/office'
-            },
-            {
-              icon: "mdi-package-up",
-              title: "ໜ່ວຍງານ",
-              to:'/dashboard/importRural/unit'
+        //   children: [
+        //     {
+        //       icon: "mdi-page-previous",
+        //       title: "ແຂວງ",
+        //       to:'/dashboard/dataRarul'
+        //     },
+        //     {
+        //       icon: "mdi-page-previous",
+        //       title: "ຂະແໜງ",
+        //       to:'/dashboard/importRural/sector'
+        //     },
+        //     {
+        //       icon: "mdi-office-building-plus",
+        //       title: "ຫ້ອງການ",
+        //       to:'/dashboard/importRural/office'
+        //     },
+        //     {
+        //       icon: "mdi-package-up",
+        //       title: "ໜ່ວຍງານ",
+        //       to:'/dashboard/importRural/unit'
 
-            },
-          ],
-        },
+        //     },
+        //   ],
+        // },
         {
           icon: "mdi-bank",
           title: "ສູນກາງ",

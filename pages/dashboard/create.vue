@@ -24,7 +24,6 @@
         :items="admin.rows"
         class="elevation-3"
         :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
-        dense
         fixed-header
         :search="search"
       >

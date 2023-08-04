@@ -21,7 +21,7 @@
       :headers="headers"
       :items="ministry?.rows"
       class="elevation-3"
-      :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
+      :footer-props="{ 'items-per-page-options': [5,10, 25, -1] }"
       fixed-header 
       :search="search"
       >
@@ -101,6 +101,7 @@ export default {
           sortable: false,
           value: "idx",
         },
+        { text: "ຊື່ກະຊວງ", value: "ministry_title" },
         { text: "ຊື່", value: "user_name" },
         { text: "ສະຖານະ", value: "role" },
         { text: "ວັນທີສ້າງ", value: "createdAt" },

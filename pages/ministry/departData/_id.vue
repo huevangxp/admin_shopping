@@ -147,17 +147,14 @@
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ພະແນກ</p> -->
-          <v-select
+          <v-text-field
             v-model="title"
-            :items="dataPrepare"
-            item-text="title"
-            item-value="title"
             class="pt-10"
             label="ຊື່ພະແນກ"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-select>
+          ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -491,6 +488,9 @@ export default {
     },
     async createDepartment() {
       try {
+        if (!this.title) {
+          return this.$toast.error("ປ້ອນຂໍ້ມູນໃຫ້ຄົບ")
+        }
         const data = {
           department_title: this.title,
           department_organization_id: this.id,
@@ -498,6 +498,7 @@ export default {
         await this.$axios.post("/department", data).then((res) => {
           this.$toast.success("ສ້າງສຳເລັດ");
           this.dialogDepartment = false;
+          this.title = '';
         });
         this.seleteDepartment();
       } catch (error) {

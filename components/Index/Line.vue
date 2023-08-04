@@ -3,7 +3,7 @@
     <h1 class="pb-10">ຈັດການຂໍ້ມູນພື້ນຖານ</h1>
     <v-row>
       <v-col v-for="(item, index) in Lists" :key="index" cols="12" sm="4" md="4">
-        <v-card :to="item?.to" shaped>
+        <v-card :to="item?.to" shaped height="130">
           <v-card-text>
             <div
               class="font-weight-bold d-flex align-center"
@@ -36,33 +36,27 @@ export default {
       value: 10,
       Lists: [
         {
-          icon: "mdi-account",
-          title: "ADMIN",
-          to: "/dashboard/create",
-        },
-        {
           icon: "mdi-bank",
-          title: "ສູນກາງ",
+          title: "ຈັດການຂໍ້ມູນກະຊວງ ແລະ ອົງການທຽບເທົ່າ",
           to: "/dashboard/dataMinistry",
-         
         },
         {
           icon: "mdi-home-city-outline",
-          title: "ທ້ອງຖິ້ມ",
+          title: "ຈັດການຂໍ້ມູນແຂວງ ແລະ ພະແນກ",
           to: "/dashboard/dataRarul",
          
         },
         {
           icon: "mdi-account-multiple-plus",
-          title: "ຈັດການພະນັກງາານ",
+          title: "ຈັດການຂໍ້ມູນພະນັກງານທີ່ປະກອບກົງຈັກ",
           to: "/dashboard/member",
          
         },
-        // {
-        //   icon: "mdi-vector-difference",
-        //   title: "ຈັດການຂະແໜງ",
-        //   to: "/dashboard/dataRarul",
-        // },
+        {
+          icon: "mdi-account",
+          title: "ຈັດການຂໍ້ມູນສິດທິການໃຊ້ລະບົບ",
+          to: "/dashboard/role",
+        },
       ]
     };
   },

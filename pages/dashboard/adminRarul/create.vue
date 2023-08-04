@@ -25,16 +25,20 @@
               dense
               class="mt-10"
               hide-details="auto"
+              @change="selectDepartment"
             ></v-select>
           </v-card-text>
           <v-card-text>
-                <v-text-field
+                <v-select
                   v-model="user.title"
+                  :items="departmentDO"
+                  item-text="title"
+                  item-value="title"
                   dense
                   outlined
-                  placeholder="ຊື່ພະແນກ"
+                  placeholder="ເລືອກຊື່ພະແນກ"
                   hide-details="auto"
-                ></v-text-field>
+                ></v-select>
           </v-card-text>
         </v-window-item>
 
@@ -99,6 +103,7 @@ export default {
       province: {},
       loading: false,
       user: {},
+      departmentDO:[],
       image: "",
       step: 1,
       data: [
@@ -126,6 +131,15 @@ export default {
     },
   },
   methods: {
+    selectDepartment(e) {
+      // console.log(e);
+      this.$axios
+        .get(`/select-prepare-department/${e.id}`)
+        .then((res) => {
+            // console.log('------------->',res.data);
+          this.departmentDO = res?.data;
+        });
+    },
     async create() {
       try {
         if (!this.province || !this.user.title || !this.user.password || !this.user.user_name || !this.user.role) {

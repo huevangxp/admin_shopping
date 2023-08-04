@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <h1 class="my-10">
-      ຈັດການຂໍ້ມູນພະແນກຂອງ
+      ຈັດການຂໍ້ມູນພະແນກ
       <span class="primary--text" style="border-bottom: 1px solid #000">{{
         title
       }}</span>

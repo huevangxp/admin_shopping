@@ -4,7 +4,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   // target:server,
   head: {
-    titleTemplate: '%s - admin',
+    titleTemplate: '%s - ກະຊວງພາຍໃນ',
     title: 'admin',
     htmlAttrs: {
       lang: 'en'

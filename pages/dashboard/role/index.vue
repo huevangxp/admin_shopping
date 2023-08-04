@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- {{ ministry }} -->
-    <h1 class="my-10">ຈັດການຂໍ້ມູນແຂວງ</h1>
+    <h1 class="my-10">ຈັດການຂໍ້ມູນສິດ</h1>
     <v-row>
       <v-col md="6">
         <v-text-field
           v-model="search"
           outlined
           dense
-          placeholder="ຄົ້ນຫາ admin ທ້ອງຖີ້ມ"
+          placeholder="ຄົ້ນຫາສິດ"
           append-icon="mdi-magnify"
         ></v-text-field>
       </v-col>
@@ -18,30 +18,19 @@
         >
 
         <v-btn outlined color="primary" dark @click="dialog = true"
-          >ສ້າງແຂວງ</v-btn
+          >ເພີ່ມສິດ</v-btn
         >
       </v-col>
     </v-row>
+    <!-- {{ provinceData }} -->
     <v-data-table
       :headers="headers"
-      :items="provinceData.rows"
+      :items="provinceData"
       class="elevation-3"
       :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
       fixed-header
       :search="search"
-      @click:row="moveCreateDepartment"
     >
-      <template #item.profile="{ item }">
-        <div>
-          <v-avatar size="70">
-            <v-img
-              lazy-src="/loading.gif"
-              :src="item?.profile"
-              alt="profile"
-            ></v-img>
-          </v-avatar>
-        </div>
-      </template>
       <template #item.idx="{ index }">
         <div>
           {{ index + 1 }}
@@ -65,29 +54,13 @@
     </v-data-table>
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title class="primary white--text">ສ້າງແຂວງ</v-card-title>
+        <v-card-title class="primary white--text">ເພີ່ມສິດ</v-card-title>
         <v-divider class="mb-5"></v-divider>
-        <v-card-text class="d-none">
-          <v-file-input
-            id="picture"
-            v-model="images"
-            @change="uploadImage"
-          ></v-file-input>
-        </v-card-text>
-        <div class="d-flex justify-center">
-          <v-avatar size="150" v-if="image">
-            <v-img v-if="loading" src="/loading.gif" alt="profile"></v-img>
-            <v-img v-else :src="image" alt="profile"> </v-img>
-            <!-- <v-img :src="image" alt="profile"></v-img> -->
-          </v-avatar>
-          <v-avatar size="150" color="primary" @click="getImage" v-else>
-            <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon>
-          </v-avatar>
-        </div>
+
         <v-card-text>
           <v-text-field
-            v-model="province"
-            label="ປ້ອນຊື່ແຂວງ"
+            v-model="role"
+            label="ປ້ອນສິດ"
             outlined
             dense
             class="mt-10"
@@ -99,7 +72,7 @@
           <v-btn color="red" outlined dark @click="dialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="createProvince()">ສ້າງແຂວງ</v-btn>
+          <v-btn color="primary" dark @click="createRole()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -109,51 +82,25 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title color="red">ອັບເດດແຂວງ</v-card-title>
+        <v-card-title class="primary white--text">ອັບເດດສິດ</v-card-title>
         <v-divider></v-divider>
-        <v-card-text class="d-none">
-          <v-file-input
-            id="picture"
-            v-model="images"
-            @change="uploadImage"
-          ></v-file-input>
-        </v-card-text>
-        <div class="d-flex justify-center">
-          <v-avatar size="150" v-if="image">
-            <v-img v-if="loading" src="/loading.gif" alt="profile"></v-img>
-            <v-img v-else :src="image" alt="profile"> </v-img>
-          </v-avatar>
-          <v-avatar size="150" color="primary" @click="getImage" v-else>
-            <v-img
-              lazy-src="/loading.gif"
-              :src="dataUdate.profile"
-              alt="profile"
-            >
-            </v-img>
-
-            <!-- <v-icon size="70" color="white">mdi-file-image-plus-outline</v-icon> -->
-          </v-avatar>
-        </div>
         <v-card-text>
-          <v-select
-            :items="chooseProvince"
-            v-model="dataUdate.province_title"
-            item-value="pn"
-            item-text="pn"
-            label="ເລືອກແຂວງ"
-            return-object
+          <v-text-field
+            v-model="dataUdate.role_title"
+            label="ປ້ອນສິດ"
             outlined
             dense
             class="mt-10"
-          ></v-select>
+          ></v-text-field>
         </v-card-text>
+        <v-card-text> </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" outlined dark @click="dialogUdate = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="updateProvince()">ສ້າງກົມ</v-btn>
+          <v-btn color="primary" dark @click="updateProvince()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -166,7 +113,7 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title class="primary white--text">ລຶບແຂວງ</v-card-title>
+        <v-card-title class="primary white--text">ລຶບສິດ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="py-6 text-center black--text">
           ທ່ານຕ້ອງການລືບບັນຊີນີ້ບໍ?
@@ -187,16 +134,14 @@ export default {
   data() {
     return {
       dialog: false,
-      province: "",
-      image: "",
+      role: "",
+      updateDataRole: "",
       search: "",
-      provinceData: {},
+      provinceData: [],
       dialogDelete: false,
       dataUdate: {},
-      imageUrl: "",
       loading: false,
       dialogUdate: false,
-      images: "",
       headers: [
         {
           text: "ລ/ດ",
@@ -204,32 +149,20 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຮູບພາບ", value: "profile" },
-        { text: "ຊື່ກະຊວງ", value: "province_title" },
+        { text: "ສິດ", value: "role_title" },
         { text: "ວັນທີສ້າງ", value: "createdAt" },
         { text: "", value: "actions" },
       ],
     };
   },
 
-  computed: {
-    chooseProvince() {
-      return this.$store.state.province.address;
-    },
-    province() {
-      return this.$store.state.province.province;
-    },
-  },
+  computed: {},
   mounted() {
-    this.$store.dispatch("province/getAllProvince");
-    this.$axios.get("/province").then((res) => {
+    this.$axios.get("/select-roles").then((res) => {
       this.provinceData = res?.data;
     });
   },
   methods: {
-    moveCreateDepartment(item) {
-      this.$router.push(`/dashboard/department/${item.id}`);
-    },
     openUdate(item) {
       this.dataUdate = item;
       this.dialogUdate = true;
@@ -238,55 +171,35 @@ export default {
       this.dataUdate = item;
       this.dialogDelete = true;
     },
-    async uploadImage(e) {
-      this.loading = true;
-      this.url = URL.createObjectURL(e);
-      this.image = this.url;
-      const formData = new FormData();
-      formData.append("file", this.images);
 
-      await this.$axios.post("upload", formData).then((res) => {
-        this.imageUrl = res?.data?.url;
-        this.loading = false;
-      });
-    },
-    getImage() {
-      document.getElementById("picture").click();
-    },
     async updateProvince() {
       const data = {
-        province_title: this.dataUdate.province_title.pn,
-        pid: this.dataUdate.province_title.pid,
-        profile: this.imageUrl == "" ? this.dataUdate.profile : this.imageUrl,
+        role_title: this.dataUdate.role_title,
       };
       await this.$axios
-        .put(`/province/${this.dataUdate.id}`, data)
+        .put(`/update-role/${this.dataUdate.id}`, data)
         .then((res) => {
           this.dialogUdate = false;
           this.$toast.success("ສຳເລັດ");
         });
-      this.$axios.get("/province").then((res) => {
+      this.$axios.get("/select-roles").then((res) => {
         this.provinceData = res?.data;
       });
     },
-    async createProvince() {
+    async createRole() {
       try {
-        if (!this.province || !this.imageUrl) {
+        if (!this.role) {
           return this.$toast.error("ກະລຸນາເລືອກຂໍ້ມູນໃຫ້ຄົບ");
         }
         const data = {
-          province_title: this.province,
-          pid: "new",
-          profile: this.imageUrl,
+          role: this.role,
         };
-        await this.$axios.post("/province", data).then((res) => {
+        await this.$axios.post("/create-role", data).then((res) => {
           this.dialog = false;
           this.$toast.success("ສຳເລັດ");
-          this.imageUrl = "";
-          this.images = "";
-          this.image = "";
+          this.role = "";
         });
-        this.$axios.get("/province").then((res) => {
+        this.$axios.get("/select-roles").then((res) => {
           this.provinceData = res?.data;
         });
       } catch (error) {
@@ -296,7 +209,7 @@ export default {
     async deleteData() {
       try {
         await this.$axios
-          .delete(`/province/${this.dataUdate.id}`)
+          .delete(`/delete-role/${this.dataUdate.id}`)
           .then((res) => {
             this.$toast.success("ລຶບຂໍ້ມູນສຳເລັດ");
             this.dialogDelete = false;
@@ -304,7 +217,7 @@ export default {
           .catch((error) => {
             this.$toast.error("ລຶບບໍ່ສຳເລັດ");
           });
-        this.$axios.get("/province").then((res) => {
+        this.$axios.get("/select-roles").then((res) => {
           this.provinceData = res?.data;
         });
       } catch (error) {

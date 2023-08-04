@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- {{ ministry }} -->
+    <!-- {{ ministry }}/ -->
     <h1 class="my-10">ຈັດການຂໍ້ມູນຂອງກະຊວງ</h1>
 
     <v-row>
@@ -17,7 +17,7 @@
         <v-btn color="red" class="mx-3 white--text" @click="$router.back()">ຍົກເລິກ</v-btn>
 
         <v-btn outlined color="primary" dark to="/dashboard/adminMinistry/create"
-          >ສ້າງ admin ຂອງກະຊວງ</v-btn
+          >ສ້າງກະຊວງ</v-btn
         >
       </v-col>
     </v-row>
@@ -25,9 +25,10 @@
       :headers="headers"
       :items="ministry.rows"
       class="elevation-3"
-      :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
       :search="search"
+      :items-per-page="5"
       fixed-header
+      
     >
       <!-- @click:row="showDetails" -->
       <template #item.profile="{ item }">

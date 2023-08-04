@@ -282,17 +282,14 @@
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ກົມ</p> -->
-          <v-select
+          <v-text-field
             v-model="department_organization_title"
             class="pt-10"
             label="ເລືອກກົມ"
-            :items="dataPrepare"
-            item-text="title"
-            item-value="title"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
-          ></v-select>
+          ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -559,6 +556,7 @@ export default {
         await this.$store.dispatch("department/createDepartmentDO", {
           ...data,
         });
+        this.department_organization_title = '';
         this.getDepartmentDO();
         this.dialog = false;
       } catch (error) {

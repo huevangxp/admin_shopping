@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="my-10 ml-3">
-      ຈັດການຂໍ້ມູນກົມຂອງ
+      ຈັດການຂໍ້ມູນພະແນກ
       <span class="primary--text" style="border-bottom: 1px solid #000">{{
         title
       }}</span>
@@ -22,7 +22,7 @@
         <v-col cols="4"> </v-col>
         <v-col cols="4" class="d-flex justify-end">
           <v-btn outlined color="primary" @click="dialog = true"
-            >ສ້າງກົມຈັດຕັ້ງ</v-btn
+            >ສ້າງພະແນກ</v-btn
           >
         </v-col>
       </v-row>
@@ -55,11 +55,9 @@
         </v-card>
       </v-card-text>
       <v-card-text v-else>
-
         <v-data-table
-        
-        :headers="dessertHeaders"
-        :items="departmentDO"
+          :headers="dessertHeaders"
+          :items="departmentDO"
           :single-expand="singleExpand"
           :expanded.sync="expanded"
           item-key="id"
@@ -113,13 +111,13 @@
 
     <v-dialog v-model="dialog" max-width="500px" transition="dialog-transition">
       <v-card>
-        <v-card-title class="primary white--text">ສ້າງກົມ</v-card-title>
+        <v-card-title class="primary white--text">ສ້າງພະແນກ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <v-text-field
             v-model="department_organization_title"
             class="pt-10"
-            label="ຊື່ກົມ"
+            label="ຊື່ພະແນກ"
             outlined
             dense
             :rules="[(v) => !!v || 'ຈຳເປັນ']"
@@ -131,7 +129,7 @@
           <v-btn color="red" outlined dark @click="dialog = false"
             >ຍົກເລິກ</v-btn
           >
-          <v-btn color="primary" dark @click="createDO()">ສ້າງກົມ</v-btn>
+          <v-btn color="primary" dark @click="createDO()">ບັນທືກ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -141,7 +139,7 @@
       transition="dialog-transition"
     >
       <v-card>
-        <v-card-title class="primary white--text">ອັບເດບກົມ</v-card-title>
+        <v-card-title class="primary white--text">ອັບເດບພະແນກ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
           <!-- <p class="black--text">ຊື່ກົມ</p> -->
@@ -193,13 +191,12 @@
 export default {
   data() {
     return {
-
       deleteDialog: false,
       expanded: [],
       singleExpand: false,
       dialog: false,
       dialogUpdateDO: false,
-   
+
       eid: "",
       mData: {},
       role: this.$cookies.get("role"),
@@ -216,7 +213,7 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຊື່ກົມ", value: "title" },
+        { text: "ຊື່ພະແນກ", value: "title" },
         { text: "ຈັດການ", value: "actions" },
       ],
     };
@@ -224,12 +221,16 @@ export default {
   mounted() {
     this.getDepartmentDO();
   },
-  computed: {},
+    computed: {
+        id() {
+            return this.$route.params.id;
+    }
+  },
   methods: {
     async deleteDO() {
       try {
         await this.$axios
-          .$delete(`/delete-department-prepare/${this.doId}`)
+          .$delete(`/delete-prepare-department/${this.doId}`)
           .then((res) => {
             console.log(res.data);
             this.deleteDialog = false;
@@ -245,10 +246,12 @@ export default {
     },
 
     getDepartmentDO() {
-        this.$axios.get(`/get-all-department-prepare?status=department_oganization`).then((res) => {
-        console.log(res.data);
-        this.departmentDO = res?.data;
-      });
+      this.$axios
+        .get(`/select-prepare-department/${this.id}`)
+        .then((res) => {
+            // console.log('------------->',res.data);
+          this.departmentDO = res?.data;
+        });
     },
 
     updateDO(item) {
@@ -261,7 +264,7 @@ export default {
       };
 
       this.$axios
-        .put(`/update-department-prepare/${this.mData.id}`, data)
+        .put(`/update-prepare-department/${this.mData.id}`, data)
         .then((res) => {
           (this.dialogUpdateDO = false), this.$toast.success("ສຳເລັດ");
         })
@@ -276,20 +279,20 @@ export default {
     },
     async createDO() {
       try {
-        if (this.department_organization_title === '' ) {
+        if (this.department_organization_title === "") {
           return this.$toast.error("ກະລຸນາປ້ອນຂໍ້ມູນ");
         }
         const data = {
-            title: this.department_organization_title,
-          db_status: "department_oganization",
+          title: this.department_organization_title,
+          province_id: this.id,
         };
-          await this.$axios.post("/create-department-prepare", data)
-              .then((res) => {
-            // console.log(object);
-                  this.getDepartmentDO();
-            this.$toast.success('ສຳເລັດ')
+        await this.$axios
+          .post("/prepare-department", data)
+          .then((res) => {
+            this.getDepartmentDO();
+            this.$toast.success("ສຳເລັດ");
             this.dialog = false;
-        })
+          });
       } catch (error) {
         console.log(error);
       }

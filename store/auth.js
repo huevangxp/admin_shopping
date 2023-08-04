@@ -19,7 +19,7 @@ export const actions = {
                             const token = res.data.token
                          
                             const data = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-                            // console.log('login',data);
+                            console.log('login',data);
                             this.$cookies.set('name', data.name);
                             this.$cookies.set('userId', data.id);
                             this.$cookies.set('role', data.role);

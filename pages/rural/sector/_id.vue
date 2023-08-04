@@ -138,16 +138,13 @@
         <v-card-title class="primary white--text">ສ້າງຂະແໜງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <v-select
+          <v-text-field
             v-model="sector_title"
-            :items="dataPrepare"
-            item-text="title"
-            item-value="title"
             class="pt-10"
-            label="ເລຶອກຂະແໜງ"
+            label="ປ້ອນຊື່ຂະແໜງ"
             outlined
             dense
-          ></v-select>
+          ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -212,7 +209,6 @@
           <v-card elevation="0">
             <v-card-text>
               <v-data-table
-                :headers="headers"
                 :search="search"
                 sort-by="index"
                 class="elevation-0"
@@ -473,6 +469,7 @@ export default {
       const data = {
         sector_title: this.dataUpdate.sector_title,
       };
+
       this.$axios
         .put(`/sector/${this.dataUpdate.id}`, data)
         .then((res) => {
@@ -510,6 +507,9 @@ export default {
       }
     },
     async createSector() {
+      if (!this.sector_title) {
+        return this.$toast.error('ປ້ອນຂໍ້ມູນໃຫ້ຄົບ')
+      } 
       const data = {
         sector_title: this.sector_title,
         rarul_department_id: this.id,

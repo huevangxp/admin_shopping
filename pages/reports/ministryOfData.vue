@@ -35,7 +35,7 @@
         :headers="headers"
         :items="ministry.rows"
         class="elevation-3"
-        :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
+        :footer-props="{ 'items-per-page-options': [5,10, 25, -1] }"
         dense
         :search="search"
         fixed-header

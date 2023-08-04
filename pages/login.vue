@@ -1,5 +1,4 @@
 <template>
-  <!-- -->
   <div id="backgrond-image">
     <v-card class="mx-auto my-5 mt-10" style="opacity: 0.9;" max-width="400" elevation="10">
       <template slot="progress"> 
@@ -16,9 +15,8 @@
       </div>
 
       <v-card-title class="d-flex justify-center"
-        >ກະລຸນາເຂົ້າສູ່ລະບົບ</v-card-title
+        >ເຂົ້າສູ່ລະບົບ</v-card-title
       >
-
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
           <v-text-field

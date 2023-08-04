@@ -23,8 +23,8 @@
       :headers="headers"
       :items="department.rows"
       class="elevation-3"
-      :footer-props="{ 'items-per-page-options': [10, 25, -1] }"
       :search="search"
+      :items-per-page="5"
       fixed-header
     >
       <template #item.profile="{ item }">

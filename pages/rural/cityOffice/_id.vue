@@ -52,6 +52,7 @@
         </v-card>
       </v-card-text>
       <v-card-text v-else>
+        <!-- :items="office" -->
         <v-data-table
           :headers="dessertHeaders"
           :items="office"
@@ -145,14 +146,15 @@
         <v-card-title class="primary white--text">ສ້າງຫ້ອງເມືອງ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <!-- <p class="black--text">ຊື່ຫ້ອງການເມືອງ</p> -->
+          <v-text-field  class="pt-10" hide-details="auto" v-model="title" dense outlined label="ປ້ອນຊື່ຫ້ອງການ"></v-text-field>
           <v-select
-          class="pt-10"
-            v-model="title"
-            :items="dataPrepare"
-            item-text="title"
-            item-value="title"
-            label="ເລືອກຫ້ອງການເມືອງ"
+           hide-details="auto"
+           class="pt-4"
+            v-model="office_title"
+            label="ເລືອກຊື່ເມືອງ"
+            :items="city"
+            item-text="dn"
+            item-value="dn"
             outlined
             dense
           ></v-select>
@@ -178,8 +180,8 @@
         <v-card-title class="primary white--text">ຫ້ອງການ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <!-- <p class="black--text">ຊື່ຫ້ອງການ</p> -->
-          <v-text-field class="pt-10" dense outlined v-model="officeData.office_title" :rules="[(v) => !!v || '']"></v-text-field>
+          <v-text-field class="pt-10" label="ຊື່ຫ້ອງການ" dense outlined v-model="officeData.title" :rules="[(v) => !!v || '']"></v-text-field>
+          <v-text-field label="ເມືອງ" dense outlined v-model="officeData.office_title" :rules="[(v) => !!v || '']"></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -370,6 +372,7 @@ export default {
       openDeleteData: false,
       openDeleteEmData: false,
       title: "",
+      office_title:"",
       singleExpand: false,
       dialogUdate: false,
       dialogEmployee: false,
@@ -382,10 +385,10 @@ export default {
       hover: false,
       ofId: "",
       tabs: null,
-      dataPrepare:[],
+      city: [],
+      office:[],
       transition: "slide-y-reverse-transition",
       search: "",
-      office: [],
       role: this.$cookies.get("role"),
       dessertHeaders: [
         {
@@ -394,8 +397,9 @@ export default {
           sortable: false,
           value: "idx",
         },
-        { text: "ຊື່ຫ້ອງການ", value: "office_title" },
-        { text: "", value: "actions" },
+        { text: "ຊື່ຫ້ອງການ", value: "title" },
+        { text: "ເມືອງ", value: "office_title" },
+        { text: "ຈັດການ", value: "actions" },
         { text: "", value: "data-table-expand" },
         { text: "", value: "employee" },
       ],
@@ -403,15 +407,10 @@ export default {
   },
   mounted() {
     this.seleteData();
-    this.getDataAll();
+    this.getCity()
   },
   methods: {
-    getDataAll() {
-      this.$axios.get(`/get-all-department-prepare?status=office`).then((res) => {
-            // console.log('---------->', res.data);
-          this.dataPrepare = res?.data;
-        });
-      },
+   
     updateEm(id) {
       this.$router.push(`/rural/cityOffice/update/${id}`);
     },
@@ -454,7 +453,8 @@ export default {
     },
     async updateOffice() {
       const data = {
-        title: this.officeData.office_title,
+        title: this.officeData.title,
+        office_title:this.officeData.office_title
       };
       await this.$axios
         .put(`/office/${this.officeData.id}`, data)
@@ -493,10 +493,13 @@ export default {
     },
     async createOffice() {
       const data = {
-        district_id: this.id,
+        province_department_id: this.id,
         title: this.title,
+        office_title: this.office_title,
       };
+      // console.log(data);
       await this.$axios.post("/office", data).then((res) => {
+        console.log(res.data);
         this.$toast.success("ສ້າງສຳເລັດ");
         this.dialog = false;
       });
@@ -506,11 +509,20 @@ export default {
     moveToCityOffice(item) {
       this.$router.push(`/rural/cityUnit/${item.id}`);
     },
+    async getCity() {
+      let id = this.pid;
+      await this.$axios.get(`/address/city/${id}`).then((res) => {
+        this.city = res?.data;
+      });
+    },
   },
   computed: {
     id() {
-      return this.$route.params.id;
+      return this.$route.query.id;
     },
+    pid() {
+        return this.$route.query.pid
+       }
   },
 };
 </script>

@@ -141,17 +141,14 @@
         <v-card-title class="primary white--text">ສ້າງຊື່ໜ່ວຍງານ</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="mt-3">
-          <v-select
+          <v-text-field
             v-model="title"
-            :items="dataPrepare"
-            item-text="title"
-            item-value="title"
             class="pt-10"
             label="ເລືອກໜ່ວຍງານ"
             outlined
             dense
             :rules="[(v) => !!v || '']"
-          ></v-select>
+          ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>

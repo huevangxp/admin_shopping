@@ -1,7 +1,25 @@
 <template>
     <div>
         <!-- {{ items }} -->
-        <h1 class="my-3">admin ຂອງທ້ອງຖີ່ມ <span class="primary--text" style="border-bottom: 1px solid #000;">{{ items[0]?.title }}</span></h1>
+        <h1 class="my-10">admin ຂອງທ້ອງຖີ່ມ </h1>
+        <v-row>
+          <v-col cols="4">
+            <v-text-field
+              v-model="search"
+              name="ຄົ້ນຫາ"
+              label="ຄົ້ນຫາ"
+              id="id"
+              dense
+              outlined
+              append-icon="mdi-magnify"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4"> </v-col>
+          <v-col cols="4" class="d-flex justify-end">
+            <v-btn class="mx-2" outlined color="primary" to="/rural/createAmin"
+              >ເພີ່ມ admin</v-btn>
+          </v-col>
+        </v-row>
         <v-data-table
             :headers="headers"
             :items="items"
