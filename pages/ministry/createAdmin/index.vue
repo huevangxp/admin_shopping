@@ -54,10 +54,8 @@ export default {
       user: {},
       loading: false,
       admin_id: this.$cookies.get("userId"),
-      province_title: this.$cookies.get("province_title"),
       title: this.$cookies.get("title"),
-      pid: this.$cookies.get("pid"),
-        role: this.$cookies.get("role"),
+      role: this.$cookies.get("role"),
       profile : this.$cookies.get("profile")
     };
   },
@@ -76,9 +74,7 @@ export default {
           username: this.user.username,
             password: this.user.password,
             role: this.role,
-            title: this.province_title,
-            text: this.title,
-            pid: this.pid,
+            title: this.title,
             admin_id: this.admin_id,
             profile:this.profile,
           

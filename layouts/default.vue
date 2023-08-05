@@ -109,7 +109,7 @@
         <v-list-item-icon>
           <v-icon class="ml-2">mdi-database</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>ຈັດການຂໍ້ມູນ</v-list-item-title>
+        <v-list-item-title style="font-size:15px">ຈັດການຂໍ້ມູນ</v-list-item-title>
       </div>
        </v-list-tile>
         <v-list-item
@@ -122,7 +122,7 @@
             <v-icon>{{ item.icon }} </v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title style="font-size:15px">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -195,10 +195,10 @@
       </v-avatar>
       <v-toolbar-title v-if="role == 'super_admin'" class="ml-3">
         <!-- ອົງການທີ່ຂື້ນກັບລັດຖະບານ -->
-        ລະບົບຄຸ້ມຄອງສະຖິຕິກົງຈັກການຈັດຕັ້ງລັດຖະບານແຫ່ງ ສປປລາວ ຂອງກະຊວງພາຍໃນ
+        ລະບົບຄຸ້ມຄອງສະຖິຕິກົງຈັກການຈັດຕັ້ງລັດຖະບານແຫ່ງ ສປປລາວ
 
         </v-toolbar-title>
-      <v-toolbar-title  v-else class="ml-3">{{ title }}</v-toolbar-title>
+      <v-toolbar-title  v-else class="ml-3"> {{ province_title }}  {{ title }}</v-toolbar-title>
       <v-spacer />
       <div class="mx-4">version {{ VERSION }}</div>
       <div class="d-flex">
@@ -261,7 +261,7 @@ export default {
   middleware: "auth",
   data() {
     return {
-      VERSION:'0.0.2',
+      VERSION:'0.1.1',
       dialog: false,
       clipped: true,
       drawer: true,
@@ -271,6 +271,7 @@ export default {
       rightDrawer: true,
       name: this.$cookies.get("name"),
       id: this.$cookies.get('userId'),
+      province_title: this.$cookies.get('province_title'),
       lastName: this.$cookies.get("lastName"),
       profile: this.$cookies.get("profile"),
       role: this.$cookies.get("role"),

@@ -390,6 +390,7 @@ export default {
       transition: "slide-y-reverse-transition",
       search: "",
       role: this.$cookies.get("role"),
+      userId: this.$cookies.get("userId"),
       dessertHeaders: [
         {
           text: "ລະຫັດ",
@@ -492,10 +493,15 @@ export default {
       }
     },
     async createOffice() {
+      if (!this.title || !this.office_title) {
+        return this.$toast.error('ປ້ອນຂໍ້ມູນໃຫ້ຄົບ')
+      }
       const data = {
         province_department_id: this.id,
         title: this.title,
         office_title: this.office_title,
+        // user_id: userId
+
       };
       // console.log(data);
       await this.$axios.post("/office", data).then((res) => {

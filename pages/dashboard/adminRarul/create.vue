@@ -10,7 +10,7 @@
           v-text="step"
         ></v-avatar>
       </v-card-title>
-
+<!-- {{ chooseProvince.rows }} -->
       <v-window v-model="step">
         <v-window-item :value="1">
           <v-card-text>
@@ -147,7 +147,7 @@ export default {
         }
           const data = {
             province_id: this.province.id,
-            province_title: this.province.pn,
+            province_title: this.province.province_title,
             pid: this.province.pid,
             profile:this.province.profile,
             title: this.user.title,
@@ -155,7 +155,7 @@ export default {
             password: this.user.password,
             role: this.user.role,
         };
-          console.log(data);
+          // console.log(data);
           await this.$axios.post("/rarul_department", data).then((data) => {
             this.$router.back();
             this.$toast.success("ສ້າງສຳເລັດແລ້ວ");

@@ -53,12 +53,12 @@ export default {
           icon: "mdi-file-import",
           to: "/reports/rural/sectorEm",
         },
-        {
-          title: "ຂໍ້ມູນເມືອງ",
-          src: "https://picsum.photos/400/400",
-          icon: "mdi-file-export",
-          to: "/reports/rural/city",
-        },
+        // {
+        //   title: "ຂໍ້ມູນເມືອງ",
+        //   src: "https://picsum.photos/400/400",
+        //   icon: "mdi-file-export",
+        //   to: "/reports/rural/city",
+        // },
         {
           title: "ຂໍ້ມູນຫ້ອງການເມືອງ",
           src: "https://picsum.photos/400/400",

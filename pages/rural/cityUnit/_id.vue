@@ -498,6 +498,9 @@ export default {
     },
 
     async createOfficeUnit() {
+      if (!this.title) {
+        return this.$toast.error("ປ້ອນຊື່ຂະແໜງ")
+      }
       const data = {
         office_id: this.id,
         title: this.title,
