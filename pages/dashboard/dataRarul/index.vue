@@ -85,13 +85,23 @@
           </v-avatar>
         </div>
         <v-card-text>
-          <v-text-field
+          <!-- <v-text-field
             v-model="province"
             label="ປ້ອນຊື່ແຂວງ"
             outlined
             dense
             class="mt-10"
-          ></v-text-field>
+          ></v-text-field> -->
+          <v-select
+            v-model="province"
+            label="ຊື່ແຂວງ"
+            :items="chooseProvince"
+            return-object
+            item-text="pn"
+            outlined
+            dense
+            class="mt-10"
+          ></v-select>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -274,11 +284,17 @@ export default {
         if (!this.province || !this.imageUrl) {
           return this.$toast.error("ກະລຸນາເລືອກຂໍ້ມູນໃຫ້ຄົບ");
         }
+        // const data = {
+        //   province_title: this.province,
+        //   pid: "new",
+        //   profile: this.imageUrl,
+        // };
         const data = {
-          province_title: this.province,
-          pid: "new",
+          province_title: this.province.pn,
+          pid: this.province.pid,
           profile: this.imageUrl,
         };
+        // console.log(data);
         await this.$axios.post("/province", data).then((res) => {
           this.dialog = false;
           this.$toast.success("ສຳເລັດ");
